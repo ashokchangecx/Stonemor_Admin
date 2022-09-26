@@ -101,7 +101,7 @@ const DUMMYUSERS = [
   { email: "user300@example.com", id: "300300" },
   { email: "user400@example.com", id: "400400" },
 ];
-const baseUrl = "http://localhost:3001";
+const baseUrl = "https://main.d3d8mcg1fsym22.amplifyapp.com";
 
 const QuestionnarieQuestionPart = (props) => {
   const classes = useStyles();
