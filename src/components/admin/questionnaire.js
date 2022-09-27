@@ -288,7 +288,7 @@ const QuestionnairePart = (props) => {
                 <TableCell>Name</TableCell>
                 <TableCell>Description</TableCell>
                 <TableCell>Type</TableCell>
-                <TableCell>Manage</TableCell>
+                {/* <TableCell>Manage</TableCell> */}
                 <TableCell>View</TableCell>
               </TableRow>
             </TableHead>
@@ -298,14 +298,14 @@ const QuestionnairePart = (props) => {
                   <TableCell>{questionnaire.name}</TableCell>
                   <TableCell>{questionnaire.description}</TableCell>
                   <TableCell>{questionnaire.type}</TableCell>
-                  <TableCell>
-                    <Button
+                  {/* <TableCell> */}
+                    {/* <Button
                       size="small"
                       color="primary"
                       onClick={handleSnackBarClick}
                     >
                       <EditIcon />
-                    </Button>
+                    </Button> */}
                     {/* <Button
                       size="small"
                       color="primary"
@@ -315,7 +315,7 @@ const QuestionnairePart = (props) => {
                     >
                       <DeleteIcon />
                     </Button> */}
-                  </TableCell>
+                  {/* </TableCell> */}
                   <TableCell>
                     <Button
                       size="small"
