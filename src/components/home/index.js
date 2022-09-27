@@ -105,14 +105,14 @@ const HomePart = (props) => {
                     Pre-Questionnaire
                   </Button>
                 ) : null}
-                <Button
+                {/* <Button
                   size="small"
                   color="primary"
                   component={Link}
                   to={`/survey/${id}`}
                 >
                   Survey
-                </Button>
+                </Button> */}
                 {postQuestionnaire ? (
                   <Button
                     size="small"

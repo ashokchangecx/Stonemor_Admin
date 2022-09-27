@@ -199,7 +199,7 @@ function App() {
                 <HomeIcon />
               </IconButton>
               <Typography variant="h6" className={classes.title}>
-                Stonemor Survey Tool
+                StoneMor Survey Tool
               </Typography>
               {auth && (
                 <div>

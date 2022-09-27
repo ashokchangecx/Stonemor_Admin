@@ -90,12 +90,12 @@ const Admin = (props) => {
           </ListItemIcon>
           <ListItemText primary="Questionnaires" />
         </ListItem>
-        <ListItem button component={Link} to="/admin/questions">
+        {/* <ListItem button component={Link} to="/admin/questions">
           <ListItemIcon>
             <ChatBubbleOutlineIcon />
           </ListItemIcon>
           <ListItemText primary="Questions" />
-        </ListItem>
+        </ListItem> */}
         <ListItem
           button
           component={Link}

@@ -106,7 +106,7 @@ const baseUrl = "https://main.d3d8mcg1fsym22.amplifyapp.com";
 const QuestionnarieQuestionPart = (props) => {
   const classes = useStyles();
   const {
-    data: { loading, error, getQuestionnaire },
+    data: { loading, error, getQuestionnaire, refetch },
   } = props.getQuestionnaire;
   const { listSurveyUsers } = props?.listSurveyUsers?.data;
   const [open, setOpen] = useState(false);
@@ -128,6 +128,10 @@ const QuestionnarieQuestionPart = (props) => {
   const [openSurveyLink, setOpenSurveyLink] = React.useState(false);
   const [surveyUser, setSuveyUser] = React.useState("");
   const [userSurveyLink, setUserSurveyLink] = React.useState("");
+  const [initialLoading, setinitialLoading] = useState(true);
+  const [isCreated, setIsCreated] = useState(false);
+  const [isopen, setIsOpen] = React.useState(false);
+  const [deleteQuestion, setDeleteQuestion] = React.useState("");
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -141,12 +145,22 @@ const QuestionnarieQuestionPart = (props) => {
   };
 
   /*Deleting question by ID*/
-  const handleDelete = (id) => {
+  function handleDelete() {
     props.onDeleteQuestion({
-      id: id,
+      id: deleteQuestion,
     });
-  };
+    setDeleteQuestion("");
+    setIsCreated(true);
+    setIsOpen(false);
+  }
 
+  const handleOpenDeleteDialog = (que) => {
+    setDeleteQuestion(que?.id);
+    setIsOpen(true);
+  };
+  function handleCloseDialog() {
+    setIsOpen(false);
+  }
   /*Opening Creating new question Dialogbox*/
   const handleOpenDialog = () => {
     setOpen(true);
@@ -231,6 +245,7 @@ const QuestionnarieQuestionPart = (props) => {
         nextQuestion: item?.nextQuestion,
       }))
     );
+    setIsCreated(true);
     setEditQuestionOpen(true);
   };
 
@@ -281,6 +296,7 @@ const QuestionnarieQuestionPart = (props) => {
       createQuestionQuery,
       getQuestionnaire?.id
     );
+    setIsCreated(true);
     handleClose();
   };
 
@@ -609,7 +625,20 @@ const QuestionnarieQuestionPart = (props) => {
       setOpenAddListItem(true);
     }
   }, [type]);
-  if (loading) {
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (isCreated) {
+        refetch({ limit: 300 });
+        setIsCreated(false);
+      }
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, [isCreated]);
+  useEffect(() => {
+    if (!loading) setinitialLoading(false);
+  }, [loading]);
+  if (loading && initialLoading) {
     return (
       <div>
         <CircularProgress className={classes.progress} />
@@ -645,6 +674,36 @@ const QuestionnarieQuestionPart = (props) => {
         </Breadcrumbs>
       </div>
       <div>
+        <Dialog
+          open={isopen}
+          onClose={handleCloseDialog}
+          aria-labelledby="form-dialog-title"
+        >
+          <FormControl>
+            <DialogTitle id="form-dialog-title">
+              Delete this Question
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Are You Sure You Want to Delete this Survey?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseDialog} color="default">
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  handleDelete();
+                }}
+                type="submit"
+                color="primary"
+              >
+                Delete
+              </Button>
+            </DialogActions>
+          </FormControl>
+        </Dialog>
         <Dialog
           fullWidth
           open={open}
@@ -956,7 +1015,7 @@ const QuestionnarieQuestionPart = (props) => {
             >
               <TableHead>
                 <TableRow>
-                  <StyledTableCell>Question No</StyledTableCell>
+                  <StyledTableCell> Q.No </StyledTableCell>
                   <StyledTableCell>Question</StyledTableCell>
                   <StyledTableCell>Type</StyledTableCell>
                   <StyledTableCell>List Options</StyledTableCell>
@@ -998,9 +1057,7 @@ const QuestionnarieQuestionPart = (props) => {
                     {/* <Button
                       size="small"
                       color="primary"
-                      onClick={() => {
-                        handleDelete(question.id);
-                      }}
+                      onClick={() => handleOpenDeleteDialog(question)}
                     >
                       <DeleteIcon />
                     </Button> */}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -54,9 +54,11 @@ const useStyles = makeStyles((theme) => ({
 const SurveyPart = (props) => {
   const classes = useStyles();
   const {
-    data: { loading, error, listSurveys },
+    data: { loading, error, listSurveys, refetch },
   } = props.listSurveys;
   const [open, setOpen] = React.useState(false);
+  const [initialLoading, setinitialLoading] = useState(true);
+  const [isCreated, setIsCreated] = useState(false);
   const [openSnackBar, setOpenSnackBar] = React.useState(false);
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
@@ -87,8 +89,20 @@ const SurveyPart = (props) => {
       groups: groupName,
     });
     props.onAddGroup(groupName, props.location.state.userPoolId);
+    setIsCreated(true);
     setOpen(false);
   }
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (isCreated) {
+        refetch({ limit: 300 });
+        setIsCreated(false);
+      }
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, [isCreated]);
+
   function handleBulkImport(event) {
     event.preventDefault();
     props.onBulkImport();
@@ -99,6 +113,7 @@ const SurveyPart = (props) => {
       id: deleteQuestion,
     });
     setDeleteQuestion("");
+    setIsCreated(true);
     setIsOpen(false);
   }
   const handleOpenDeleteDialog = (que) => {
@@ -139,7 +154,10 @@ const SurveyPart = (props) => {
     }
     setImage(newValue);
   }
-  if (loading) {
+  useEffect(() => {
+    if (!loading) setinitialLoading(false);
+  }, [loading]);
+  if (loading && initialLoading) {
     return (
       <div>
         <CircularProgress className={classes.progress} />
@@ -264,7 +282,7 @@ const SurveyPart = (props) => {
             </DialogTitle>
             <DialogContent>
               <DialogContentText>
-                Are You Sure You Want to Delete this Question?
+                Are You Sure You Want to Delete this Survey?
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -317,13 +335,13 @@ const SurveyPart = (props) => {
                     >
                       <EditIcon />
                     </Button>
-                    <Button
+                    {/* <Button
                       onClick={() => handleOpenDeleteDialog(survey)}
                       size="small"
                       color="primary"
                     >
                       <DeleteIcon />
-                    </Button>
+                    </Button> */}
                   </TableCell>
                 </TableRow>
               ))}

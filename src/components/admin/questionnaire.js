@@ -39,10 +39,15 @@ import {
 
 import AdminMenu from "./index";
 import { Link } from "react-router-dom";
+import { Breadcrumbs } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
+    flexGrow: 1,
+    overflow: "hidden",
+    marginLeft: 120,
+    marginTop: 20,
+    padding: theme.spacing(0, 3),
   },
   content: {
     flexGrow: 1,
@@ -70,8 +75,7 @@ const QuestionnairePart = (props) => {
   const [description, setDescription] = React.useState("");
   const [type, setType] = React.useState("");
   const [openSnackBar, setOpenSnackBar] = React.useState(false);
-  const [isopen, setIsOpen] = React.useState(false);
-  const [deleteQuestion, setDeleteQuestion] = React.useState("");
+
   function handleSnackBarClick() {
     setOpenSnackBar(true);
   }
@@ -100,23 +104,14 @@ const QuestionnairePart = (props) => {
     setOpen(false);
   }
 
-  function handleDelete() {
+  function handleDelete(id) {
     props.onDeleteQuestionnaire({
-      id: deleteQuestion,
+      id: id,
     });
-    setDeleteQuestion("");
-    setIsOpen(false);
   }
 
-  const handleOpenDeleteDialog = (que) => {
-    setDeleteQuestion(que?.id);
-    setIsOpen(true);
-  };
   function handleClose() {
     setOpen(false);
-  }
-  function handleCloseDialog() {
-    setIsOpen(false);
   }
 
   function onNameChange(newValue) {
@@ -200,6 +195,14 @@ const QuestionnairePart = (props) => {
         ]}
       />
       <AdminMenu />
+      <div className={classes.root}>
+        <Breadcrumbs aria-label="breadcrumb">
+          <Typography underline="hover" color="inherit" href="/admin">
+            Admin
+          </Typography>
+          <Typography color="primary">Manage Questionnaire</Typography>
+        </Breadcrumbs>
+      </div>
       <div>
         <Dialog
           open={open}
@@ -274,41 +277,11 @@ const QuestionnairePart = (props) => {
             </DialogActions>
           </FormControl>
         </Dialog>
-        <Dialog
-          open={isopen}
-          onClose={handleCloseDialog}
-          aria-labelledby="form-dialog-title"
-        >
-          <FormControl>
-            <DialogTitle id="form-dialog-title">
-              Delete this Question
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Are You Sure You Want to Delete this Question?
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseDialog} color="default">
-                Cancel
-              </Button>
-              <Button
-                onClick={() => {
-                  handleDelete();
-                }}
-                type="submit"
-                color="primary"
-              >
-                Delete
-              </Button>
-            </DialogActions>
-          </FormControl>
-        </Dialog>
       </div>
-      <main className={classes.content}>
+      <main className={classes.root}>
         <Typography variant="h4">Manage Questionnaires</Typography>
         <p />
-        <Paper className={classes.root}>
+        <Paper className={classes.content}>
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
@@ -333,13 +306,15 @@ const QuestionnairePart = (props) => {
                     >
                       <EditIcon />
                     </Button>
-                    <Button
+                    {/* <Button
                       size="small"
                       color="primary"
-                      onClick={() => handleOpenDeleteDialog(questionnaire)}
+                      onClick={() => {
+                        handleDelete(questionnaire.id);
+                      }}
                     >
                       <DeleteIcon />
-                    </Button>
+                    </Button> */}
                   </TableCell>
                   <TableCell>
                     <Button
