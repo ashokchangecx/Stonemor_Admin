@@ -88,9 +88,9 @@ const SurveyPart = (props) => {
       image: image,
       groups: groupName,
     });
-    props.onAddGroup(groupName, props.location.state.userPoolId);
     setIsCreated(true);
     setOpen(false);
+    props.onAddGroup(groupName, props.location.state.userPoolId);
   }
 
   useEffect(() => {
@@ -99,7 +99,7 @@ const SurveyPart = (props) => {
         refetch({ limit: 300 });
         setIsCreated(false);
       }
-    }, 1500);
+    }, 1000);
     return () => clearTimeout(timer);
   }, [isCreated]);
 
@@ -328,14 +328,14 @@ const SurveyPart = (props) => {
                   <TableCell>{survey.name}</TableCell>
                   <TableCell>{survey.description}</TableCell>
                   {/* <TableCell> */}
-                    {/* <Button
+                  {/* <Button
                       onClick={handleSnackBarClick}
                       size="small"
                       color="primary"
                     >
                       <EditIcon />
                     </Button> */}
-                    {/* <Button
+                  {/* <Button
                       onClick={() => handleOpenDeleteDialog(survey)}
                       size="small"
                       color="primary"
