@@ -289,7 +289,7 @@ const QuestionnairePart = (props) => {
                 <TableCell>Description</TableCell>
                 <TableCell>Type</TableCell>
                 {/* <TableCell>Manage</TableCell> */}
-                <TableCell>View</TableCell>
+                <TableCell>Manage</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -323,7 +323,7 @@ const QuestionnairePart = (props) => {
                       component={Link}
                       to={`/admin/question/${questionnaire.id}`}
                     >
-                      <VisibilityIcon />
+                      <EditIcon />
                     </Button>
                   </TableCell>
                 </TableRow>
