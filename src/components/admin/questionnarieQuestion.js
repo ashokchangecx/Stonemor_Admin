@@ -383,7 +383,7 @@ const QuestionnarieQuestionPart = (props) => {
         </DialogTitle>
         <DialogContent>
           <TextField
-            autoFocus
+            
             margin="dense"
             id="qu"
             label="Question"
@@ -525,6 +525,7 @@ const QuestionnarieQuestionPart = (props) => {
                 value={listItem}
                 onChange={(event) => setListItem(event.target.value)}
                 fullWidth
+                autoFocus
               />
               {currentMode === "self" && (
                 <FormControl fullWidth>
