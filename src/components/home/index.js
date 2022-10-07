@@ -19,6 +19,13 @@ import { listSurveys } from "../../graphql/queries";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    root: {
+      flexGrow: 1,
+      overflow: "hidden",
+      marginLeft: 120,
+      marginTop: 20,
+      padding: theme.spacing(0, 3),
+    },
     card: {
       maxWidth: 600,
       margin: 30,
@@ -32,6 +39,10 @@ const useStyles = makeStyles((theme) =>
     },
     progress: {
       margin: 2,
+    },
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing(3),
     },
   })
 );
@@ -66,46 +77,49 @@ const HomePart = (props) => {
     );
   }
   return (
-    <Grid container gutter={0}>
-      {listSurveys.items.map(
-        ({
-          id,
-          name,
-          description,
-          image,
-          preQuestionnaire,
-          postQuestionnaire,
-        }) => (
-          <Grid item sm={4} xs={10} key={id}>
-            <Card className={classes.card}>
-              <CardActionArea>
-                <CardMedia
-                  component="img"
-                  alt={name}
-                  className={classes.media}
-                  height="80"
-                  image={image}
-                  title={name}
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="h2">
-                    {name}
-                  </Typography>
-                  <Typography component="p">{description}</Typography>
-                </CardContent>
-              </CardActionArea>
-              <CardActions>
-                {preQuestionnaire ? (
-                  <Button
-                    size="small"
-                    color="primary"
-                    component={Link}
-                    to={`/surveyquestions/${preQuestionnaire.id}`}
-                  >
-                    Pre-Questionnaire
-                  </Button>
-                ) : null}
-                {/* <Button
+    <div className={classes.root}>
+      <main className={classes.root}>
+        <Paper className={classes.content}>
+          <Grid container gutter={0}>
+            {listSurveys.items.map(
+              ({
+                id,
+                name,
+                description,
+                image,
+                preQuestionnaire,
+                postQuestionnaire,
+              }) => (
+                <Grid item sm={4} xs={10} key={id}>
+                  <Card className={classes.card}>
+                    <CardActionArea>
+                      <CardMedia
+                        component="img"
+                        alt={name}
+                        className={classes.media}
+                        height="80"
+                        image={image}
+                        title={name}
+                      />
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                          {name}
+                        </Typography>
+                        <Typography component="p">{description}</Typography>
+                      </CardContent>
+                    </CardActionArea>
+                    <CardActions>
+                      {preQuestionnaire ? (
+                        <Button
+                          size="small"
+                          color="primary"
+                          component={Link}
+                          to={`/surveyquestions/${preQuestionnaire.id}`}
+                        >
+                          Pre-Questionnaire
+                        </Button>
+                      ) : null}
+                      {/* <Button
                   size="small"
                   color="primary"
                   component={Link}
@@ -113,22 +127,25 @@ const HomePart = (props) => {
                 >
                   Survey
                 </Button> */}
-                {postQuestionnaire ? (
-                  <Button
-                    size="small"
-                    color="primary"
-                    component={Link}
-                    to={`/surveyquestions/${postQuestionnaire.id}`}
-                  >
-                    Post-Questionnaire
-                  </Button>
-                ) : null}
-              </CardActions>
-            </Card>
+                      {postQuestionnaire ? (
+                        <Button
+                          size="small"
+                          color="primary"
+                          component={Link}
+                          to={`/surveyquestions/${postQuestionnaire.id}`}
+                        >
+                          Post-Questionnaire
+                        </Button>
+                      ) : null}
+                    </CardActions>
+                  </Card>
+                </Grid>
+              )
+            )}
           </Grid>
-        )
-      )}
-    </Grid>
+        </Paper>
+      </main>
+    </div>
   );
 };
 

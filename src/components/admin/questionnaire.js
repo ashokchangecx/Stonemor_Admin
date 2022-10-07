@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -39,7 +39,7 @@ import {
 
 import AdminMenu from "./index";
 import { Link } from "react-router-dom";
-import { Breadcrumbs } from "@material-ui/core";
+import { Breadcrumbs, TablePagination } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,7 +60,23 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
   },
 }));
-
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.common.white,
+    fontSize: 14,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    "&:nth-of-type(even)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+}))(TableRow);
 const QuestionnairePart = (props) => {
   const classes = useStyles();
   const {
@@ -75,7 +91,10 @@ const QuestionnairePart = (props) => {
   const [description, setDescription] = React.useState("");
   const [type, setType] = React.useState("");
   const [openSnackBar, setOpenSnackBar] = React.useState(false);
-
+  const [isopen, setIsOpen] = React.useState(false);
+  const [deleteQuestion, setDeleteQuestion] = React.useState("");
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   function handleSnackBarClick() {
     setOpenSnackBar(true);
   }
@@ -90,7 +109,13 @@ const QuestionnairePart = (props) => {
   function handleOpenDialog() {
     setOpen(true);
   }
-
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
   function handleCreate(event) {
     event.preventDefault();
     props.onCreateQuestionnaire(
@@ -104,14 +129,22 @@ const QuestionnairePart = (props) => {
     setOpen(false);
   }
 
-  function handleDelete(id) {
+  function handleDelete() {
     props.onDeleteQuestionnaire({
-      id: id,
+      id: deleteQuestion,
     });
+    setDeleteQuestion("");
+    setIsOpen(false);
   }
-
+  const handleOpenDeleteDialog = (que) => {
+    setDeleteQuestion(que?.id);
+    setIsOpen(true);
+  };
   function handleClose() {
     setOpen(false);
+  }
+  function handleCloseDialog() {
+    setIsOpen(false);
   }
 
   function onNameChange(newValue) {
@@ -194,12 +227,9 @@ const QuestionnairePart = (props) => {
           </IconButton>,
         ]}
       />
-      <AdminMenu />
+      {/* <AdminMenu /> */}
       <div className={classes.root}>
         <Breadcrumbs aria-label="breadcrumb">
-          <Typography underline="hover" color="inherit" href="/admin">
-            Admin
-          </Typography>
           <Typography color="primary">Manage Questionnaire</Typography>
         </Breadcrumbs>
       </div>
@@ -219,7 +249,7 @@ const QuestionnairePart = (props) => {
                 details.
               </DialogContentText>
               <TextField
-                autoFocus
+                // autoFocus
                 margin="dense"
                 id="name"
                 label="Name"
@@ -277,6 +307,36 @@ const QuestionnairePart = (props) => {
             </DialogActions>
           </FormControl>
         </Dialog>
+        <Dialog
+          open={isopen}
+          onClose={handleCloseDialog}
+          aria-labelledby="form-dialog-title"
+        >
+          <FormControl>
+            <DialogTitle id="form-dialog-title">
+              Delete this Question
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Are You Sure You Want to Delete this Question?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseDialog} color="default">
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  handleDelete();
+                }}
+                type="submit"
+                color="primary"
+              >
+                Delete
+              </Button>
+            </DialogActions>
+          </FormControl>
+        </Dialog>
       </div>
       <main className={classes.root}>
         <Typography variant="h4">Manage Questionnaires</Typography>
@@ -284,39 +344,43 @@ const QuestionnairePart = (props) => {
         <Paper className={classes.content}>
           <Table className={classes.table}>
             <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Type</TableCell>
-                {/* <TableCell>Manage</TableCell> */}
-                <TableCell>Manage</TableCell>
-              </TableRow>
+              <StyledTableRow>
+                <StyledTableCell>Name</StyledTableCell>
+                <StyledTableCell>Description</StyledTableCell>
+                <StyledTableCell>Type</StyledTableCell>
+                {/* <StyledTableCell>Manage</StyledTableCell> */}
+                <StyledTableCell>Manage</StyledTableCell>
+              </StyledTableRow>
             </TableHead>
             <TableBody>
-              {listQuestionnaires.items.map((questionnaire, q) => (
-                <TableRow key={q}>
-                  <TableCell>{questionnaire.name}</TableCell>
-                  <TableCell>{questionnaire.description}</TableCell>
-                  <TableCell>{questionnaire.type}</TableCell>
-                  {/* <TableCell> */}
-                    {/* <Button
+              {(rowsPerPage > 0
+                ? listQuestionnaires?.items?.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : listQuestionnaires
+              ).map((questionnaire, q) => (
+                <StyledTableRow key={q}>
+                  <StyledTableCell>{questionnaire.name}</StyledTableCell>
+                  <StyledTableCell>{questionnaire.description}</StyledTableCell>
+                  <StyledTableCell>{questionnaire.type}</StyledTableCell>
+                  {/* <StyledTableCell> */}
+                  {/* <Button
                       size="small"
                       color="primary"
                       onClick={handleSnackBarClick}
                     >
                       <EditIcon />
                     </Button> */}
-                    {/* <Button
+                  {/* <Button
                       size="small"
                       color="primary"
-                      onClick={() => {
-                        handleDelete(questionnaire.id);
-                      }}
+                      onClick={() => handleOpenDeleteDialog(questionnaire)}
                     >
                       <DeleteIcon />
-                    </Button> */}
-                  {/* </TableCell> */}
-                  <TableCell>
+                    </Button>
+                  </StyledTableCell> */}
+                  <StyledTableCell>
                     <Button
                       size="small"
                       color="primary"
@@ -325,11 +389,19 @@ const QuestionnairePart = (props) => {
                     >
                       <EditIcon />
                     </Button>
-                  </TableCell>
-                </TableRow>
+                  </StyledTableCell>
+                </StyledTableRow>
               ))}
             </TableBody>
           </Table>
+          <TablePagination
+            component="div"
+            count={listSurveys?.items?.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </Paper>
         <Button
           variant="contained"

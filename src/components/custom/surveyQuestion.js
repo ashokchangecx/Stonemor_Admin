@@ -12,6 +12,7 @@ import {
   Button,
   Checkbox,
   CircularProgress,
+  Container,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -70,6 +71,7 @@ const SurveyQuestion = (props) => {
   } = props.getQuestionnaire;
 
   const questions = getQuestionnaire?.question?.items;
+
   const firstQuestion =
     questions?.find((q) => q?.order === 1) ||
     questions?.sort((a, b) => b?.order - a?.order)[questions?.length - 1];
@@ -97,9 +99,10 @@ const SurveyQuestion = (props) => {
       : setChecked([...temp]);
     setCurrentAnswer(checked);
   };
+  // console.log("Demo", ANSLIST, currentAnswer);
   const handleFinish = () => {
     ANSLIST.map((response) => {
-      // console.log("response", response);
+      console.log("response", response);
       props.onCreateResponse({
         responsesQuId: response?.questionId,
         res: response?.answer,
@@ -212,8 +215,11 @@ const SurveyQuestion = (props) => {
               style={{ margin: "10px 0", color: "black" }}
               id="demo-radio-buttons-group-label"
             >
-              Q.
-              {q?.qu}
+              <Typography sx={{ paddingTop: 2 }}>
+                {" "}
+                Q.
+                {q?.qu}
+              </Typography>
             </FormLabel>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
@@ -240,8 +246,11 @@ const SurveyQuestion = (props) => {
               style={{ margin: "10px 0", color: "black" }}
               id="demo-radio-buttons-group-label"
             >
-              Q.
-              {q?.qu}
+              <Typography sx={{ paddingTop: 2 }}>
+                {" "}
+                Q.
+                {q?.qu}
+              </Typography>
             </FormLabel>
             <TextField
               required
@@ -262,8 +271,11 @@ const SurveyQuestion = (props) => {
               style={{ margin: "10px 0", color: "black" }}
               id="demo-radio-buttons-group-label"
             >
-              Q.
-              {q?.qu}
+              <Typography sx={{ paddingTop: 2 }}>
+                {" "}
+                Q.
+                {q?.qu}
+              </Typography>
             </FormLabel>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
@@ -302,8 +314,11 @@ const SurveyQuestion = (props) => {
                 style={{ margin: "10px 0", color: "black" }}
                 id="demo-radio-buttons-group-label"
               >
-                Q.
-                {q?.qu}
+                <Typography sx={{ paddingTop: 2 }}>
+                  {" "}
+                  Q.
+                  {q?.qu}
+                </Typography>
               </FormLabel>
 
               {q?.listOptions.map((option, o) => (
@@ -331,8 +346,11 @@ const SurveyQuestion = (props) => {
                 style={{ margin: "10px 0", color: "black" }}
                 id="demo-radio-buttons-group-label"
               >
-                Q.
-                {q?.qu}
+                <Typography sx={{ paddingTop: 2 }}>
+                  {" "}
+                  Q.
+                  {q?.qu}
+                </Typography>
               </FormLabel>
 
               {q?.listOptions.map((option, o) => (
@@ -416,59 +434,62 @@ const SurveyQuestion = (props) => {
 
   return (
     <div className={classes.root}>
-      <img
+      {/* <img
         src="https://dynamix-cdn.s3.amazonaws.com/stonemorcom/stonemorcom_616045937.svg"
         alt="logo"
         className={classes.logo}
-      />
-      <Typography className={classes.custom} variant="h5">
-        {getQuestionnaire?.name}
-      </Typography>
-      <div className={classes.cont}>
-        <div>{getQuestionView(currentQuestion)}</div>
-        <Box>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            disabled={
-              currentQuestion?.order
-                ? currentQuestion?.order === 1
-                : questions?.findIndex((q) => q?.id === currentQuestion?.id) ===
-                  0
-            }
-            data-amplify-analytics-on="click"
-            data-amplify-analytics-name="click"
-            onClick={handlePreviousClick}
-          >
-            <ArrowBackIcon />
-            Prev
-          </Button>
-          {final ? (
-            <Button
-              variant="contained"
-              color="primary"
-              data-amplify-analytics-on="click"
-              onClick={handleFinish}
-            >
-              Finish
-              {/* <ArrowForwardIcon /> */}
-            </Button>
-          ) : (
+      /> */}
+      <Container maxWidth="md">
+        <Typography className={classes.custom} variant="h5">
+          {getQuestionnaire?.name}
+        </Typography>
+        <div className={classes.cont}>
+          <div>{getQuestionView(currentQuestion)}</div>
+          <Box>
             <Button
               variant="contained"
               color="primary"
               className={classes.button}
-              disabled={!currentAnswer}
+              disabled={
+                currentQuestion?.order
+                  ? currentQuestion?.order === 1
+                  : questions?.findIndex(
+                      (q) => q?.id === currentQuestion?.id
+                    ) === 0
+              }
               data-amplify-analytics-on="click"
-              onClick={handleNextClick2}
+              data-amplify-analytics-name="click"
+              onClick={handlePreviousClick}
             >
-              Next
-              <ArrowForwardIcon />
+              <ArrowBackIcon />
+              Prev
             </Button>
-          )}
-        </Box>
-      </div>
+            {final ? (
+              <Button
+                variant="contained"
+                color="primary"
+                data-amplify-analytics-on="click"
+                onClick={handleFinish}
+              >
+                Finish
+                {/* <ArrowForwardIcon /> */}
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                disabled={!currentAnswer}
+                data-amplify-analytics-on="click"
+                onClick={handleNextClick2}
+              >
+                Next
+                <ArrowForwardIcon />
+              </Button>
+            )}
+          </Box>
+        </div>
+      </Container>
     </div>
   );
 };

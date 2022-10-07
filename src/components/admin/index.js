@@ -2,13 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import { Auth } from "aws-amplify";
-
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
+import HomeIcon from "@material-ui/icons/Home";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -17,7 +17,8 @@ import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
 import PersonIcon from "@material-ui/icons/Person";
 import LanguageIcon from "@material-ui/icons/Language";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles, useTheme, withStyles } from "@material-ui/core/styles";
+import MuiListItem from "@material-ui/core/ListItem";
 
 const drawerWidth = 240;
 
@@ -55,12 +56,46 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const ListItem = withStyles({
+  root: {
+    "&$selected": {
+      backgroundColor: "#5e8abf",
+      color: "white",
+      "& .MuiListItemIcon-root": {
+        color: "white",
+      },
+    },
+    // "&$selected:hover": {
+    //   backgroundColor: "purple",
+    //   color: "white",
+    //   "& .MuiListItemIcon-root": {
+    //     color: "white",
+    //   },
+    // },
+    // "&:hover": {
+    //   backgroundColor: "blue",
+    //   color: "white",
+    //   "& .MuiListItemIcon-root": {
+    //     color: "white",
+    //   },
+    // },
+  },
+  selected: {},
+})(MuiListItem);
 const Admin = (props) => {
   const { container } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [userPoolId] = React.useState(Auth.userPool.userPoolId);
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+
+  console.log(selectedIndex);
+  const handleListItemClick = (event, index) => {
+    // event.preventDefault();
+
+    setSelectedIndex(index);
+  };
 
   function handleDrawerToggle() {
     setMobileOpen(!mobileOpen);
@@ -71,9 +106,28 @@ const Admin = (props) => {
       <List>
         <ListItem
           button
+          selected={selectedIndex === 0}
+          onClick={(event) => handleListItemClick(event, 0)}
           component={Link}
           to={{
-            pathname: "/admin/",
+            pathname: "/",
+            state: {
+              userPoolId: userPoolId,
+            },
+          }}
+        >
+          <ListItemIcon>
+            <HomeIcon />
+          </ListItemIcon>
+          <ListItemText primary="Home" />
+        </ListItem>
+        <ListItem
+          button
+          selected={selectedIndex === 1}
+          onClick={(event) => handleListItemClick(event, 1)}
+          component={Link}
+          to={{
+            pathname: "/admin",
             state: {
               userPoolId: userPoolId,
             },
@@ -84,12 +138,19 @@ const Admin = (props) => {
           </ListItemIcon>
           <ListItemText primary="Surveys" />
         </ListItem>
-        <ListItem button component={Link} to="/admin/questionnaires">
+        <ListItem
+          button
+          selected={selectedIndex === 2}
+          onClick={(event) => handleListItemClick(event, 2)}
+          component={Link}
+          to="/admin/questionnaires"
+        >
           <ListItemIcon>
             <QuestionAnswerIcon />
           </ListItemIcon>
           <ListItemText primary="Questionnaires" />
         </ListItem>
+        <Divider />
         {/* <ListItem button component={Link} to="/admin/questions">
           <ListItemIcon>
             <ChatBubbleOutlineIcon />
@@ -98,6 +159,8 @@ const Admin = (props) => {
         </ListItem> */}
         <ListItem
           button
+          selected={selectedIndex === 3}
+          onClick={(event) => handleListItemClick(event, 3)}
           component={Link}
           to={{
             pathname: "/admin/users",
@@ -111,8 +174,20 @@ const Admin = (props) => {
           </ListItemIcon>
           <ListItemText primary="Users" />
         </ListItem>
-        <Divider />
         <ListItem
+          button
+          selected={selectedIndex === 4}
+          onClick={(event) => handleListItemClick(event, 4)}
+          component={Link}
+          to="/admin/responses"
+        >
+          <ListItemIcon>
+            <CheckCircleOutlineIcon />
+          </ListItemIcon>
+          <ListItemText primary="Responses" />
+        </ListItem>
+        {/* <Divider /> */}
+        {/* <ListItem
           button
           component={Link}
           to={{
@@ -126,7 +201,7 @@ const Admin = (props) => {
             <SupervisedUserCircleIcon />
           </ListItemIcon>
           <ListItemText primary="Groups" />
-        </ListItem>
+        </ListItem> */}
       </List>
     </div>
   );

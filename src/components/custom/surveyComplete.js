@@ -8,14 +8,47 @@ import {
   createTheme,
 } from "@material-ui/core/styles";
 
-import { IconButton, Paper, Typography } from "@material-ui/core";
+import { IconButton, Paper, Typography,Container,Card, Box } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
+
+const styles = {
+  paperContainer: {
+      backgroundRepeat: 'no-repeat',
+      backgroundImage: `url('https://wallpaperaccess.com/full/1454447.jpg')`,
+      backgroundSize: 'cover',
+      minHeight: '100vh'
+  
+  }
+};
 const useStyles = makeStyles((theme) =>
   createStyles({
+  
+    text:{
+      marginTop: 100,
+      display:'flex',
+      justifyContent:'center',
+      alignItems: 'center'
+      
+
+    },
+    media:{
+      objectFit: 'cover'
+    },
     button: {
       margin: theme.spacing(2),
     },
+    textcolor: {
+      color: '#fafafa',
+    },
+    img:{
+      width: 100,
+      height:100,
+      marginLeft: '40%'
+
+    }
+    
+    
   })
 );
 const theme = createTheme();
@@ -35,7 +68,7 @@ const SurveyComplete = (props) => {
   const classes = useStyles();
 
   return (
-    <div>
+    <div  style={styles.paperContainer}>
       <div>
         <IconButton
           className={classes.button}
@@ -47,11 +80,21 @@ const SurveyComplete = (props) => {
           <ArrowBackIcon />
         </IconButton>
       </div>
-      <ThemeProvider theme={theme}>
-        <Typography variant="h3">Thankyou for Your Participation</Typography>
-        <Typography variant="h3">Your Survey is Completed</Typography>
+      <div className={classes.text} >
+        <Box  >
+          
+          <img src="https://www.freeiconspng.com/thumbs/success-icon/success-icon-10.png"  className={classes.img}></img>
+        
+      <ThemeProvider theme={theme} >
+      
+        <Typography variant="h3" className={classes.textcolor}>Thankyou for Your Participation</Typography>
+        <Typography variant="h3" className={classes.textcolor}>Your Survey is Completed</Typography>
       </ThemeProvider>
-    </div>
+      </Box>
+       </div>
+      
+      </div>
+    
   );
 };
 

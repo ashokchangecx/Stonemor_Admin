@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -30,7 +30,7 @@ import { listSurveys } from "../../graphql/queries";
 import { createSurvey, deleteSurvey, addGroup } from "../../graphql/mutations";
 
 import AdminMenu from "./index";
-import { Breadcrumbs, Link } from "@material-ui/core";
+import { Breadcrumbs, Link, TablePagination } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -51,6 +51,23 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 20,
   },
 }));
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.common.white,
+    fontSize: 14,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    "&:nth-of-type(even)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+}))(TableRow);
 const SurveyPart = (props) => {
   const classes = useStyles();
   const {
@@ -65,6 +82,8 @@ const SurveyPart = (props) => {
   const [groupName, setGroupName] = React.useState("");
   const [isopen, setIsOpen] = React.useState(false);
   const [deleteQuestion, setDeleteQuestion] = React.useState("");
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [image, setImage] = React.useState(
     "https://dynamix-cdn.s3.amazonaws.com/stonemorcom/stonemorcom_616045937.svg"
   );
@@ -157,6 +176,14 @@ const SurveyPart = (props) => {
   useEffect(() => {
     if (!loading) setinitialLoading(false);
   }, [loading]);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
   if (loading && initialLoading) {
     return (
       <div>
@@ -206,12 +233,9 @@ const SurveyPart = (props) => {
           </IconButton>,
         ]}
       />
-      <AdminMenu />
+      {/* <AdminMenu /> */}
       <div className={classes.root}>
         <Breadcrumbs aria-label="breadcrumb">
-          <Link underline="hover" color="inherit" href="/admin">
-            Admin
-          </Link>
           <Typography color="primary">Manage Survey</Typography>
         </Breadcrumbs>
       </div>
@@ -308,26 +332,32 @@ const SurveyPart = (props) => {
         <Paper className={classes.content}>
           <Table className={classes.table}>
             <TableHead>
-              <TableRow>
-                <TableCell></TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Description</TableCell>
-                {/* <TableCell>Manage</TableCell> */}
-              </TableRow>
+              <StyledTableRow>
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell>Name</StyledTableCell>
+                <StyledTableCell>Description</StyledTableCell>
+                {/* <StyledTableCell>Manage</StyledTableCell> */}
+              </StyledTableRow>
             </TableHead>
             <TableBody>
-              {listSurveys.items.map((survey) => (
-                <TableRow key={survey.name}>
-                  <TableCell>
+              {(rowsPerPage > 0
+                ? listSurveys?.items?.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : listSurveys
+              ).map((survey) => (
+                <StyledTableRow key={survey.name}>
+                  <StyledTableCell>
                     <img
                       src={survey.image}
                       alt={survey.image}
                       className={classes.image}
                     />
-                  </TableCell>
-                  <TableCell>{survey.name}</TableCell>
-                  <TableCell>{survey.description}</TableCell>
-                  {/* <TableCell> */}
+                  </StyledTableCell>
+                  <StyledTableCell>{survey.name}</StyledTableCell>
+                  <StyledTableCell>{survey.description}</StyledTableCell>
+                  {/* <StyledTableCell> */}
                   {/* <Button
                       onClick={handleSnackBarClick}
                       size="small"
@@ -342,11 +372,19 @@ const SurveyPart = (props) => {
                     >
                       <DeleteIcon />
                     </Button> */}
-                  {/* </TableCell> */}
-                </TableRow>
+                  {/* </StyledTableCell> */}
+                </StyledTableRow>
               ))}
             </TableBody>
           </Table>
+          <TablePagination
+            component="div"
+            count={listSurveys?.items?.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </Paper>
         <Button
           variant="contained"

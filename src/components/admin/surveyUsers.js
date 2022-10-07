@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Breadcrumbs,
   Button,
   CircularProgress,
   Dialog,
@@ -15,6 +16,7 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TablePagination,
   TableRow,
   TextField,
   Typography,
@@ -22,10 +24,12 @@ import {
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import EditIcon from "@material-ui/icons/Edit";
 import { graphql, compose, withApollo } from "react-apollo";
+import { withStyles } from "@material-ui/core/styles";
 import gql from "graphql-tag";
 import AdminMenu from "./index";
 import { listSurveyUsers } from "../../graphql/queries";
 import { createSurveyUser, updateSurveyUser } from "../../graphql/mutations";
+import { Link } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -49,6 +53,25 @@ const useStyles = makeStyles((theme) => ({
   //   maxHeight: 2000,
   // },
 }));
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.common.white,
+    fontSize: 14,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    "&:nth-of-type(even)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+}))(TableRow);
 const SurveyUsersPart = (props) => {
   const classes = useStyles();
   const { error, loading, listSurveyUsers, refetch } =
@@ -60,6 +83,8 @@ const SurveyUsersPart = (props) => {
   const [userName, setUserName] = useState("");
   const [userMail, setUserMail] = useState("");
   const [currentUserId, setCurrentUserId] = useState("");
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleClosingSurveyUsersDialog = () => {
     setUserName("");
@@ -112,6 +137,14 @@ const SurveyUsersPart = (props) => {
   useEffect(() => {
     if (!loading) setinitialLoading(false);
   }, [loading]);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
   if (loading && initialLoading) {
     return (
       <div>
@@ -137,12 +170,14 @@ const SurveyUsersPart = (props) => {
   }
   return (
     <div className={classes.root}>
-      <AdminMenu />
+      {/* <AdminMenu /> */}
+
       <div className={classes.root}>
-        <Typography color="primary" variant="h6">
-          Survey Users
-        </Typography>
-        <Divider />
+        <Breadcrumbs aria-label="breadcrumb">
+          <Typography color="primary">SurveyUsers</Typography>
+        </Breadcrumbs>
+        <p />
+        <Typography variant="h4">SurveyUser </Typography> <p />
         <div>
           <Dialog
             open={openCreateSurveyUser}
@@ -242,50 +277,68 @@ const SurveyUsersPart = (props) => {
           </Dialog>
         </div>
       </div>
-      <div className={classes.root}>
-        {listSurveyUsers?.items?.length > 0 && (
-          <Table
-            className={classes.table}
-            stickyHeader
-            aria-label="sticky table"
+      <main className={classes.root}>
+        <Paper className={classes.content}>
+          {listSurveyUsers?.items?.length > 0 && (
+            <Table
+              className={classes.table}
+              stickyHeader
+              aria-label="sticky table"
+            >
+              <TableHead>
+                <StyledTableRow>
+                  <StyledTableCell>S.NO</StyledTableCell>
+                  <StyledTableCell>Name</StyledTableCell>
+                  <StyledTableCell>Email</StyledTableCell>
+                  <StyledTableCell>Manage</StyledTableCell>
+                </StyledTableRow>
+              </TableHead>
+              <TableBody>
+                {(rowsPerPage > 0
+                  ? listSurveyUsers?.items?.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : listSurveyUsers
+                ).map((user, u) => (
+                  <StyledTableRow key={u}>
+                    <StyledTableCell>{u + 1}</StyledTableCell>
+                    <StyledTableCell>{user?.name}</StyledTableCell>
+                    <StyledTableCell>{user?.email}</StyledTableCell>
+                    <StyledTableCell>
+                      <Button
+                        size="small"
+                        color="primary"
+                        onClick={() =>
+                          handleopeninguypdatesurveyUserDialog(user)
+                        }
+                      >
+                        <EditIcon />
+                      </Button>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+          <TablePagination
+            component="div"
+            count={listSurveyUsers?.items?.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={() => setOpenCreateSurveyUser(true)}
           >
-            <TableHead>
-              <TableRow>
-                <TableCell>S.NO</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Manage</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {listSurveyUsers?.items?.map((user, u) => (
-                <TableRow key={u}>
-                  <TableCell>{u + 1}</TableCell>
-                  <TableCell>{user?.name}</TableCell>
-                  <TableCell>{user?.email}</TableCell>
-                  <TableCell>
-                    <Button
-                      size="small"
-                      color="primary"
-                      onClick={() => handleopeninguypdatesurveyUserDialog(user)}
-                    >
-                      <EditIcon />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          onClick={() => setOpenCreateSurveyUser(true)}
-        >
-          <AddCircleIcon className={classes.rightIcon} /> Add SurveyUser
-        </Button>
-      </div>
+            <AddCircleIcon className={classes.rightIcon} /> Add SurveyUser
+          </Button>
+        </Paper>
+      </main>
     </div>
   );
 };

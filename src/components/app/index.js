@@ -38,7 +38,7 @@ import AdminQuestion from "../admin/question";
 import AdminUser from "../admin/users";
 import AdminGroup from "../admin/groups";
 import AdminQuestionnaireQuestions from "../admin/questionnarieQuestion";
-
+import suerveyResponses from "../admin/responses";
 import { createTheme } from "@material-ui/core/styles";
 import orange from "@material-ui/core/colors/orange";
 import indigo from "@material-ui/core/colors/indigo";
@@ -46,7 +46,9 @@ import SurveyQuestionarrireQuestion from "../custom/surveyQuestion";
 import surveyComplete from "../custom/surveyComplete";
 import EditQuestion from "../admin/EditQuestion";
 import SurveyUsers from "../admin/surveyUsers";
-
+import surveyResponses from "../custom/surveyResponses";
+import responses from "../admin/responses";
+import AdminMenu from "../admin/index";
 const theme = createTheme({
   palette: {
     primary: {
@@ -160,7 +162,7 @@ function App() {
 
   return (
     <div className={classes.root}>
-      <Dialog
+      {/* <Dialog
         open={openDialog}
         onClose={handleCloseDialog}
         aria-labelledby="alert-dialog-title"
@@ -183,7 +185,7 @@ function App() {
             Add
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
       <MuiThemeProvider theme={theme}>
         <BrowserRouter>
           <AppBar position="sticky" className={classes.appbar}>
@@ -246,7 +248,10 @@ function App() {
               )}
             </Toolbar>
           </AppBar>
+
+          <AdminMenu />
           <Route exact path="/" component={Home} />
+
           <Route path="/addentry/:questionnaireID" component={AddEntry} />
           <Route exact path="/admin" component={AdminSurvey} />
           <Route path="/admin/questions" component={AdminQuestion} />
@@ -262,6 +267,11 @@ function App() {
             path="/questionnaire/:questionnaireID"
             component={Questionnaire}
           />
+          <Route
+            path="/surveyResponses/:responseID"
+            component={surveyResponses}
+          />
+          <Route path="/admin/responses" component={responses} />
 
           <Route
             path="/surveyquestions/:questionnaireID"
