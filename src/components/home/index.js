@@ -16,6 +16,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { graphql, compose, withApollo } from "react-apollo";
 import gql from "graphql-tag";
 import { listSurveys } from "../../graphql/queries";
+import { Height } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -46,7 +47,10 @@ const useStyles = makeStyles((theme) =>
     },
   })
 );
-
+const Style = {
+  height: 150,
+  maxWidth: 300,
+};
 const HomePart = (props) => {
   const classes = useStyles();
   const {
@@ -89,15 +93,16 @@ const HomePart = (props) => {
                 image,
                 preQuestionnaire,
                 postQuestionnaire,
+                mainQuestionnaire,
               }) => (
-                <Grid item sm={4} xs={10} key={id}>
-                  <Card className={classes.card}>
+                <Grid item sm={6} xs={10} key={id}>
+                  <Card className={classes.card} elevation={10}>
                     <CardActionArea>
                       <CardMedia
                         component="img"
                         alt={name}
                         className={classes.media}
-                        height="80"
+                        style={Style}
                         image={image}
                         title={name}
                       />
@@ -119,14 +124,24 @@ const HomePart = (props) => {
                           Pre-Questionnaire
                         </Button>
                       ) : null}
+                      {mainQuestionnaire ? (
+                        <Button
+                          size="small"
+                          color="primary"
+                          component={Link}
+                          to={`/surveyquestions/${mainQuestionnaire.id}`}
+                        >
+                          mainQuestionnaire
+                        </Button>
+                      ) : null}
                       {/* <Button
-                  size="small"
-                  color="primary"
-                  component={Link}
-                  to={`/survey/${id}`}
-                >
-                  Survey
-                </Button> */}
+                        size="small"
+                        color="primary"
+                        component={Link}
+                        to={`/survey/${id}`}
+                      >
+                        Survey
+                      </Button> */}
                       {postQuestionnaire ? (
                         <Button
                           size="small"

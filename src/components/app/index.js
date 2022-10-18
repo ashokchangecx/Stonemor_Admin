@@ -47,8 +47,11 @@ import surveyComplete from "../custom/surveyComplete";
 import EditQuestion from "../admin/EditQuestion";
 import SurveyUsers from "../admin/surveyUsers";
 import surveyResponses from "../custom/surveyResponses";
+import Chart from "../custom/Chart";
 import responses from "../admin/responses";
+import QrResponses from "../admin/qrCodeResponses";
 import AdminMenu from "../admin/index";
+import SurveyLocation from "../admin/SurveyLocation";
 const theme = createTheme({
   palette: {
     primary: {
@@ -261,6 +264,7 @@ function App() {
             component={AdminQuestionnaireQuestions}
           />
           <Route path="/admin/users" component={SurveyUsers} />
+          <Route path="/admin/location" component={SurveyLocation} />
           <Route path="/admin/groups" component={AdminGroup} />
           <Route path="/profile" component={Profile} />
           <Route
@@ -272,6 +276,7 @@ function App() {
             component={surveyResponses}
           />
           <Route path="/admin/responses" component={responses} />
+          <Route path="/admin/qrresponses" component={QrResponses} />
 
           <Route
             path="/surveyquestions/:questionnaireID"
@@ -284,6 +289,7 @@ function App() {
           <Route path="/surveyComplete" component={surveyComplete} />
           <Route path="/settings" component={Settings} />
           <Route path="/survey/:surveyID" component={Survey} />
+          <Route path="/chart" component={Chart} />
         </BrowserRouter>
       </MuiThemeProvider>
     </div>

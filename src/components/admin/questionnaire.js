@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -80,7 +80,7 @@ const StyledTableRow = withStyles((theme) => ({
 const QuestionnairePart = (props) => {
   const classes = useStyles();
   const {
-    data: { loading, error, listQuestionnaires },
+    data: { loading, error, listQuestionnaires, refetch },
   } = props.listQuestionnaires;
   const {
     data: { listSurveys },
@@ -94,6 +94,8 @@ const QuestionnairePart = (props) => {
   const [isopen, setIsOpen] = React.useState(false);
   const [deleteQuestion, setDeleteQuestion] = React.useState("");
   const [page, setPage] = React.useState(0);
+  const [isCreated, setIsCreated] = useState(false);
+  const [initialLoading, setinitialLoading] = useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   function handleSnackBarClick() {
     setOpenSnackBar(true);
@@ -138,6 +140,7 @@ const QuestionnairePart = (props) => {
   }
   const handleOpenDeleteDialog = (que) => {
     setDeleteQuestion(que?.id);
+    setIsCreated(true);
     setIsOpen(true);
   };
   function handleClose() {
@@ -177,8 +180,21 @@ const QuestionnairePart = (props) => {
     }
     setType(newValue);
   }
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (isCreated) {
+        refetch({ limit: 300 });
+        setIsCreated(false);
+      }
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [isCreated]);
 
-  if (loading) {
+  useEffect(() => {
+    if (!loading) setinitialLoading(false);
+  }, [loading]);
+
+  if (loading && initialLoading) {
     return (
       <div>
         <CircularProgress className={classes.progress} />
@@ -292,8 +308,8 @@ const QuestionnairePart = (props) => {
                   onChange={(event) => onTypeChange(event.target.value)}
                 >
                   <MenuItem value={"PRE"}>PRE</MenuItem>
-                  <MenuItem value={"MAIN"}>MAIN</MenuItem>
-                  <MenuItem value={"POST"}>POST</MenuItem>
+                  {/* <MenuItem value={"MAIN"}>MAIN</MenuItem>
+                  <MenuItem value={"POST"}>POST</MenuItem> */}
                 </Select>
               </FormControl>
             </DialogContent>
@@ -348,7 +364,6 @@ const QuestionnairePart = (props) => {
                 <StyledTableCell>Name</StyledTableCell>
                 <StyledTableCell>Description</StyledTableCell>
                 <StyledTableCell>Type</StyledTableCell>
-                {/* <StyledTableCell>Manage</StyledTableCell> */}
                 <StyledTableCell>Manage</StyledTableCell>
               </StyledTableRow>
             </TableHead>
@@ -364,23 +379,14 @@ const QuestionnairePart = (props) => {
                   <StyledTableCell>{questionnaire.name}</StyledTableCell>
                   <StyledTableCell>{questionnaire.description}</StyledTableCell>
                   <StyledTableCell>{questionnaire.type}</StyledTableCell>
-                  {/* <StyledTableCell> */}
-                  {/* <Button
-                      size="small"
-                      color="primary"
-                      onClick={handleSnackBarClick}
-                    >
-                      <EditIcon />
-                    </Button> */}
-                  {/* <Button
+                  <StyledTableCell>
+                    <Button
                       size="small"
                       color="primary"
                       onClick={() => handleOpenDeleteDialog(questionnaire)}
                     >
                       <DeleteIcon />
                     </Button>
-                  </StyledTableCell> */}
-                  <StyledTableCell>
                     <Button
                       size="small"
                       color="primary"

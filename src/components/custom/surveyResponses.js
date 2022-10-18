@@ -113,7 +113,7 @@ const surveyResponsesPart = (props) => {
   // const questionCount = listans?.question?.items.sort(
   //   (a, b) => a?.order - b?.order
   // );
-  const questionCount = listans?.items.sort(
+  const questionCount = listans?.items?.sort(
     (a, b) => a?.qu?.order - b?.qu?.order
   );
   console.log("questionCount", questionCount);
@@ -165,7 +165,7 @@ const surveyResponsesPart = (props) => {
                     page * rowsPerPage + rowsPerPage
                   )
                 : questionCount
-              ).map((res, r) => (
+              )?.map((res, r) => (
                 <StyledTableRow key={r}>
                   <StyledTableCell>{res?.qu?.order}</StyledTableCell>
                   <StyledTableCell>{res?.qu?.qu}</StyledTableCell>

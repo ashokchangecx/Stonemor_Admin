@@ -10,6 +10,7 @@ import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
+import ControlPointDuplicateIcon from "@material-ui/icons/ControlPointDuplicate";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import CreateIcon from "@material-ui/icons/Create";
@@ -25,10 +26,13 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 // import { Link } from "react-router-dom";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableContainer from "@material-ui/core/TableContainer";
-
+import QRCode from "qrcode.react";
+import { useTheme } from "@material-ui/core/styles";
 import { graphql, compose, withApollo } from "react-apollo";
+
 import gql from "graphql-tag";
 import {
   listQuestions,
@@ -36,6 +40,7 @@ import {
   getQuestionnaire,
   getQuestion,
   listSurveyUsers,
+  listSurveyLocations,
 } from "../../graphql/queries";
 import {
   createQuestion,
@@ -97,20 +102,16 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const DUMMYUSERS = [
-  { email: "user100@example.com", id: "100100" },
-  { email: "user200@example.com", id: "200200" },
-  { email: "user300@example.com", id: "300300" },
-  { email: "user400@example.com", id: "400400" },
-];
 const baseUrl = "https://main.d3d8mcg1fsym22.amplifyapp.com";
 
 const QuestionnarieQuestionPart = (props) => {
   const classes = useStyles();
+  const theme = useTheme();
   const {
     data: { loading, error, getQuestionnaire, refetch },
   } = props.getQuestionnaire;
   const { listSurveyUsers } = props?.listSurveyUsers?.data;
+  const { listSurveyLocations } = props?.listSurveyLocations?.data;
   const [open, setOpen] = useState(false);
   const [editQuestionOpen, setEditQuestionOpen] = useState(false);
   const [question, setQuestion] = useState("");
@@ -128,22 +129,52 @@ const QuestionnarieQuestionPart = (props) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [openSurveyLink, setOpenSurveyLink] = React.useState(false);
+  const [openSurveyQrCode, setOpenSurveyQrCode] = React.useState(false);
   const [surveyUser, setSuveyUser] = React.useState("");
+  const [surveyLocation, setSuveyLocation] = React.useState("");
   const [userSurveyLink, setUserSurveyLink] = React.useState("");
   const [initialLoading, setinitialLoading] = useState(true);
   const [isCreated, setIsCreated] = useState(false);
   const [isopen, setIsOpen] = React.useState(false);
   const [deleteQuestion, setDeleteQuestion] = React.useState("");
+  const [inchargeEmail, setInchargeEmail] = useState("");
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
+  const surveyQrcode = `${baseUrl}/surveyquestions/${props.match.params.questionnaire}?uid=${surveyLocation}`;
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
   const questionCount = getQuestionnaire?.question?.items.sort(
     (a, b) => a?.order - b?.order
   );
+
+  const handleSendEmail = (user) => {
+    setInchargeEmail(user?.id);
+  };
+  console.log("inchargeEmail", inchargeEmail);
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+  /* Generating survey Link */
+  const handleGeneratingSurveyLink = () => {
+    const surveyUrl = `${baseUrl}/surveyquestions/${props.match.params.questionnaire}?uid=${surveyUser}`;
+    setUserSurveyLink(surveyUrl);
+    // console.log(surveyUrl, "surveyUrl");
+  };
+  //QR code //
+  const downloadQRCode = () => {
+    // Generate download with use canvas and stream
+    const canvas = document.getElementById("qr-gen");
+    const pngUrl = canvas
+      .toDataURL("image/png")
+      .replace("image/png", "image/octet-stream");
+    let downloadLink = document.createElement("a");
+    downloadLink.href = pngUrl;
+    downloadLink.download = `${surveyQrcode}.png`;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
   };
 
   /*Deleting question by ID*/
@@ -172,6 +203,10 @@ const QuestionnarieQuestionPart = (props) => {
   const handleOpenCreateSurveyDialog = () => {
     setOpenSurveyLink(true);
   };
+  /*Opening Creating new surveyQrCode Dialogbox*/
+  const handleOpenCreateSurveyLocationDialog = () => {
+    setOpenSurveyQrCode(true);
+  };
 
   /*Opening Creating new surveylink Dialogbox*/
   const handleopenSurveyLinkClose = () => {
@@ -179,12 +214,11 @@ const QuestionnarieQuestionPart = (props) => {
     setUserSurveyLink("");
     setOpenSurveyLink(false);
   };
+  /*Opening Creating new surveylink Dialogbox*/
+  const handleopenSurveyQrCodeClose = () => {
+    setSuveyLocation("");
 
-  /* Generating survey Link */
-  const handleGeneratingSurveyLink = () => {
-    const surveyUrl = `${baseUrl}/surveyquestions/${props.match.params.questionnaire}?uid=${surveyUser}`;
-    setUserSurveyLink(surveyUrl);
-    // console.log(surveyUrl, "surveyUrl");
+    setOpenSurveyQrCode(false);
   };
 
   /*Changing new question value */
@@ -972,11 +1006,11 @@ const QuestionnarieQuestionPart = (props) => {
         <Dialog
           open={openSurveyLink}
           onClose={handleopenSurveyLinkClose}
-          aria-labelledby="form-dialog-title"
-          fullWidth
+          aria-labelledby="responsive-dialog-title"
+          fullScreen={fullScreen}
         >
           <FormControl>
-            <DialogTitle id="form-dialog-title">
+            <DialogTitle id="responsive-dialog-title">
               Creating survey Link
             </DialogTitle>
 
@@ -1022,6 +1056,62 @@ const QuestionnarieQuestionPart = (props) => {
             </DialogActions>
           </FormControl>
         </Dialog>
+        <Dialog
+          open={openSurveyQrCode}
+          onClose={handleopenSurveyQrCodeClose}
+          aria-labelledby="responsive-dialog-title"
+          fullScreen={fullScreen}
+        >
+          <FormControl>
+            <DialogTitle id="responsive-dialog-title">
+              Creating survey QR Code
+            </DialogTitle>
+
+            <DialogContent>
+              <FormControl fullWidth>
+                <InputLabel>Select Location</InputLabel>
+                <Select
+                  margin="dense"
+                  fullWidth
+                  value={surveyLocation}
+                  onChange={(event) => setSuveyLocation(event.target.value)}
+                >
+                  {listSurveyLocations?.items?.map((user, u) => (
+                    <MenuItem value={user?.id} key={u}>
+                      {user?.location}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <TextField
+                  margin="dense"
+                  id="InchargeEmail"
+                  label="Email"
+                  value={inchargeEmail}
+                  onChange={(event) => setInchargeEmail(event.target.value)}
+                  fullWidth
+                />
+              </FormControl>
+            </DialogContent>
+
+            <DialogActions>
+              <QRCode
+                id="qr-gen"
+                value={surveyQrcode}
+                size={300}
+                level={"H"}
+                includeMargin={true}
+              />
+
+              <Button onClick={handleopenSurveyQrCodeClose} color="default">
+                Close
+              </Button>
+
+              <Button type="button" color="primary" onClick={downloadQRCode}>
+                Download QR Code
+              </Button>
+            </DialogActions>
+          </FormControl>
+        </Dialog>
       </div>
       <main className={classes.root}>
         <div>
@@ -1034,6 +1124,15 @@ const QuestionnarieQuestionPart = (props) => {
           >
             <CreateIcon className={classes.rightIcon} />
             Create Survey Link
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            onClick={handleOpenCreateSurveyLocationDialog}
+          >
+            <CreateIcon className={classes.rightIcon} />
+            Create Survey QR Code
           </Button>
         </div>
         <p />
@@ -1085,13 +1184,13 @@ const QuestionnarieQuestionPart = (props) => {
                     >
                       <EditIcon />
                     </Button>
-                    {/* <Button
+                    <Button
                       size="small"
                       color="primary"
                       onClick={() => handleOpenDeleteDialog(question)}
                     >
                       <DeleteIcon />
-                    </Button> */}
+                    </Button>
                   </StyledTableCell>
                   {/* </StyledTableRow> */}
                 </StyledTableRow>
@@ -1115,6 +1214,15 @@ const QuestionnarieQuestionPart = (props) => {
           onClick={handleOpenDialog}
         >
           <AddCircleIcon className={classes.rightIcon} /> Add Question
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.button}
+          onClick={handleOpenDialog}
+        >
+          <ControlPointDuplicateIcon className={classes.rightIcon} /> Clone
+          Questionnaire
         </Button>
         {/* <Button
           variant="contained"
@@ -1151,6 +1259,17 @@ const Question = compose(
     props: (props) => {
       return {
         listSurveyUsers: props ? props : [],
+      };
+    },
+  }),
+  graphql(gql(listSurveyLocations), {
+    options: (props) => ({
+      errorPolicy: "all",
+      fetchPolicy: "cache-and-network",
+    }),
+    props: (props) => {
+      return {
+        listSurveyLocations: props ? props : [],
       };
     },
   }),

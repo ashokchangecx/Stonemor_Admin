@@ -120,6 +120,7 @@ export const getQuestionnaire = /* GraphQL */ `
       id
       name
       description
+      image
       type
       createdAt
       updatedAt
@@ -167,7 +168,30 @@ export const listQuestionnaires = /* GraphQL */ `
         type
         createdAt
         updatedAt
-        question {
+        question(limit: 200) {
+          items {
+            id
+            qu
+            type
+            isSelf
+            isDependent
+            listOptions {
+              listValue
+              nextQuestion
+              isText
+              isMultiple
+            }
+            dependent {
+              id
+              options {
+                dependentValue
+                nextQuestion
+              }
+            }
+            order
+            createdAt
+            updatedAt
+          }
           nextToken
         }
       }
@@ -305,6 +329,13 @@ export const getResponses = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        location {
+          id
+          location
+          inchargeEmail
+          createdAt
+          updatedAt
+        }
       }
     }
   }
@@ -369,6 +400,13 @@ export const getSurveyEntries = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      location {
+        id
+        location
+        inchargeEmail
+        createdAt
+        updatedAt
+      }
     }
   }
 `;
@@ -412,6 +450,13 @@ export const listSurveyEntriess = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        location {
+          id
+          location
+          inchargeEmail
+          createdAt
+          updatedAt
+        }
       }
       nextToken
     }
@@ -439,6 +484,35 @@ export const listSurveyUsers = /* GraphQL */ `
         id
         name
         email
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getSurveyLocation = /* GraphQL */ `
+  query GetSurveyLocation($id: ID!) {
+    getSurveyLocation(id: $id) {
+      id
+      location
+      inchargeEmail
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listSurveyLocations = /* GraphQL */ `
+  query ListSurveyLocations(
+    $filter: ModelSurveyLocationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listSurveyLocations(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        location
+        inchargeEmail
         createdAt
         updatedAt
       }

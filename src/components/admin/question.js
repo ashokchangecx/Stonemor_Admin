@@ -378,13 +378,13 @@ const QuestionPart = (props) => {
                     >
                       <EditIcon />
                     </Button>
-                    {/* <Button
+                    <Button
                       size="small"
                       color="primary"
                       onClick={() => handleOpenDeleteDialog(question)}
                     >
                       <DeleteIcon />
-                    </Button> */}
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}

@@ -8,47 +8,46 @@ import {
   createTheme,
 } from "@material-ui/core/styles";
 
-import { IconButton, Paper, Typography,Container,Card, Box } from "@material-ui/core";
+import {
+  IconButton,
+  Paper,
+  Typography,
+  Container,
+  Card,
+  Box,
+} from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-
 
 const styles = {
   paperContainer: {
-      backgroundRepeat: 'no-repeat',
-      backgroundImage: `url('https://wallpaperaccess.com/full/1454447.jpg')`,
-      backgroundSize: 'cover',
-      minHeight: '100vh'
-  
-  }
+    backgroundRepeat: "no-repeat",
+    backgroundImage: `url('https://wallpaperaccess.com/full/1454447.jpg')`,
+    backgroundSize: "cover",
+    minHeight: "100vh",
+  },
 };
 const useStyles = makeStyles((theme) =>
   createStyles({
-  
-    text:{
+    text: {
       marginTop: 100,
-      display:'flex',
-      justifyContent:'center',
-      alignItems: 'center'
-      
-
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
     },
-    media:{
-      objectFit: 'cover'
+    media: {
+      objectFit: "cover",
     },
     button: {
       margin: theme.spacing(2),
     },
     textcolor: {
-      color: '#fafafa',
+      color: "#fafafa",
     },
-    img:{
+    img: {
       width: 100,
-      height:100,
-      marginLeft: '40%'
-
-    }
-    
-    
+      height: 100,
+      marginLeft: "40%",
+    },
   })
 );
 const theme = createTheme();
@@ -68,7 +67,7 @@ const SurveyComplete = (props) => {
   const classes = useStyles();
 
   return (
-    <div  style={styles.paperContainer}>
+    <div style={styles.paperContainer}>
       <div>
         <IconButton
           className={classes.button}
@@ -80,21 +79,25 @@ const SurveyComplete = (props) => {
           <ArrowBackIcon />
         </IconButton>
       </div>
-      <div className={classes.text} >
-        <Box  >
-          
-          <img src="https://www.freeiconspng.com/thumbs/success-icon/success-icon-10.png"  className={classes.img}></img>
-        
-      <ThemeProvider theme={theme} >
-      
-        <Typography variant="h3" className={classes.textcolor}>Thankyou for Your Participation</Typography>
-        <Typography variant="h3" className={classes.textcolor}>Your Survey is Completed</Typography>
-      </ThemeProvider>
-      </Box>
-       </div>
-      
+      <div className={classes.text}>
+        <Box>
+          <img
+            src="https://basis.net/wp-content/uploads/2021/10/house_plant_home.jpeg"
+            className={classes.img}
+            alt="img"
+          />
+          s
+          <ThemeProvider theme={theme}>
+            <Typography variant="h3" className={classes.textcolor}>
+              Thankyou for Your Participation
+            </Typography>
+            <Typography variant="h3" className={classes.textcolor}>
+              Your Survey is Completed
+            </Typography>
+          </ThemeProvider>
+        </Box>
       </div>
-    
+    </div>
   );
 };
 

@@ -73,13 +73,14 @@ const SurveyPart = (props) => {
   const {
     data: { loading, error, listSurveys, refetch },
   } = props.listSurveys;
+  console.log("listSurveys", listSurveys);
   const [open, setOpen] = React.useState(false);
   const [initialLoading, setinitialLoading] = useState(true);
   const [isCreated, setIsCreated] = useState(false);
   const [openSnackBar, setOpenSnackBar] = React.useState(false);
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [groupName, setGroupName] = React.useState("");
+  const [groupName] = React.useState("StoneMor");
   const [isopen, setIsOpen] = React.useState(false);
   const [deleteQuestion, setDeleteQuestion] = React.useState("");
   const [page, setPage] = React.useState(0);
@@ -152,13 +153,13 @@ const SurveyPart = (props) => {
     }
     setTitle(newValue);
   }
-  function onGroupNameChange(newValue) {
-    if (groupName === newValue) {
-      setGroupName(newValue);
-      return;
-    }
-    setGroupName(newValue);
-  }
+  // function onGroupNameChange(newValue) {
+  //   if (groupName === newValue) {
+  //     setGroupName(newValue);
+  //     return;
+  //   }
+  //   setGroupName(newValue);
+  // }
   function onDescriptionChange(newValue) {
     if (title === newValue) {
       setDescription(newValue);
@@ -234,11 +235,11 @@ const SurveyPart = (props) => {
         ]}
       />
       {/* <AdminMenu /> */}
-      <div className={classes.root}>
+      {/* <div className={classes.root}>
         <Breadcrumbs aria-label="breadcrumb">
           <Typography color="primary">Manage Survey</Typography>
         </Breadcrumbs>
-      </div>
+      </div> */}
       <div>
         <Dialog
           open={open}
@@ -276,14 +277,14 @@ const SurveyPart = (props) => {
                 onChange={(event) => onImageChange(event.target.value)}
                 fullWidth
               />
-              <TextField
+              {/* <TextField
                 margin="dense"
                 id="groupname"
                 label="Security Group Name"
                 value={groupName}
                 onChange={(event) => onGroupNameChange(event.target.value)}
                 fullWidth
-              />
+              /> */}
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose} color="default">
@@ -336,7 +337,8 @@ const SurveyPart = (props) => {
                 <StyledTableCell></StyledTableCell>
                 <StyledTableCell>Name</StyledTableCell>
                 <StyledTableCell>Description</StyledTableCell>
-                {/* <StyledTableCell>Manage</StyledTableCell> */}
+                <StyledTableCell>Questionnaire</StyledTableCell>
+                <StyledTableCell>Manage</StyledTableCell>
               </StyledTableRow>
             </TableHead>
             <TableBody>
@@ -347,32 +349,35 @@ const SurveyPart = (props) => {
                   )
                 : listSurveys
               ).map((survey) => (
-                <StyledTableRow key={survey.name}>
+                <StyledTableRow key={survey?.name}>
                   <StyledTableCell>
                     <img
-                      src={survey.image}
+                      src={survey?.image}
                       alt={survey.image}
                       className={classes.image}
                     />
                   </StyledTableCell>
-                  <StyledTableCell>{survey.name}</StyledTableCell>
-                  <StyledTableCell>{survey.description}</StyledTableCell>
-                  {/* <StyledTableCell> */}
-                  {/* <Button
+                  <StyledTableCell>{survey?.name}</StyledTableCell>
+                  <StyledTableCell>{survey?.description}</StyledTableCell>
+                  <StyledTableCell>
+                    {survey?.preQuestionnaire?.name}
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    {/* <Button
                       onClick={handleSnackBarClick}
                       size="small"
                       color="primary"
                     >
                       <EditIcon />
                     </Button> */}
-                  {/* <Button
+                    <Button
                       onClick={() => handleOpenDeleteDialog(survey)}
                       size="small"
                       color="primary"
                     >
                       <DeleteIcon />
-                    </Button> */}
-                  {/* </StyledTableCell> */}
+                    </Button>
+                  </StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
@@ -432,7 +437,6 @@ const Survey = compose(
             const query = gql(listSurveys);
             const data = store.readQuery({
               query,
-              variables: { filter: null, limit: null, nextToken: null },
             });
             data.listSurveys.items = [
               ...data.listSurveys.items.filter(

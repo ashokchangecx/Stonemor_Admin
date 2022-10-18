@@ -16,6 +16,8 @@ import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
 import PersonIcon from "@material-ui/icons/Person";
+import PinDropIcon from "@material-ui/icons/PinDrop";
+import AdjustIcon from "@material-ui/icons/Adjust";
 import LanguageIcon from "@material-ui/icons/Language";
 import { makeStyles, useTheme, withStyles } from "@material-ui/core/styles";
 import MuiListItem from "@material-ui/core/ListItem";
@@ -179,12 +181,41 @@ const Admin = (props) => {
           selected={selectedIndex === 4}
           onClick={(event) => handleListItemClick(event, 4)}
           component={Link}
+          to={{
+            pathname: "/admin/location",
+            state: {
+              userPoolId: userPoolId,
+            },
+          }}
+        >
+          <ListItemIcon>
+            <PinDropIcon />
+          </ListItemIcon>
+          <ListItemText primary="Location" />
+        </ListItem>
+        <ListItem
+          button
+          selected={selectedIndex === 5}
+          onClick={(event) => handleListItemClick(event, 5)}
+          component={Link}
           to="/admin/responses"
         >
           <ListItemIcon>
             <CheckCircleOutlineIcon />
           </ListItemIcon>
-          <ListItemText primary="Responses" />
+          <ListItemText primary="Link Responses" />
+        </ListItem>
+        <ListItem
+          button
+          selected={selectedIndex === 6}
+          onClick={(event) => handleListItemClick(event, 6)}
+          component={Link}
+          to="/admin/qrresponses"
+        >
+          <ListItemIcon>
+            <AdjustIcon />
+          </ListItemIcon>
+          <ListItemText primary="QR Responses" />
         </ListItem>
         {/* <Divider /> */}
         {/* <ListItem

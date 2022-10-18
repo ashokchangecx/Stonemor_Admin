@@ -78,7 +78,7 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const responsesPort = (props) => {
+const qrCodeResponsesPort = (props) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [page, setPage] = React.useState(0);
@@ -112,8 +112,8 @@ const responsesPort = (props) => {
   //   (a, b) => a?.order - b?.order
   // );
   const questionCount = listSurveyEntriess?.items
-    ?.filter((user) => user?.by?.name)
-    .sort(
+    ?.filter((user) => user?.location?.location)
+    ?.sort(
       (a, b) =>
         moment(b.finishTime, "DD-MM-YYYY hh:mm A").unix() -
         moment(a.finishTime, "DD-MM-YYYY hh:mm A").unix()
@@ -136,11 +136,11 @@ const responsesPort = (props) => {
       {/* <AdminMenu /> */}
       <div className={classes.root}>
         <Breadcrumbs aria-label="breadcrumb">
-          <Typography color="primary">Survey Link Response</Typography>
+          <Typography color="primary">QR Code Response</Typography>
         </Breadcrumbs>
       </div>
       <div className={classes.root}>
-        <Typography variant="h4">Survey Link Response </Typography> <p />
+        <Typography variant="h4">QR Code Response </Typography> <p />
         <Paper className={classes.content}>
           {listSurveyEntriess?.items?.length > 0 && (
             <Table
@@ -151,9 +151,8 @@ const responsesPort = (props) => {
               <TableHead>
                 <StyledTableRow>
                   <StyledTableCell>S.NO</StyledTableCell>
-                  <StyledTableCell>Name</StyledTableCell>
-                  <StyledTableCell>Email</StyledTableCell>
 
+                  <StyledTableCell>Location</StyledTableCell>
                   <StyledTableCell>Questionnaire</StyledTableCell>
                   <StyledTableCell>Start Time</StyledTableCell>
                   <StyledTableCell>Finish Time</StyledTableCell>
@@ -170,9 +169,10 @@ const responsesPort = (props) => {
                 ).map((user, u) => (
                   <StyledTableRow key={u}>
                     <StyledTableCell>{u + 1}</StyledTableCell>
-                    <StyledTableCell>{user?.by?.name}</StyledTableCell>
-                    <StyledTableCell>{user?.by?.email}</StyledTableCell>
 
+                    <StyledTableCell>
+                      {user?.location?.location}
+                    </StyledTableCell>
                     <StyledTableCell>
                       {" "}
                       {onGettingQuestionnaireById(user?.questionnaireId)}
@@ -214,7 +214,7 @@ const responsesPort = (props) => {
     </div>
   );
 };
-const Responses = compose(
+const QrResponses = compose(
   graphql(gql(listResponsess), {
     options: (props) => ({
       errorPolicy: "all",
@@ -260,6 +260,6 @@ const Responses = compose(
       };
     },
   })
-)(responsesPort);
+)(qrCodeResponsesPort);
 
-export default Responses;
+export default QrResponses;
