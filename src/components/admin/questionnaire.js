@@ -380,13 +380,13 @@ const QuestionnairePart = (props) => {
                   <StyledTableCell>{questionnaire.description}</StyledTableCell>
                   <StyledTableCell>{questionnaire.type}</StyledTableCell>
                   <StyledTableCell>
-                    <Button
+                    {/* <Button
                       size="small"
                       color="primary"
                       onClick={() => handleOpenDeleteDialog(questionnaire)}
                     >
                       <DeleteIcon />
-                    </Button>
+                    </Button> */}
                     <Button
                       size="small"
                       color="primary"

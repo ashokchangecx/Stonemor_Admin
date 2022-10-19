@@ -15,6 +15,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
+import SelectAllIcon from "@material-ui/icons/SelectAll";
 import PersonIcon from "@material-ui/icons/Person";
 import PinDropIcon from "@material-ui/icons/PinDrop";
 import AdjustIcon from "@material-ui/icons/Adjust";
@@ -213,7 +214,7 @@ const Admin = (props) => {
           to="/admin/qrresponses"
         >
           <ListItemIcon>
-            <AdjustIcon />
+            <SelectAllIcon />
           </ListItemIcon>
           <ListItemText primary="QR Responses" />
         </ListItem>

@@ -118,7 +118,7 @@ const qrCodeResponsesPort = (props) => {
         moment(b.finishTime, "DD-MM-YYYY hh:mm A").unix() -
         moment(a.finishTime, "DD-MM-YYYY hh:mm A").unix()
     );
-  // console.log("questionCount", questionCount);
+  console.log("questionCount", questionCount);
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));

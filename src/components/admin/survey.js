@@ -338,7 +338,7 @@ const SurveyPart = (props) => {
                 <StyledTableCell>Name</StyledTableCell>
                 <StyledTableCell>Description</StyledTableCell>
                 <StyledTableCell>Questionnaire</StyledTableCell>
-                <StyledTableCell>Manage</StyledTableCell>
+                {/* <StyledTableCell>Manage</StyledTableCell> */}
               </StyledTableRow>
             </TableHead>
             <TableBody>
@@ -362,22 +362,22 @@ const SurveyPart = (props) => {
                   <StyledTableCell>
                     {survey?.preQuestionnaire?.name}
                   </StyledTableCell>
-                  <StyledTableCell>
-                    {/* <Button
+                  {/* <StyledTableCell> */}
+                  {/* <Button
                       onClick={handleSnackBarClick}
                       size="small"
                       color="primary"
                     >
                       <EditIcon />
                     </Button> */}
-                    <Button
+                  {/* <Button
                       onClick={() => handleOpenDeleteDialog(survey)}
                       size="small"
                       color="primary"
                     >
                       <DeleteIcon />
-                    </Button>
-                  </StyledTableCell>
+                    </Button> */}
+                  {/* </StyledTableCell> */}
                 </StyledTableRow>
               ))}
             </TableBody>
