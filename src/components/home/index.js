@@ -47,10 +47,7 @@ const useStyles = makeStyles((theme) =>
     },
   })
 );
-const Style = {
-  height: 150,
-  maxWidth: 300,
-};
+
 const HomePart = (props) => {
   const classes = useStyles();
   const {
@@ -102,7 +99,7 @@ const HomePart = (props) => {
                         component="img"
                         alt={name}
                         className={classes.media}
-                        style={Style}
+                       height="80px"
                         image={image}
                         title={name}
                       />
