@@ -140,7 +140,7 @@ const QuestionnarieQuestionPart = (props) => {
 
   const [inchargeEmail, setInchargeEmail] = useState("");
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
-  const emailUrl = "https://main.d2s3f26iaks9k7.amplifyapp.com/api/mail/send";
+  const emailUrl = "https://stonemor.netlify.app/.netlify/functions/server/send";
   const surveyLoc = listSurveyLocations?.items?.find(
     (loc) => loc?.id === surveyLocation
   );
