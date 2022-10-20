@@ -99,7 +99,7 @@ const HomePart = (props) => {
                         component="img"
                         alt={name}
                         className={classes.media}
-                       height="80px"
+                       height="50px"
                         image={image}
                         title={name}
                       />

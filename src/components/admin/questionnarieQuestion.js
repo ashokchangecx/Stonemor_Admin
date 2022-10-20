@@ -26,6 +26,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 // import { Link } from "react-router-dom";
+import Alert from "@material-ui/lab/Alert";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -34,6 +35,8 @@ import { useTheme } from "@material-ui/core/styles";
 import { graphql, compose, withApollo } from "react-apollo";
 import axios from "axios";
 import gql from "graphql-tag";
+import CloseIcon from "@material-ui/icons/Close";
+import { IconButton } from "@material-ui/core";
 import {
   listQuestions,
   listQuestionnaires,
@@ -60,6 +63,7 @@ import {
   RadioGroup,
   TableFooter,
 } from "@material-ui/core";
+import { AlarmTwoTone } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -79,6 +83,13 @@ const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
     marginTop: 20,
+  },
+  customizedButtion: {
+    position: "absolute",
+    left: "93%",
+    top: "2%",
+    backgroundColor: "#fbf9f9",
+    color: "gray",
   },
   // createLink: {
   //   marginLeft: "55rem",
@@ -137,10 +148,16 @@ const QuestionnarieQuestionPart = (props) => {
   const [isCreated, setIsCreated] = useState(false);
   const [isopen, setIsOpen] = React.useState(false);
   const [deleteQuestion, setDeleteQuestion] = React.useState("");
-
+  const [alertSuccess, setAlertSuccess] = useState(false);
+  const [alertFail, setAlertFail] = useState(false);
+  const [alertContentSuccess, setAlertContentSuccess] = useState("");
+  const [alertContentFail, setAlertContentFail] = useState("");
   const [inchargeEmail, setInchargeEmail] = useState("");
-  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
-  const emailUrl = "https://stonemor.netlify.app/.netlify/functions/server/send";
+  // const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const [fullWidth, setFullWidth] = React.useState(true);
+  const [maxWidth] = useState("md");
+  const emailUrl =
+    "https://stonemor.netlify.app/.netlify/functions/server/send";
   const surveyLoc = listSurveyLocations?.items?.find(
     (loc) => loc?.id === surveyLocation
   );
@@ -164,7 +181,23 @@ const QuestionnarieQuestionPart = (props) => {
     loc: surveyLoc?.location,
   };
   const handleSendEmail = async () => {
-    axios.post(`${emailUrl}`, data);
+    axios
+      .post(`${emailUrl}`, data)
+      .then((res) => {
+        if (res.data.mailSent === true) {
+          setAlertContentSuccess(
+            `QR code send to  ${inchargeEmail}  successfully`
+          );
+          setAlertSuccess(true);
+        } else {
+          setAlertContentFail("Email ID Required");
+          setAlertFail(true);
+        }
+        console.log("res", res);
+      })
+      .catch((err) => {
+        alert(err);
+      });
   };
 
   console.log("surveyLoc", surveyLoc?.inchargeEmail);
@@ -239,7 +272,7 @@ const QuestionnarieQuestionPart = (props) => {
   /*Opening Creating new surveylink Dialogbox*/
   const handleopenSurveyQrCodeClose = () => {
     setSuveyLocation("");
-
+    setInchargeEmail("");
     setOpenSurveyQrCode(false);
   };
 
@@ -433,7 +466,12 @@ const QuestionnarieQuestionPart = (props) => {
   const handleAddListItemClose = () => {
     setOpenAddListItem(false);
   };
-
+  useEffect(() => {
+    const surveyLoc = listSurveyLocations?.items?.find(
+      (loc) => loc?.id === surveyLocation
+    );
+    setInchargeEmail(surveyLoc?.inchargeEmail || " ");
+  }, [surveyLocation]);
   /* Side effect to open List dialog */
   useEffect(() => {
     if (type && type !== "TEXT" && !editQuestion) {
@@ -454,6 +492,7 @@ const QuestionnarieQuestionPart = (props) => {
   useEffect(() => {
     if (!loading) setinitialLoading(false);
   }, [loading]);
+
   if (loading && initialLoading) {
     return (
       <div>
@@ -1082,8 +1121,16 @@ const QuestionnarieQuestionPart = (props) => {
           open={openSurveyQrCode}
           onClose={handleopenSurveyQrCodeClose}
           aria-labelledby="responsive-dialog-title"
-          fullScreen={fullScreen}
+          fullWidth={fullWidth}
+          maxWidth={maxWidth}
         >
+          {" "}
+          {alertSuccess ? (
+            <Alert severity="success">{alertContentSuccess}</Alert>
+          ) : (
+            ""
+          )}
+          {alertFail ? <Alert severity="error">{alertContentFail}</Alert> : ""}
           <FormControl>
             <DialogTitle id="responsive-dialog-title">
               Creating survey QR Code
@@ -1116,20 +1163,22 @@ const QuestionnarieQuestionPart = (props) => {
             </DialogContent>
 
             <DialogActions>
+              <IconButton
+                autoFocus
+                onClick={handleopenSurveyQrCodeClose}
+                color="primary"
+                className={classes.customizedButtion}
+              >
+                <CloseIcon />
+              </IconButton>
               <QRCode
                 id="qr-gen"
                 value={surveyQrcode}
-                size={300}
+                size={280}
                 level={"H"}
                 includeMargin={true}
               />
-              <Button
-                onClick={handleopenSurveyQrCodeClose}
-                variant="contained"
-                color="default"
-              >
-                Close
-              </Button>
+
               <Button
                 type="button"
                 variant="contained"

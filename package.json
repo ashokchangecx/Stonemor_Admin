@@ -7,6 +7,7 @@
     "@date-io/moment": "^1.3.7",
     "@material-ui/core": "^4.0.0",
     "@material-ui/icons": "^4.0.0",
+    "@material-ui/lab": "^4.0.0-alpha.61",
     "@material-ui/pickers": "^3.0.0",
     "apexcharts": "^3.35.5",
     "apollo-boost": "^0.4.0",
