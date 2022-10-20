@@ -267,13 +267,18 @@ const QuestionnarieQuestionPart = (props) => {
   const handleopenSurveyLinkClose = () => {
     setSuveyUser("");
     setUserSurveyLink("");
+ 
+
     setOpenSurveyLink(false);
   };
   /*Opening Creating new surveylink Dialogbox*/
   const handleopenSurveyQrCodeClose = () => {
     setSuveyLocation("");
     setInchargeEmail("");
+    setAlertSuccess("")
+    setAlertFail("")
     setOpenSurveyQrCode(false);
+
   };
 
   /*Changing new question value */
