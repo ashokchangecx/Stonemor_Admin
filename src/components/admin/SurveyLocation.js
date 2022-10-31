@@ -19,6 +19,7 @@ import {
   Typography,
   withStyles,
 } from "@material-ui/core";
+import moment from "moment";
 import gql from "graphql-tag";
 import React, { useEffect, useState } from "react";
 import { compose, graphql } from "react-apollo";
@@ -88,6 +89,13 @@ const SurveyLocationPart = (props) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
+  const surveyLocationOrder = listSurveyLocations?.items?.sort(
+    (a, b) =>
+      moment(b.updatedAt, "DD-MM-YYYY hh:mm A ").unix() -
+      moment(a.updatedAt, "DD-MM-YYYY hh:mm A ").unix()
+  );
+
+  console.log(surveyLocationOrder);
   const handleClosingSurveyLocationDialog = () => {
     setSurveyLocation("");
     setInchargeEmail("");
@@ -236,7 +244,7 @@ const SurveyLocationPart = (props) => {
           >
             <FormControl fullWidth>
               <DialogTitle id="form-dialog-title">
-                Edit SurveyLocation - {surveyLocationId}
+                Edit SurveyLocation
               </DialogTitle>
               <DialogContent>
                 <TextField
@@ -295,11 +303,11 @@ const SurveyLocationPart = (props) => {
               </TableHead>
               <TableBody>
                 {(rowsPerPage > 0
-                  ? listSurveyLocations?.items?.slice(
+                  ? surveyLocationOrder?.slice(
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
                     )
-                  : listSurveyLocations
+                  : surveyLocationOrder
                 ).map((surveyLocation, u) => (
                   <StyledTableRow key={u}>
                     <StyledTableCell>{u + 1}</StyledTableCell>

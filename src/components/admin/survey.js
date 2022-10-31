@@ -26,8 +26,14 @@ import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import { graphql, compose, withApollo } from "react-apollo";
 import gql from "graphql-tag";
+import moment from "moment";
 import { listSurveys } from "../../graphql/queries";
-import { createSurvey, deleteSurvey, addGroup } from "../../graphql/mutations";
+import {
+  createSurvey,
+  deleteSurvey,
+  addGroup,
+  updateSurvey,
+} from "../../graphql/mutations";
 
 import AdminMenu from "./index";
 import { Breadcrumbs, Link, TablePagination } from "@material-ui/core";
@@ -88,9 +94,19 @@ const SurveyPart = (props) => {
   const [image, setImage] = React.useState(
     "https://dynamix-cdn.s3.amazonaws.com/stonemorcom/stonemorcom_616045937.svg"
   );
+  const [surveyId, setSurveyId] = useState("");
+
+  const [openUpdateSurvey, setOpenUpdateSurvey] = useState(false);
+
   function handleSnackBarClick() {
     setOpenSnackBar(true);
   }
+
+  const surveyOrder = listSurveys?.items?.sort(
+    (a, b) =>
+      moment(b.createdAt, "DD-MM-YYYY hh:mm A").unix() -
+      moment(a.createdAt, "DD-MM-YYYY hh:mm A").unix()
+  );
   function handleSnackBarClose(event, reason) {
     if (reason === "clickaway") {
       return;
@@ -113,6 +129,29 @@ const SurveyPart = (props) => {
     props.onAddGroup(groupName, props.location.state.userPoolId);
   }
 
+  const handleClosingSurveyUpdateDialog = () => {
+    setImage("");
+    setTitle("");
+    setDescription("");
+    setOpenUpdateSurvey(false);
+  };
+  const handleUpdateSurvey = (event) => {
+    event.preventDefault();
+    props.onUpdateSurvey({
+      id: surveyId,
+      name: title,
+      description: description,
+      image: image,
+    });
+    handleClosingSurveyUpdateDialog();
+  };
+  const handleopeningUpdatesurveyDialog = (survey) => {
+    setSurveyId(survey?.id);
+    setTitle(survey?.name);
+    setDescription(survey?.description);
+    setImage(survey?.image);
+    setOpenUpdateSurvey(true);
+  };
   useEffect(() => {
     const timer = setTimeout(() => {
       if (isCreated) {
@@ -326,6 +365,59 @@ const SurveyPart = (props) => {
             </DialogActions>
           </FormControl>
         </Dialog>
+
+        {/* edit survey   */}
+
+        <Dialog
+          open={openUpdateSurvey}
+          onClose={handleClosingSurveyUpdateDialog}
+          aria-labelledby="form-dialog-title"
+          fullWidth
+        >
+          <FormControl fullWidth>
+            <DialogTitle id="form-dialog-title">Edit Survey</DialogTitle>
+            <DialogContent>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="title"
+                label="Title"
+                value={title}
+                onChange={(event) => setTitle(event.target.value)}
+                fullWidth
+              />
+              <TextField
+                autoFocus
+                margin="dense"
+                id="description"
+                label="Description"
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+                fullWidth
+              />
+              <TextField
+                margin="dense"
+                id="image"
+                label="Image URL (enter your own or use the random generated image)"
+                value={image}
+                onChange={(event) => setImage(event.target.value)}
+                fullWidth
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClosingSurveyUpdateDialog} color="default">
+                Cancel
+              </Button>
+              <Button
+                onClick={handleUpdateSurvey}
+                type="submit"
+                color="primary"
+              >
+                Update
+              </Button>
+            </DialogActions>
+          </FormControl>
+        </Dialog>
       </div>
       <main className={classes.root}>
         <Typography variant="h4">Manage Surveys</Typography>
@@ -338,16 +430,16 @@ const SurveyPart = (props) => {
                 <StyledTableCell>Name</StyledTableCell>
                 <StyledTableCell>Description</StyledTableCell>
                 <StyledTableCell>Questionnaire</StyledTableCell>
-                {/* <StyledTableCell>Manage</StyledTableCell> */}
+                <StyledTableCell>Manage</StyledTableCell>
               </StyledTableRow>
             </TableHead>
             <TableBody>
               {(rowsPerPage > 0
-                ? listSurveys?.items?.slice(
+                ? surveyOrder?.slice(
                     page * rowsPerPage,
                     page * rowsPerPage + rowsPerPage
                   )
-                : listSurveys
+                : surveyOrder
               ).map((survey) => (
                 <StyledTableRow key={survey?.name}>
                   <StyledTableCell>
@@ -362,22 +454,22 @@ const SurveyPart = (props) => {
                   <StyledTableCell>
                     {survey?.preQuestionnaire?.name}
                   </StyledTableCell>
-                  {/* <StyledTableCell> */}
-                  {/* <Button
-                      onClick={handleSnackBarClick}
+                  <StyledTableCell>
+                    <Button
+                      onClick={() => handleopeningUpdatesurveyDialog(survey)}
                       size="small"
                       color="primary"
                     >
                       <EditIcon />
-                    </Button> */}
-                  {/* <Button
+                    </Button>
+                    {/* <Button
                       onClick={() => handleOpenDeleteDialog(survey)}
                       size="small"
                       color="primary"
                     >
                       <DeleteIcon />
                     </Button> */}
-                  {/* </StyledTableCell> */}
+                  </StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
@@ -448,6 +540,36 @@ const Survey = compose(
               query,
               data,
               variables: { filter: null, limit: null, nextToken: null },
+            });
+          },
+        });
+      },
+    }),
+  }),
+  graphql(gql(updateSurvey), {
+    options: (props) => ({
+      errorPolicy: "all",
+    }),
+    props: (props) => ({
+      onUpdateSurvey: (survey) => {
+        props.mutate({
+          variables: {
+            input: survey,
+          },
+          update: (store, { data: { updateSurvey } }) => {
+            const query = gql(listSurveys);
+            const data = store.readQuery({
+              query,
+            });
+            data.listSurveys.items = [
+              ...data.listSurveyLocations.items.filter(
+                (item) => item.id !== updateSurvey.id
+              ),
+              updateSurvey,
+            ];
+            store.writeQuery({
+              query,
+              data,
             });
           },
         });

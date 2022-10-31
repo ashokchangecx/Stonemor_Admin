@@ -35,11 +35,13 @@ import {
   createQuestionnaire,
   updateSurvey,
   deleteQuestionnaire,
+  updateQuestionnaire,
 } from "../../graphql/mutations";
 
 import AdminMenu from "./index";
 import { Link } from "react-router-dom";
 import { Breadcrumbs, TablePagination } from "@material-ui/core";
+import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -82,6 +84,8 @@ const QuestionnairePart = (props) => {
   const {
     data: { loading, error, listQuestionnaires, refetch },
   } = props.listQuestionnaires;
+
+  console.log("listQuestionnaires", listQuestionnaires);
   const {
     data: { listSurveys },
   } = props.listSurveys;
@@ -97,9 +101,46 @@ const QuestionnairePart = (props) => {
   const [isCreated, setIsCreated] = useState(false);
   const [initialLoading, setinitialLoading] = useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [questionnairesId, setQuestionnairesId] = useState("");
+  const [openUpdateQuestionnaires, setOpenUpdateQuestionnaires] =
+    useState(false);
+
   function handleSnackBarClick() {
     setOpenSnackBar(true);
   }
+  const questionnaireOrder = listQuestionnaires?.items.sort(
+    (a, b) =>
+      moment(b.createdAt, "DD-MM-YYYY hh:mm A").unix() -
+      moment(a.createdAt, "DD-MM-YYYY hh:mm A").unix()
+  );
+  const handleopeningQuestionnaireUpdateDialog = (questionnaire) => {
+    setQuestionnairesId(questionnaire?.id);
+    setName(questionnaire?.name);
+    setDescription(questionnaire?.description);
+
+    setOpenUpdateQuestionnaires(true);
+  };
+
+  const handleClosingQuestionnaireUpdateDialog = () => {
+    setName("");
+    setDescription("");
+    setSurvey("");
+    setOpenUpdateQuestionnaires(false);
+  };
+
+  const handleUpdateQuestionnaire = (event) => {
+    event.preventDefault();
+    props.onUpdateQuestionnaire(
+      {
+        id: questionnairesId,
+        name: name,
+        description: description,
+      },
+      survey
+    );
+    handleClosingQuestionnaireUpdateDialog();
+    setIsCreated(true);
+  };
 
   function handleSnackBarClose(event, reason) {
     if (reason === "clickaway") {
@@ -251,6 +292,52 @@ const QuestionnairePart = (props) => {
       </div>
       <div>
         <Dialog
+          open={openUpdateQuestionnaires}
+          onClose={handleClosingQuestionnaireUpdateDialog}
+          aria-labelledby="form-dialog-title"
+        >
+          <FormControl>
+            <DialogTitle id="form-dialog-title">Edit Questionnaire</DialogTitle>
+            <DialogContent>
+              <TextField
+                // autoFocus
+                margin="dense"
+                id="name"
+                label="Name"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                fullWidth
+              />
+              <TextField
+                margin="dense"
+                id="description"
+                label="Description"
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+                fullWidth
+              />
+
+              <br />
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={handleClosingQuestionnaireUpdateDialog}
+                color="default"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleUpdateQuestionnaire}
+                type="submit"
+                color="primary"
+              >
+                Update
+              </Button>
+            </DialogActions>
+          </FormControl>
+        </Dialog>
+
+        <Dialog
           open={open}
           onClose={handleClose}
           aria-labelledby="form-dialog-title"
@@ -365,15 +452,16 @@ const QuestionnairePart = (props) => {
                 <StyledTableCell>Description</StyledTableCell>
                 <StyledTableCell>Type</StyledTableCell>
                 <StyledTableCell>Manage</StyledTableCell>
+                <StyledTableCell>View</StyledTableCell>
               </StyledTableRow>
             </TableHead>
             <TableBody>
               {(rowsPerPage > 0
-                ? listQuestionnaires?.items?.slice(
+                ? questionnaireOrder?.slice(
                     page * rowsPerPage,
                     page * rowsPerPage + rowsPerPage
                   )
-                : listQuestionnaires
+                : questionnaireOrder
               ).map((questionnaire, q) => (
                 <StyledTableRow key={q}>
                   <StyledTableCell>{questionnaire.name}</StyledTableCell>
@@ -390,10 +478,21 @@ const QuestionnairePart = (props) => {
                     <Button
                       size="small"
                       color="primary"
+                      onClick={() =>
+                        handleopeningQuestionnaireUpdateDialog(questionnaire)
+                      }
+                    >
+                      <EditIcon />
+                    </Button>
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <Button
+                      size="small"
+                      color="primary"
                       component={Link}
                       to={`/admin/question/${questionnaire.id}`}
                     >
-                      <EditIcon />
+                      <VisibilityIcon />
                     </Button>
                   </StyledTableCell>
                 </StyledTableRow>
@@ -471,6 +570,37 @@ const Question = compose(
           .then((data) => {
             //console.log(data)
           });
+      },
+    }),
+  }),
+
+  graphql(gql(updateQuestionnaire), {
+    options: (props) => ({
+      errorPolicy: "all",
+    }),
+    props: (props) => ({
+      onUpdateQuestionnaire: (questionnaire) => {
+        props.mutate({
+          variables: {
+            input: questionnaire,
+          },
+          update: (store, { data: { updateQuestionnaire } }) => {
+            const query = gql(listQuestionnaires);
+            const data = store.readQuery({
+              query,
+            });
+            data.listQuestionnaires.items = [
+              ...data.listQuestionnaires.items.filter(
+                (item) => item.id !== updateQuestionnaire.id
+              ),
+              updateQuestionnaire,
+            ];
+            store.writeQuery({
+              query,
+              data,
+            });
+          },
+        });
       },
     }),
   }),

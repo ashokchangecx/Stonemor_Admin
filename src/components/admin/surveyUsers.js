@@ -30,6 +30,7 @@ import AdminMenu from "./index";
 import { listSurveyUsers } from "../../graphql/queries";
 import { createSurveyUser, updateSurveyUser } from "../../graphql/mutations";
 import { Link } from "react-router-dom";
+import moment from "moment";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -91,7 +92,11 @@ const SurveyUsersPart = (props) => {
     setUserMail("");
     setOpenCreateSurveyUser(false);
   };
-
+  const surveyUserOrder = listSurveyUsers?.items?.sort(
+    (a, b) =>
+      moment(b.updatedAt, "DD-MM-YYYY hh:mm A ").unix() -
+      moment(a.updatedAt, "DD-MM-YYYY hh:mm A ").unix()
+  );
   const handleClosingSurveyUsersUpdateDialog = () => {
     setUserName("");
     setUserMail("");
@@ -234,9 +239,7 @@ const SurveyUsersPart = (props) => {
             fullWidth
           >
             <FormControl fullWidth>
-              <DialogTitle id="form-dialog-title">
-                Edit SurveyUser - {currentUserId}
-              </DialogTitle>
+              <DialogTitle id="form-dialog-title">Edit SurveyUser</DialogTitle>
               <DialogContent>
                 <TextField
                   autoFocus
@@ -295,11 +298,11 @@ const SurveyUsersPart = (props) => {
               </TableHead>
               <TableBody>
                 {(rowsPerPage > 0
-                  ? listSurveyUsers?.items?.slice(
+                  ? surveyUserOrder?.slice(
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
                     )
-                  : listSurveyUsers
+                  : surveyUserOrder
                 ).map((user, u) => (
                   <StyledTableRow key={u}>
                     <StyledTableCell>{u + 1}</StyledTableCell>

@@ -153,6 +153,7 @@ const qrCodeResponsesPort = (props) => {
                   <StyledTableCell>S.NO</StyledTableCell>
 
                   <StyledTableCell>Location</StyledTableCell>
+                  <StyledTableCell>Email</StyledTableCell>
                   <StyledTableCell>Questionnaire</StyledTableCell>
                   <StyledTableCell>Start Time</StyledTableCell>
                   <StyledTableCell>Finish Time</StyledTableCell>
@@ -172,6 +173,9 @@ const qrCodeResponsesPort = (props) => {
 
                     <StyledTableCell>
                       {user?.location?.location}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {user?.location?.inchargeEmail}
                     </StyledTableCell>
                     <StyledTableCell>
                       {" "}
