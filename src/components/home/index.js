@@ -28,12 +28,13 @@ const useStyles = makeStyles((theme) =>
       padding: theme.spacing(0, 3),
     },
     card: {
-      maxWidth: 600,
+      maxWidth: 500,
       margin: 30,
     },
     media: {
       // object-fit is not supported by IE 11.
-      objectFit: "fill",
+      objectFit: "scale-down",
+      marginTop: 20,
     },
     table: {
       minWidth: 700,
@@ -99,7 +100,7 @@ const HomePart = (props) => {
                         component="img"
                         alt={name}
                         className={classes.media}
-                       height="50px"
+                        height="100px"
                         image={image}
                         title={name}
                       />

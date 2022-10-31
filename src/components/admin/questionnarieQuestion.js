@@ -267,7 +267,6 @@ const QuestionnarieQuestionPart = (props) => {
   const handleopenSurveyLinkClose = () => {
     setSuveyUser("");
     setUserSurveyLink("");
- 
 
     setOpenSurveyLink(false);
   };
@@ -275,10 +274,9 @@ const QuestionnarieQuestionPart = (props) => {
   const handleopenSurveyQrCodeClose = () => {
     setSuveyLocation("");
     setInchargeEmail("");
-    setAlertSuccess("")
-    setAlertFail("")
+    setAlertSuccess("");
+    setAlertFail("");
     setOpenSurveyQrCode(false);
-
   };
 
   /*Changing new question value */
