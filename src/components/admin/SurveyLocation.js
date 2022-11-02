@@ -5,6 +5,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
   DialogTitle,
   FormControl,
   makeStyles,
@@ -23,11 +24,13 @@ import moment from "moment";
 import gql from "graphql-tag";
 import React, { useEffect, useState } from "react";
 import { compose, graphql } from "react-apollo";
+import DeleteIcon from "@material-ui/icons/Delete";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import EditIcon from "@material-ui/icons/Edit";
 import { listSurveyLocations } from "../../graphql/queries";
 import {
   createSurveyLocation,
+  deleteSurveyLocation,
   updateSurveyLocation,
 } from "../../graphql/mutations";
 const useStyles = makeStyles((theme) => ({
@@ -84,15 +87,14 @@ const SurveyLocationPart = (props) => {
     useState(false);
   const [surveyLocation, setSurveyLocation] = useState("");
   const [inchargeEmail, setInchargeEmail] = useState("");
-
+  const [isopen, setIsOpen] = React.useState(false);
+  const [deleteSurveyLocation, setDeleteSurveyLocation] = useState("");
   const [surveyLocationId, setSurveyLocationId] = useState("");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const surveyLocationOrder = listSurveyLocations?.items?.sort(
-    (a, b) =>
-      moment(b.updatedAt, "DD-MM-YYYY hh:mm A ").unix() -
-      moment(a.updatedAt, "DD-MM-YYYY hh:mm A ").unix()
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 
   console.log(surveyLocationOrder);
@@ -124,6 +126,22 @@ const SurveyLocationPart = (props) => {
     handleClosingSurveyLocationDialog();
     setIsCreated(true);
   };
+
+  function handleDelete() {
+    props.onDeleteSurveyLocation({
+      id: deleteSurveyLocation,
+    });
+    setDeleteSurveyLocation("");
+    setIsCreated(true);
+    setIsOpen(false);
+  }
+  const handleOpenDeleteDialog = (user) => {
+    setDeleteSurveyLocation(user?.id);
+    setIsOpen(true);
+  };
+  function handleCloseDialog() {
+    setIsOpen(false);
+  }
 
   const handleUpdateSurveyLocation = (event) => {
     event.preventDefault();
@@ -189,6 +207,36 @@ const SurveyLocationPart = (props) => {
         <p />
         <Typography variant="h4">SurveyLocation </Typography> <p />
         <div>
+          <Dialog
+            open={isopen}
+            onClose={handleCloseDialog}
+            aria-labelledby="form-dialog-title"
+          >
+            <FormControl>
+              <DialogTitle id="form-dialog-title">
+                Delete this SurveyUser
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Are You Sure You Want to Delete this SurveyUser?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseDialog} color="default">
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => {
+                    handleDelete();
+                  }}
+                  type="submit"
+                  color="primary"
+                >
+                  Delete
+                </Button>
+              </DialogActions>
+            </FormControl>
+          </Dialog>
           <Dialog
             open={openCreateSurveyLocation}
             onClose={handleClosingSurveyLocationDialog}
@@ -330,6 +378,13 @@ const SurveyLocationPart = (props) => {
                       >
                         <EditIcon />
                       </Button>
+                      <Button
+                        onClick={() => handleOpenDeleteDialog(surveyLocation)}
+                        size="small"
+                        color="primary"
+                      >
+                        <DeleteIcon />
+                      </Button>
                     </StyledTableCell>
                   </StyledTableRow>
                 ))}
@@ -394,6 +449,20 @@ const SurveyLocation = compose(
               query,
               data,
             });
+          },
+        });
+      },
+    }),
+  }),
+  graphql(gql(deleteSurveyLocation), {
+    options: (props) => ({
+      errorPolicy: "all",
+    }),
+    props: (props) => ({
+      onDeleteSurveyUser: (surveyLocation) => {
+        props.mutate({
+          variables: {
+            input: surveyLocation,
           },
         });
       },

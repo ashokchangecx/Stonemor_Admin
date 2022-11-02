@@ -88,7 +88,7 @@ const SurveyPart = (props) => {
   const [description, setDescription] = React.useState("");
   const [groupName] = React.useState("StoneMor");
   const [isopen, setIsOpen] = React.useState(false);
-  const [deleteQuestion, setDeleteQuestion] = React.useState("");
+  const [deleteSurvey, setDeleteSurvey] = React.useState("");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [image, setImage] = React.useState(
@@ -103,9 +103,7 @@ const SurveyPart = (props) => {
   }
 
   const surveyOrder = listSurveys?.items?.sort(
-    (a, b) =>
-      moment(b.createdAt, "DD-MM-YYYY hh:mm A").unix() -
-      moment(a.createdAt, "DD-MM-YYYY hh:mm A").unix()
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
   function handleSnackBarClose(event, reason) {
     if (reason === "clickaway") {
@@ -169,14 +167,14 @@ const SurveyPart = (props) => {
 
   function handleDelete() {
     props.onDeleteSurvey({
-      id: deleteQuestion,
+      id: deleteSurvey,
     });
-    setDeleteQuestion("");
+    setDeleteSurvey("");
     setIsCreated(true);
     setIsOpen(false);
   }
   const handleOpenDeleteDialog = (que) => {
-    setDeleteQuestion(que?.id);
+    setDeleteSurvey(que?.id);
     setIsOpen(true);
   };
   function handleCloseDialog() {
@@ -311,7 +309,7 @@ const SurveyPart = (props) => {
               <TextField
                 margin="dense"
                 id="image"
-                label="Image URL (enter your own or use the random generated image)"
+                label="Image URL"
                 value={image}
                 onChange={(event) => onImageChange(event.target.value)}
                 fullWidth
@@ -341,9 +339,7 @@ const SurveyPart = (props) => {
           aria-labelledby="form-dialog-title"
         >
           <FormControl>
-            <DialogTitle id="form-dialog-title">
-              Delete this Question
-            </DialogTitle>
+            <DialogTitle id="form-dialog-title">Delete this Survey</DialogTitle>
             <DialogContent>
               <DialogContentText>
                 Are You Sure You Want to Delete this Survey?
@@ -427,7 +423,7 @@ const SurveyPart = (props) => {
             <TableHead>
               <StyledTableRow>
                 <StyledTableCell></StyledTableCell>
-                <StyledTableCell>Name</StyledTableCell>
+                <StyledTableCell>Survey</StyledTableCell>
                 <StyledTableCell>Description</StyledTableCell>
                 <StyledTableCell>Questionnaire</StyledTableCell>
                 <StyledTableCell>Manage</StyledTableCell>

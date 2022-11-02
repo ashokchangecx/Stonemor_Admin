@@ -6,6 +6,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
   DialogTitle,
   Divider,
   FormControl,
@@ -25,10 +26,15 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import EditIcon from "@material-ui/icons/Edit";
 import { graphql, compose, withApollo } from "react-apollo";
 import { withStyles } from "@material-ui/core/styles";
+import DeleteIcon from "@material-ui/icons/Delete";
 import gql from "graphql-tag";
 import AdminMenu from "./index";
 import { listSurveyUsers } from "../../graphql/queries";
-import { createSurveyUser, updateSurveyUser } from "../../graphql/mutations";
+import {
+  createSurveyUser,
+  deleteSurveyUser,
+  updateSurveyUser,
+} from "../../graphql/mutations";
 import { Link } from "react-router-dom";
 import moment from "moment";
 const useStyles = makeStyles((theme) => ({
@@ -84,6 +90,8 @@ const SurveyUsersPart = (props) => {
   const [userName, setUserName] = useState("");
   const [userMail, setUserMail] = useState("");
   const [currentUserId, setCurrentUserId] = useState("");
+  const [isopen, setIsOpen] = React.useState(false);
+  const [deleteSurveyUser, setDeleteSurveyUser] = useState("");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -93,9 +101,8 @@ const SurveyUsersPart = (props) => {
     setOpenCreateSurveyUser(false);
   };
   const surveyUserOrder = listSurveyUsers?.items?.sort(
-    (a, b) =>
-      moment(b.updatedAt, "DD-MM-YYYY hh:mm A ").unix() -
-      moment(a.updatedAt, "DD-MM-YYYY hh:mm A ").unix()
+    (a, b) => (a, b) =>
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
   const handleClosingSurveyUsersUpdateDialog = () => {
     setUserName("");
@@ -103,6 +110,21 @@ const SurveyUsersPart = (props) => {
     setOpenUpdateSurveyUser(false);
   };
 
+  function handleDelete() {
+    props.onDeleteSurveyUser({
+      id: deleteSurveyUser,
+    });
+    setDeleteSurveyUser("");
+    setIsCreated(true);
+    setIsOpen(false);
+  }
+  const handleOpenDeleteDialog = (user) => {
+    setDeleteSurveyUser(user?.id);
+    setIsOpen(true);
+  };
+  function handleCloseDialog() {
+    setIsOpen(false);
+  }
   const handleopeninguypdatesurveyUserDialog = (user) => {
     setCurrentUserId(user?.id);
     setUserName(user?.name);
@@ -185,6 +207,36 @@ const SurveyUsersPart = (props) => {
         <Typography variant="h4">SurveyUser </Typography> <p />
         <div>
           <Dialog
+            open={isopen}
+            onClose={handleCloseDialog}
+            aria-labelledby="form-dialog-title"
+          >
+            <FormControl>
+              <DialogTitle id="form-dialog-title">
+                Delete this SurveyUser
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Are You Sure You Want to Delete this SurveyUser?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseDialog} color="default">
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => {
+                    handleDelete();
+                  }}
+                  type="submit"
+                  color="primary"
+                >
+                  Delete
+                </Button>
+              </DialogActions>
+            </FormControl>
+          </Dialog>
+          <Dialog
             open={openCreateSurveyUser}
             onClose={handleClosingSurveyUsersDialog}
             aria-labelledby="form-dialog-title"
@@ -206,7 +258,6 @@ const SurveyUsersPart = (props) => {
                 />
                 <br />
                 <TextField
-                  autoFocus
                   margin="dense"
                   id="email"
                   label="Email"
@@ -318,6 +369,13 @@ const SurveyUsersPart = (props) => {
                       >
                         <EditIcon />
                       </Button>
+                      <Button
+                        onClick={() => handleOpenDeleteDialog(user)}
+                        size="small"
+                        color="primary"
+                      >
+                        <DeleteIcon />
+                      </Button>
                     </StyledTableCell>
                   </StyledTableRow>
                 ))}
@@ -382,6 +440,20 @@ const SurveyUsers = compose(
               query,
               data,
             });
+          },
+        });
+      },
+    }),
+  }),
+  graphql(gql(deleteSurveyUser), {
+    options: (props) => ({
+      errorPolicy: "all",
+    }),
+    props: (props) => ({
+      onDeleteSurveyUser: (surveyUser) => {
+        props.mutate({
+          variables: {
+            input: surveyUser,
           },
         });
       },

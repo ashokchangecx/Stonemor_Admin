@@ -115,8 +115,7 @@ const qrCodeResponsesPort = (props) => {
     ?.filter((user) => user?.location?.location)
     ?.sort(
       (a, b) =>
-        moment(b.finishTime, "DD-MM-YYYY hh:mm A").unix() -
-        moment(a.finishTime, "DD-MM-YYYY hh:mm A").unix()
+        new Date(b.finishTime).getTime() - new Date(a.finishTime).getTime()
     );
   console.log("questionCount", questionCount);
 

@@ -119,7 +119,7 @@ const HomePart = (props) => {
                           component={Link}
                           to={`/surveyquestions/${preQuestionnaire.id}`}
                         >
-                          Pre-Questionnaire
+                          Preview Survey
                         </Button>
                       ) : null}
                       {mainQuestionnaire ? (

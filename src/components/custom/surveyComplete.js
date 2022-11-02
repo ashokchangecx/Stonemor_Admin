@@ -1,6 +1,6 @@
 import React from "react";
 import { withApollo } from "react-apollo";
-
+import logo from "../../assets/MemorialPlanning - Wide - Tag - 4C (2) (1).png";
 import {
   createStyles,
   makeStyles,
@@ -12,41 +12,49 @@ import {
   IconButton,
   Paper,
   Typography,
-  Container,
-  Card,
   Box,
+  AppBar,
+  Toolbar,
 } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 const styles = {
   paperContainer: {
     backgroundRepeat: "no-repeat",
-    backgroundImage: `url('https://wallpaperaccess.com/full/1454447.jpg')`,
+    // backgroundImage: `url('https://basis.net/wp-content/uploads/2021/10/house_plant_home.jpeg')`,
     backgroundSize: "cover",
     minHeight: "100vh",
   },
 };
+
 const useStyles = makeStyles((theme) =>
   createStyles({
+    root: {
+      flexGrow: 1,
+      overflow: "hidden",
+      marginLeft: 220,
+      marginTop: 10,
+      // padding: theme.spacing(0, 3),s
+    },
+    button: {
+      margin: theme.spacing(2),
+    },
+    logo: {
+      maxWidth: 300,
+      paddingTop: 2,
+    },
     text: {
       marginTop: 100,
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
     },
-    media: {
-      objectFit: "cover",
-    },
-    button: {
-      margin: theme.spacing(2),
-    },
-    textcolor: {
-      color: "#fafafa",
-    },
     img: {
       width: 100,
       height: 100,
-      marginLeft: "40%",
+    },
+    textcolor: {
+      // color: "#fafafa",
     },
   })
 );
@@ -67,35 +75,40 @@ const SurveyComplete = (props) => {
   const classes = useStyles();
 
   return (
-    <div style={styles.paperContainer}>
-      <div>
-        <IconButton
-          className={classes.button}
-          aria-label="Back"
-          onClick={() => {
-            props.history.push("/");
-          }}
-        >
-          <ArrowBackIcon />
-        </IconButton>
-      </div>
-      <div className={classes.text}>
-        <Box>
-          <img
-            src="https://basis.net/wp-content/uploads/2021/10/house_plant_home.jpeg"
-            className={classes.img}
-            alt="img"
-          />
-          s
-          <ThemeProvider theme={theme}>
-            <Typography variant="h3" className={classes.textcolor}>
-              Thankyou for Your Participation
-            </Typography>
-            <Typography variant="h3" className={classes.textcolor}>
-              Your Survey is Completed
-            </Typography>
-          </ThemeProvider>
-        </Box>
+    <div className={classes.root}>
+      <div style={styles.paperContainer}>
+        {/* <AppBar position="sticky" style={{ backgroundColor: "#fff" }}>
+          <Toolbar>
+            <img src={logo} alt="logo" className={classes.logo} />
+          </Toolbar>
+        </AppBar> */}
+        <div className={classes.text}>
+          <Box
+            sx={{ width: "300", height: "300", padding: "5px 40px" }}
+            alignItems="center"
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <img
+                src="https://www.freeiconspng.com/thumbs/success-icon/success-icon-10.png"
+                className={classes.img}
+                alt="success"
+              />
+            </div>
+
+            <ThemeProvider theme={theme}>
+              <Typography variant="h3" className={classes.textcolor}>
+                Thank you for completing our survey. If you have requested a
+                follow up,someone will be in touch with you soon.
+              </Typography>
+            </ThemeProvider>
+          </Box>
+        </div>
       </div>
     </div>
   );

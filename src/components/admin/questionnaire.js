@@ -89,11 +89,13 @@ const QuestionnairePart = (props) => {
   const {
     data: { listSurveys },
   } = props.listSurveys;
+  console.log("listSurveys", listSurveys);
+
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
   const [survey, setSurvey] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [type, setType] = React.useState("");
+  const [type] = React.useState("PRE");
   const [openSnackBar, setOpenSnackBar] = React.useState(false);
   const [isopen, setIsOpen] = React.useState(false);
   const [deleteQuestion, setDeleteQuestion] = React.useState("");
@@ -108,11 +110,10 @@ const QuestionnairePart = (props) => {
   function handleSnackBarClick() {
     setOpenSnackBar(true);
   }
-  const questionnaireOrder = listQuestionnaires?.items.sort(
-    (a, b) =>
-      moment(b.createdAt, "DD-MM-YYYY hh:mm A").unix() -
-      moment(a.createdAt, "DD-MM-YYYY hh:mm A").unix()
+  const questionnaireOrder = listSurveys?.items.sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
+
   const handleopeningQuestionnaireUpdateDialog = (questionnaire) => {
     setQuestionnairesId(questionnaire?.id);
     setName(questionnaire?.name);
@@ -214,13 +215,13 @@ const QuestionnairePart = (props) => {
     setSurvey(newValue);
   }
 
-  function onTypeChange(newValue) {
-    if (type === newValue) {
-      setType(newValue);
-      return;
-    }
-    setType(newValue);
-  }
+  // function onTypeChange(newValue) {
+  //   if (type === newValue) {
+  //     setType(newValue);
+  //     return;
+  //   }
+  //   setType(newValue);
+  // }
   useEffect(() => {
     const timer = setTimeout(() => {
       if (isCreated) {
@@ -386,7 +387,7 @@ const QuestionnairePart = (props) => {
                 </Select>
               </FormControl>
               <br />
-              <FormControl>
+              {/* <FormControl>
                 <InputLabel>Type</InputLabel>
                 <Select
                   margin="dense"
@@ -395,10 +396,10 @@ const QuestionnairePart = (props) => {
                   onChange={(event) => onTypeChange(event.target.value)}
                 >
                   <MenuItem value={"PRE"}>PRE</MenuItem>
-                  {/* <MenuItem value={"MAIN"}>MAIN</MenuItem>
-                  <MenuItem value={"POST"}>POST</MenuItem> */}
+                  <MenuItem value={"MAIN"}>MAIN</MenuItem>
+                  <MenuItem value={"POST"}>POST</MenuItem>
                 </Select>
-              </FormControl>
+              </FormControl> */}
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose} color="default">
@@ -417,11 +418,11 @@ const QuestionnairePart = (props) => {
         >
           <FormControl>
             <DialogTitle id="form-dialog-title">
-              Delete this Question
+              Delete this Questionnaire
             </DialogTitle>
             <DialogContent>
               <DialogContentText>
-                Are You Sure You Want to Delete this Question?
+                Are You Sure You Want to Delete this Questionnaire?
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -448,9 +449,9 @@ const QuestionnairePart = (props) => {
           <Table className={classes.table}>
             <TableHead>
               <StyledTableRow>
-                <StyledTableCell>Name</StyledTableCell>
+                <StyledTableCell>Questionnaire</StyledTableCell>
                 <StyledTableCell>Description</StyledTableCell>
-                <StyledTableCell>Type</StyledTableCell>
+                <StyledTableCell>Survey</StyledTableCell>
                 <StyledTableCell>Manage</StyledTableCell>
                 <StyledTableCell>View</StyledTableCell>
               </StyledTableRow>
@@ -464,9 +465,11 @@ const QuestionnairePart = (props) => {
                 : questionnaireOrder
               ).map((questionnaire, q) => (
                 <StyledTableRow key={q}>
-                  <StyledTableCell>{questionnaire.name}</StyledTableCell>
+                  <StyledTableCell>
+                    {questionnaire?.preQuestionnaire?.name}
+                  </StyledTableCell>
                   <StyledTableCell>{questionnaire.description}</StyledTableCell>
-                  <StyledTableCell>{questionnaire.type}</StyledTableCell>
+                  <StyledTableCell>{questionnaire?.name}</StyledTableCell>
                   <StyledTableCell>
                     {/* <Button
                       size="small"
@@ -490,7 +493,7 @@ const QuestionnairePart = (props) => {
                       size="small"
                       color="primary"
                       component={Link}
-                      to={`/admin/question/${questionnaire.id}`}
+                      to={`/admin/question/${questionnaire?.preQuestionnaire?.id}`}
                     >
                       <VisibilityIcon />
                     </Button>
