@@ -452,8 +452,7 @@ const QuestionnairePart = (props) => {
                 <StyledTableCell>Questionnaire</StyledTableCell>
                 <StyledTableCell>Description</StyledTableCell>
                 <StyledTableCell>Survey</StyledTableCell>
-                <StyledTableCell>Manage</StyledTableCell>
-                <StyledTableCell>View</StyledTableCell>
+                <StyledTableCell>View / Edit Questionnaire</StyledTableCell>
               </StyledTableRow>
             </TableHead>
             <TableBody>
@@ -486,16 +485,14 @@ const QuestionnairePart = (props) => {
                       }
                     >
                       <EditIcon />
-                    </Button>
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <Button
-                      size="small"
-                      color="primary"
-                      component={Link}
-                      to={`/admin/question/${questionnaire?.preQuestionnaire?.id}`}
-                    >
-                      <VisibilityIcon />
+                      <Button
+                        size="small"
+                        color="primary"
+                        component={Link}
+                        to={`/admin/question/${questionnaire?.preQuestionnaire?.id}`}
+                      >
+                        <VisibilityIcon />
+                      </Button>
                     </Button>
                   </StyledTableCell>
                 </StyledTableRow>

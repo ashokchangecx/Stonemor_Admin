@@ -57,8 +57,8 @@ import {
   Breadcrumbs,
   FormControlLabel,
   FormLabel,
-  Link,
   ListItem,
+  Link,
   Radio,
   RadioGroup,
   TableFooter,
@@ -1098,14 +1098,14 @@ const QuestionnarieQuestionPart = (props) => {
             </DialogContent>
 
             <DialogActions>
-              <ListItem
+              {/* <ListItem
                 size="small"
                 color="primary"
                 component={Link}
                 to={`/admin/users`}
               >
                 Create New User
-              </ListItem>
+              </ListItem> */}
 
               <Button onClick={handleopenSurveyLinkClose} color="default">
                 Close
