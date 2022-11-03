@@ -458,13 +458,13 @@ const SurveyPart = (props) => {
                     >
                       <EditIcon />
                     </Button>
-                    {/* <Button
+                    <Button
                       onClick={() => handleOpenDeleteDialog(survey)}
                       size="small"
                       color="primary"
                     >
                       <DeleteIcon />
-                    </Button> */}
+                    </Button>
                   </StyledTableCell>
                 </StyledTableRow>
               ))}
