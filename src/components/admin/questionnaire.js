@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -27,7 +26,6 @@ import InputLabel from "@material-ui/core/InputLabel";
 import CloseIcon from "@material-ui/icons/Close";
 import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
-
 import { graphql, compose, withApollo } from "react-apollo";
 import gql from "graphql-tag";
 import { listQuestionnaires, listSurveys } from "../../graphql/queries";
@@ -89,8 +87,6 @@ const QuestionnairePart = (props) => {
   const {
     data: { listSurveys },
   } = props.listSurveys;
-  console.log("listSurveys", listSurveys);
-
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
   const [survey, setSurvey] = React.useState("");
@@ -110,7 +106,7 @@ const QuestionnairePart = (props) => {
   function handleSnackBarClick() {
     setOpenSnackBar(true);
   }
-  const questionnaireOrder = listSurveys?.items.sort(
+  const questionnaireOrder = listQuestionnaires?.items?.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 
@@ -149,7 +145,6 @@ const QuestionnairePart = (props) => {
     }
     setOpenSnackBar(false);
   }
-
   function handleOpenDialog() {
     setOpen(true);
   }
@@ -172,7 +167,6 @@ const QuestionnairePart = (props) => {
     );
     setOpen(false);
   }
-
   function handleDelete() {
     props.onDeleteQuestionnaire({
       id: deleteQuestion,
@@ -180,8 +174,8 @@ const QuestionnairePart = (props) => {
     setDeleteQuestion("");
     setIsOpen(false);
   }
-  const handleOpenDeleteDialog = (que) => {
-    setDeleteQuestion(que?.id);
+  const handleOpenDeleteDialog = (questionnaire) => {
+    setDeleteQuestion(questionnaire?.id);
     setIsCreated(true);
     setIsOpen(true);
   };
@@ -191,7 +185,6 @@ const QuestionnairePart = (props) => {
   function handleCloseDialog() {
     setIsOpen(false);
   }
-
   function onNameChange(newValue) {
     if (name === newValue) {
       setName(newValue);
@@ -199,7 +192,6 @@ const QuestionnairePart = (props) => {
     }
     setName(newValue);
   }
-
   function onDescriptionChange(newValue) {
     if (description === newValue) {
       setDescription(newValue);
@@ -215,27 +207,18 @@ const QuestionnairePart = (props) => {
     setSurvey(newValue);
   }
 
-  // function onTypeChange(newValue) {
-  //   if (type === newValue) {
-  //     setType(newValue);
-  //     return;
-  //   }
-  //   setType(newValue);
-  // }
   useEffect(() => {
     const timer = setTimeout(() => {
       if (isCreated) {
         refetch({ limit: 300 });
         setIsCreated(false);
       }
-    }, 1000);
+    }, 300);
     return () => clearTimeout(timer);
   }, [isCreated]);
-
   useEffect(() => {
     if (!loading) setinitialLoading(false);
   }, [loading]);
-
   if (loading && initialLoading) {
     return (
       <div>
@@ -387,19 +370,6 @@ const QuestionnairePart = (props) => {
                 </Select>
               </FormControl>
               <br />
-              {/* <FormControl>
-                <InputLabel>Type</InputLabel>
-                <Select
-                  margin="dense"
-                  fullWidth
-                  value={type}
-                  onChange={(event) => onTypeChange(event.target.value)}
-                >
-                  <MenuItem value={"PRE"}>PRE</MenuItem>
-                  <MenuItem value={"MAIN"}>MAIN</MenuItem>
-                  <MenuItem value={"POST"}>POST</MenuItem>
-                </Select>
-              </FormControl> */}
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose} color="default">
@@ -449,11 +419,11 @@ const QuestionnairePart = (props) => {
           <Table className={classes.table}>
             <TableHead>
               <StyledTableRow>
-                <StyledTableCell>Questionnaire</StyledTableCell>
+                <StyledTableCell>Questionaire</StyledTableCell>
                 <StyledTableCell>Description</StyledTableCell>
-                <StyledTableCell>Survey</StyledTableCell>
-                <StyledTableCell> Edit Questionnaire</StyledTableCell>
-                <StyledTableCell> Manage Questions</StyledTableCell>
+                {/* <StyledTableCell>Type</StyledTableCell> */}
+                <StyledTableCell>Edit Questionaire</StyledTableCell>
+                <StyledTableCell>Manage Questions</StyledTableCell>
               </StyledTableRow>
             </TableHead>
             <TableBody>
@@ -465,19 +435,10 @@ const QuestionnairePart = (props) => {
                 : questionnaireOrder
               ).map((questionnaire, q) => (
                 <StyledTableRow key={q}>
-                  <StyledTableCell>
-                    {questionnaire?.preQuestionnaire?.name}
-                  </StyledTableCell>
+                  <StyledTableCell>{questionnaire.name}</StyledTableCell>
                   <StyledTableCell>{questionnaire.description}</StyledTableCell>
-                  <StyledTableCell>{questionnaire?.name}</StyledTableCell>
+                  {/* <StyledTableCell>{questionnaire.type}</StyledTableCell> */}
                   <StyledTableCell>
-                    {/* <Button
-                      size="small"
-                      color="primary"
-                      onClick={() => handleOpenDeleteDialog(questionnaire)}
-                    >
-                      <DeleteIcon />
-                    </Button> */}
                     <Button
                       size="small"
                       color="primary"
@@ -489,12 +450,18 @@ const QuestionnairePart = (props) => {
                     </Button>
                   </StyledTableCell>
                   <StyledTableCell>
-                    {" "}
+                    <Button
+                      size="small"
+                      color="primary"
+                      onClick={() => handleOpenDeleteDialog(questionnaire)}
+                    >
+                      <DeleteIcon />
+                    </Button>
                     <Button
                       size="small"
                       color="primary"
                       component={Link}
-                      to={`/admin/question/${questionnaire?.preQuestionnaire?.id}`}
+                      to={`/admin/question/${questionnaire.id}`}
                     >
                       <VisibilityIcon />
                     </Button>
@@ -505,7 +472,7 @@ const QuestionnairePart = (props) => {
           </Table>
           <TablePagination
             component="div"
-            count={listSurveys?.items?.length}
+            count={listQuestionnaires?.items?.length}
             page={page}
             onPageChange={handleChangePage}
             rowsPerPage={rowsPerPage}
@@ -524,7 +491,6 @@ const QuestionnairePart = (props) => {
     </div>
   );
 };
-
 const Question = compose(
   graphql(gql(listQuestionnaires), {
     options: (props) => ({
@@ -618,9 +584,7 @@ const Question = compose(
             },
             update: (store, { data: { createQuestionnaire } }) => {
               const query = gql(listQuestionnaires);
-
               const data = store.readQuery({ query });
-
               if (data?.listQuestionnaires?.items?.length > 0) {
                 data.listQuestionnaires.items = [
                   ...data.listQuestionnaires.items.filter(
@@ -666,5 +630,4 @@ const Question = compose(
     }),
   })
 )(QuestionnairePart);
-
 export default withApollo(Question);

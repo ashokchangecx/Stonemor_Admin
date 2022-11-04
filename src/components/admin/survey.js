@@ -558,7 +558,7 @@ const Survey = compose(
               query,
             });
             data.listSurveys.items = [
-              ...data.listSurveyLocations.items.filter(
+              ...data.listSurveys.items.filter(
                 (item) => item.id !== updateSurvey.id
               ),
               updateSurvey,

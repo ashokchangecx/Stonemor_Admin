@@ -33,8 +33,20 @@ export const getSurvey = /* GraphQL */ `
         description
         image
         type
+        introMsg
+        endMsg
         createdAt
         updatedAt
+        survey {
+          id
+          name
+          description
+          image
+          archived
+          groups
+          createdAt
+          updatedAt
+        }
         question {
           nextToken
         }
@@ -45,8 +57,20 @@ export const getSurvey = /* GraphQL */ `
         description
         image
         type
+        introMsg
+        endMsg
         createdAt
         updatedAt
+        survey {
+          id
+          name
+          description
+          image
+          archived
+          groups
+          createdAt
+          updatedAt
+        }
         question {
           nextToken
         }
@@ -57,11 +81,37 @@ export const getSurvey = /* GraphQL */ `
         description
         image
         type
+        introMsg
+        endMsg
         createdAt
         updatedAt
+        survey {
+          id
+          name
+          description
+          image
+          archived
+          groups
+          createdAt
+          updatedAt
+        }
         question {
           nextToken
         }
+      }
+      questionnaire {
+        items {
+          id
+          name
+          description
+          image
+          type
+          introMsg
+          endMsg
+          createdAt
+          updatedAt
+        }
+        nextToken
       }
     }
   }
@@ -88,6 +138,8 @@ export const listSurveys = /* GraphQL */ `
           description
           image
           type
+          introMsg
+          endMsg
           createdAt
           updatedAt
         }
@@ -97,6 +149,8 @@ export const listSurveys = /* GraphQL */ `
           description
           image
           type
+          introMsg
+          endMsg
           createdAt
           updatedAt
         }
@@ -106,8 +160,13 @@ export const listSurveys = /* GraphQL */ `
           description
           image
           type
+          introMsg
+          endMsg
           createdAt
           updatedAt
+        }
+        questionnaire {
+          nextToken
         }
       }
       nextToken
@@ -122,8 +181,56 @@ export const getQuestionnaire = /* GraphQL */ `
       description
       image
       type
+      introMsg
+      endMsg
       createdAt
       updatedAt
+      survey {
+        id
+        name
+        description
+        image
+        archived
+        groups
+        createdAt
+        updatedAt
+        preQuestionnaire {
+          id
+          name
+          description
+          image
+          type
+          introMsg
+          endMsg
+          createdAt
+          updatedAt
+        }
+        mainQuestionnaire {
+          id
+          name
+          description
+          image
+          type
+          introMsg
+          endMsg
+          createdAt
+          updatedAt
+        }
+        postQuestionnaire {
+          id
+          name
+          description
+          image
+          type
+          introMsg
+          endMsg
+          createdAt
+          updatedAt
+        }
+        questionnaire {
+          nextToken
+        }
+      }
       question(limit: 200) {
         items {
           id
@@ -166,8 +273,56 @@ export const listQuestionnaires = /* GraphQL */ `
         description
         image
         type
+        introMsg
+        endMsg
         createdAt
         updatedAt
+        survey {
+          id
+          name
+          description
+          image
+          archived
+          groups
+          createdAt
+          updatedAt
+          preQuestionnaire {
+            id
+            name
+            description
+            image
+            type
+            introMsg
+            endMsg
+            createdAt
+            updatedAt
+          }
+          mainQuestionnaire {
+            id
+            name
+            description
+            image
+            type
+            introMsg
+            endMsg
+            createdAt
+            updatedAt
+          }
+          postQuestionnaire {
+            id
+            name
+            description
+            image
+            type
+            introMsg
+            endMsg
+            createdAt
+            updatedAt
+          }
+          questionnaire {
+            nextToken
+          }
+        }
         question(limit: 200) {
           items {
             id
@@ -229,8 +384,20 @@ export const getQuestion = /* GraphQL */ `
         description
         image
         type
+        introMsg
+        endMsg
         createdAt
         updatedAt
+        survey {
+          id
+          name
+          description
+          image
+          archived
+          groups
+          createdAt
+          updatedAt
+        }
         question {
           nextToken
         }
@@ -269,6 +436,8 @@ export const listQuestions = /* GraphQL */ `
           description
           image
           type
+          introMsg
+          endMsg
           createdAt
           updatedAt
         }
@@ -308,6 +477,8 @@ export const getResponses = /* GraphQL */ `
           description
           image
           type
+          introMsg
+          endMsg
           createdAt
           updatedAt
         }
