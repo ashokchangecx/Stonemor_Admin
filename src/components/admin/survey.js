@@ -426,7 +426,7 @@ const SurveyPart = (props) => {
                 <StyledTableCell>Survey</StyledTableCell>
                 <StyledTableCell>Description</StyledTableCell>
                 <StyledTableCell>Questionnaire</StyledTableCell>
-                <StyledTableCell>Manage</StyledTableCell>
+                <StyledTableCell>Manage Survey</StyledTableCell>
               </StyledTableRow>
             </TableHead>
             <TableBody>

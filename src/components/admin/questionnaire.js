@@ -100,6 +100,8 @@ const QuestionnairePart = (props) => {
   const [initialLoading, setinitialLoading] = useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [questionnairesId, setQuestionnairesId] = useState("");
+  const [introMsg, setInstroMsg] = useState("");
+  const [endMsg, setEndMsg] = useState("");
   const [openUpdateQuestionnaires, setOpenUpdateQuestionnaires] =
     useState(false);
 
@@ -114,14 +116,17 @@ const QuestionnairePart = (props) => {
     setQuestionnairesId(questionnaire?.id);
     setName(questionnaire?.name);
     setDescription(questionnaire?.description);
-
+    setInstroMsg(questionnaire?.introMsg);
+    setEndMsg(questionnaire?.endMsg);
     setOpenUpdateQuestionnaires(true);
   };
 
   const handleClosingQuestionnaireUpdateDialog = () => {
     setName("");
     setDescription("");
-    setSurvey("");
+
+    setInstroMsg("");
+    setEndMsg("");
     setOpenUpdateQuestionnaires(false);
   };
 
@@ -132,6 +137,8 @@ const QuestionnairePart = (props) => {
         id: questionnairesId,
         name: name,
         description: description,
+        introMsg: introMsg,
+        endMsg: endMsg,
       },
       survey
     );
@@ -162,6 +169,8 @@ const QuestionnairePart = (props) => {
         name: name,
         description: description,
         type: type,
+        introMsg: introMsg,
+        endMsg: endMsg,
       },
       survey
     );
@@ -300,7 +309,22 @@ const QuestionnairePart = (props) => {
                 onChange={(event) => setDescription(event.target.value)}
                 fullWidth
               />
-
+              <TextField
+                margin="dense"
+                id="introMsg"
+                label="IntroMsg"
+                value={introMsg}
+                onChange={(event) => setInstroMsg(event.target.value)}
+                fullWidth
+              />
+              <TextField
+                margin="dense"
+                id="endMsg"
+                label="EndMsg"
+                value={endMsg}
+                onChange={(event) => setEndMsg(event.target.value)}
+                fullWidth
+              />
               <br />
             </DialogContent>
             <DialogActions>
@@ -350,6 +374,22 @@ const QuestionnairePart = (props) => {
                 label="Description"
                 value={description}
                 onChange={(event) => onDescriptionChange(event.target.value)}
+                fullWidth
+              />
+              <TextField
+                margin="dense"
+                id="introMsg"
+                label="IntroMsg"
+                value={introMsg}
+                onChange={(event) => setInstroMsg(event.target.value)}
+                fullWidth
+              />
+              <TextField
+                margin="dense"
+                id="endMsg"
+                label="EndMsg"
+                value={endMsg}
+                onChange={(event) => setEndMsg(event.target.value)}
                 fullWidth
               />
               <FormControl>

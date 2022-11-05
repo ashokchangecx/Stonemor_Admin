@@ -1,5 +1,5 @@
 import React from "react";
-import { withApollo } from "react-apollo";
+import { compose, graphql, withApollo } from "react-apollo";
 import logo from "../../assets/MemorialPlanning - Wide - Tag - 4C (2) (1).png";
 import {
   createStyles,
@@ -7,6 +7,7 @@ import {
   ThemeProvider,
   createTheme,
 } from "@material-ui/core/styles";
+import { getQuestionnaire } from "../../graphql/queries";
 
 import {
   IconButton,
@@ -17,6 +18,7 @@ import {
   Toolbar,
 } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import gql from "graphql-tag";
 
 const styles = {
   paperContainer: {
@@ -73,7 +75,11 @@ theme.typography.h3 = {
 
 const SurveyComplete = (props) => {
   const classes = useStyles();
+  const {
+    data: { loading, error, getQuestionnaire },
+  } = props.getQuestionnaire;
 
+  console.log("getQuestionnaire", getQuestionnaire);
   return (
     <div className={classes.root}>
       <div style={styles.paperContainer}>
@@ -103,8 +109,9 @@ const SurveyComplete = (props) => {
 
             <ThemeProvider theme={theme}>
               <Typography variant="h3" className={classes.textcolor}>
-                Thank you for completing our survey. If you have requested a
-                follow up,someone will be in touch with you soon.
+                {/* Thank you for completing our survey. If you have requested a
+                follow up,someone will be in touch with you soon. */}
+                {getQuestionnaire?.endMsg}
               </Typography>
             </ThemeProvider>
           </Box>
@@ -113,5 +120,19 @@ const SurveyComplete = (props) => {
     </div>
   );
 };
+const SurveyQuestionComplite = compose(
+  graphql(gql(getQuestionnaire), {
+    options: (props) => ({
+      errorPolicy: "all",
+      fetchPolicy: "cache-and-network",
+      variables: { id: props.match.params.questionnaireID },
+    }),
+    props: (props) => {
+      return {
+        getQuestionnaire: props ? props : [],
+      };
+    },
+  })
+)(SurveyComplete);
 
-export default withApollo(SurveyComplete);
+export default withApollo(SurveyQuestionComplite);

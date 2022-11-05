@@ -190,7 +190,7 @@ const QuestionnarieQuestionPart = (props) => {
           );
           setAlertSuccess(true);
         } else {
-          setAlertContentFail("Email ID Required");
+          setAlertContentFail("Invalid Email ID");
           setAlertFail(true);
         }
         console.log("res", res);
@@ -1201,6 +1201,87 @@ const QuestionnarieQuestionPart = (props) => {
             </DialogActions>
           </FormControl>
         </Dialog>
+        <Dialog
+          open={openSurveyQrCode}
+          onClose={handleopenSurveyQrCodeClose}
+          aria-labelledby="responsive-dialog-title"
+          fullWidth={fullWidth}
+          maxWidth={maxWidth}
+        >
+          {" "}
+          {alertSuccess ? (
+            <Alert severity="success">{alertContentSuccess}</Alert>
+          ) : (
+            ""
+          )}
+          {alertFail ? <Alert severity="error">{alertContentFail}</Alert> : ""}
+          <FormControl>
+            <DialogTitle id="responsive-dialog-title">
+              Creating survey QR Code
+            </DialogTitle>
+
+            <DialogContent>
+              <FormControl fullWidth>
+                <InputLabel>Select Location</InputLabel>
+                <Select
+                  margin="dense"
+                  fullWidth
+                  value={surveyLocation}
+                  onChange={(event) => setSuveyLocation(event.target.value)}
+                >
+                  {listSurveyLocations?.items?.map((user, u) => (
+                    <MenuItem value={user?.id} key={u}>
+                      {user?.location}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <TextField
+                  margin="dense"
+                  id="InchargeEmail"
+                  label="Email"
+                  value={inchargeEmail}
+                  onChange={(event) => setInchargeEmail(event.target.value)}
+                  fullWidth
+                />
+              </FormControl>
+            </DialogContent>
+
+            <DialogActions>
+              <IconButton
+                autoFocus
+                onClick={handleopenSurveyQrCodeClose}
+                color="primary"
+                className={classes.customizedButtion}
+              >
+                <CloseIcon />
+              </IconButton>
+              <QRCode
+                id="qr-gen"
+                value={surveyQrcode}
+                size={280}
+                level={"H"}
+                includeMargin={true}
+              />
+
+              <Button
+                type="button"
+                variant="contained"
+                color="primary"
+                onClick={handleSendEmail}
+              >
+                Send Mail
+              </Button>
+              <Button
+                type="button"
+                variant="contained"
+                color="primary"
+                onClick={downloadQRCode}
+              >
+                Download QR Code
+              </Button>
+            </DialogActions>
+          </FormControl>
+        </Dialog>
       </div>
       <main className={classes.root}>
         <div>
@@ -1273,13 +1354,13 @@ const QuestionnarieQuestionPart = (props) => {
                     >
                       <EditIcon />
                     </Button>
-                    {/* <Button
+                    <Button
                       size="small"
                       color="primary"
                       onClick={() => handleOpenDeleteDialog(question)}
                     >
                       <DeleteIcon />
-                    </Button> */}
+                    </Button>
                   </StyledTableCell>
                   {/* </StyledTableRow> */}
                 </StyledTableRow>

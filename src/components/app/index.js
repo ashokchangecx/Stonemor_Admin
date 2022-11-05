@@ -286,7 +286,10 @@ function App() {
             path="/admin/editQuestion/:editQuestionID"
             component={EditQuestion}
           />
-          <Route path="/surveyComplete" component={surveyComplete} />
+          <Route
+            path="/surveyComplete/:questionnaireID"
+            component={surveyComplete}
+          />
           <Route path="/settings" component={Settings} />
           <Route path="/survey/:surveyID" component={Survey} />
           <Route path="/chart" component={Chart} />

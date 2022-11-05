@@ -109,7 +109,8 @@ const SurveyQuestion = (props) => {
       });
       return <CircularProgress />;
     });
-    props.history.push("/surveyComplete");
+    props.history.push(`/surveyComplete/${getQuestionnaire.id} `);
+    window.location.reload();
   };
 
   const handleNextClick = () => {
