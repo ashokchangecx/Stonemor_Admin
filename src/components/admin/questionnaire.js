@@ -312,7 +312,7 @@ const QuestionnairePart = (props) => {
               <TextField
                 margin="dense"
                 id="introMsg"
-                label="IntroMsg"
+                label="Intro Message"
                 value={introMsg}
                 onChange={(event) => setInstroMsg(event.target.value)}
                 fullWidth
@@ -320,7 +320,7 @@ const QuestionnairePart = (props) => {
               <TextField
                 margin="dense"
                 id="endMsg"
-                label="EndMsg"
+                label="End Message"
                 value={endMsg}
                 onChange={(event) => setEndMsg(event.target.value)}
                 fullWidth
@@ -379,7 +379,7 @@ const QuestionnairePart = (props) => {
               <TextField
                 margin="dense"
                 id="introMsg"
-                label="IntroMsg"
+                label="Intro Message"
                 value={introMsg}
                 onChange={(event) => setInstroMsg(event.target.value)}
                 fullWidth
@@ -387,7 +387,7 @@ const QuestionnairePart = (props) => {
               <TextField
                 margin="dense"
                 id="endMsg"
-                label="EndMsg"
+                label="End Message"
                 value={endMsg}
                 onChange={(event) => setEndMsg(event.target.value)}
                 fullWidth

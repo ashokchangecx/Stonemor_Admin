@@ -26,6 +26,13 @@ import {
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    root: {
+      flexGrow: 1,
+      overflow: "hidden",
+      marginLeft: 120,
+      marginTop: 10,
+      padding: theme.spacing(0, 3),
+    },
     card: {
       maxWidth: 345,
     },
@@ -60,6 +67,10 @@ const useStyles = makeStyles((theme) =>
     logo: {
       maxWidth: 300,
       paddingTop: 14,
+    },
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing(3),
     },
   })
 );
@@ -440,57 +451,61 @@ const SurveyQuestion = (props) => {
         alt="logo"
         className={classes.logo}
       /> */}
-      <Container maxWidth="md">
-        <Typography className={classes.custom} variant="h5">
-          {getQuestionnaire?.name}
-        </Typography>
-        <div className={classes.cont}>
-          <div>{getQuestionView(currentQuestion)}</div>
-          <Box>
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              disabled={
-                currentQuestion?.order
-                  ? currentQuestion?.order === 1
-                  : questions?.findIndex(
-                      (q) => q?.id === currentQuestion?.id
-                    ) === 0
-              }
-              data-amplify-analytics-on="click"
-              data-amplify-analytics-name="click"
-              onClick={handlePreviousClick}
-            >
-              <ArrowBackIcon />
-              Prev
-            </Button>
-            {final ? (
-              <Button
-                variant="contained"
-                color="primary"
-                data-amplify-analytics-on="click"
-                onClick={handleFinish}
-              >
-                Finish
-                {/* <ArrowForwardIcon /> */}
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                color="primary"
-                className={classes.button}
-                disabled={!currentAnswer}
-                data-amplify-analytics-on="click"
-                onClick={handleNextClick2}
-              >
-                Next
-                <ArrowForwardIcon />
-              </Button>
-            )}
-          </Box>
-        </div>
-      </Container>
+      <main className={classes.root}>
+        <Paper className={classes.content}>
+          <Container maxWidth="md">
+            <Typography className={classes.custom} variant="h5">
+              {getQuestionnaire?.name}
+            </Typography>
+            <div className={classes.cont}>
+              <div>{getQuestionView(currentQuestion)}</div>
+              <Box>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                  disabled={
+                    currentQuestion?.order
+                      ? currentQuestion?.order === 1
+                      : questions?.findIndex(
+                          (q) => q?.id === currentQuestion?.id
+                        ) === 0
+                  }
+                  data-amplify-analytics-on="click"
+                  data-amplify-analytics-name="click"
+                  onClick={handlePreviousClick}
+                >
+                  <ArrowBackIcon />
+                  Prev
+                </Button>
+                {final ? (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    data-amplify-analytics-on="click"
+                    onClick={handleFinish}
+                  >
+                    Finish
+                    {/* <ArrowForwardIcon /> */}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                    disabled={!currentAnswer}
+                    data-amplify-analytics-on="click"
+                    onClick={handleNextClick2}
+                  >
+                    Next
+                    <ArrowForwardIcon />
+                  </Button>
+                )}
+              </Box>
+            </div>
+          </Container>
+        </Paper>
+      </main>
     </div>
   );
 };

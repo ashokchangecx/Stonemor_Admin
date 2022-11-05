@@ -8,7 +8,6 @@ import {
   createTheme,
 } from "@material-ui/core/styles";
 import { getQuestionnaire } from "../../graphql/queries";
-
 import {
   IconButton,
   Paper,
@@ -23,7 +22,7 @@ import gql from "graphql-tag";
 const styles = {
   paperContainer: {
     backgroundRepeat: "no-repeat",
-    // backgroundImage: `url('https://basis.net/wp-content/uploads/2021/10/house_plant_home.jpeg')`,
+    backgroundImage: `url('https://basis.net/wp-content/uploads/2021/10/house_plant_home.jpeg')`,
     backgroundSize: "cover",
     minHeight: "100vh",
   },
@@ -31,13 +30,6 @@ const styles = {
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    root: {
-      flexGrow: 1,
-      overflow: "hidden",
-      marginLeft: 220,
-      marginTop: 10,
-      // padding: theme.spacing(0, 3),s
-    },
     button: {
       margin: theme.spacing(2),
     },
@@ -58,6 +50,17 @@ const useStyles = makeStyles((theme) =>
     textcolor: {
       // color: "#fafafa",
     },
+    root: {
+      flexGrow: 1,
+      overflow: "hidden",
+      marginLeft: 120,
+      marginTop: 10,
+      padding: theme.spacing(0, 3),
+    },
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing(3),
+    },
   })
 );
 const theme = createTheme();
@@ -75,48 +78,44 @@ theme.typography.h3 = {
 
 const SurveyComplete = (props) => {
   const classes = useStyles();
+
   const {
     data: { loading, error, getQuestionnaire },
   } = props.getQuestionnaire;
-
-  console.log("getQuestionnaire", getQuestionnaire);
   return (
     <div className={classes.root}>
-      <div style={styles.paperContainer}>
-        {/* <AppBar position="sticky" style={{ backgroundColor: "#fff" }}>
-          <Toolbar>
-            <img src={logo} alt="logo" className={classes.logo} />
-          </Toolbar>
-        </AppBar> */}
-        <div className={classes.text}>
-          <Box
-            sx={{ width: "300", height: "300", padding: "5px 40px" }}
-            alignItems="center"
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
+      <main className={classes.root}>
+        <div style={styles.content}>
+          <div className={classes.text}>
+            <Box
+              sx={{ width: "300", height: "300", padding: "5px 40px" }}
+              alignItems="center"
             >
-              <img
-                src="https://www.freeiconspng.com/thumbs/success-icon/success-icon-10.png"
-                className={classes.img}
-                alt="success"
-              />
-            </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <img
+                  src="https://www.freeiconspng.com/thumbs/success-icon/success-icon-10.png"
+                  className={classes.img}
+                  alt="success"
+                />
+              </div>
 
-            <ThemeProvider theme={theme}>
-              <Typography variant="h3" className={classes.textcolor}>
-                {/* Thank you for completing our survey. If you have requested a
-                follow up,someone will be in touch with you soon. */}
-                {getQuestionnaire?.endMsg}
-              </Typography>
-            </ThemeProvider>
-          </Box>
+              <ThemeProvider theme={theme}>
+                <Typography variant="h3" className={classes.textcolor}>
+                  {/* Thank you for completing our survey. If you have requested a
+              follow up,someone will be in touch with you soon. */}
+                  {getQuestionnaire?.endMsg}
+                </Typography>
+              </ThemeProvider>
+            </Box>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
