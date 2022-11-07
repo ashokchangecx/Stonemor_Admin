@@ -427,6 +427,7 @@ const QuestionnarieQuestionPart = (props) => {
         updateQuestionQuery.listOptions = listItemOptions;
     }
     props.onUpadateQuestion(updateQuestionQuery, getQuestionnaire?.id);
+    setIsCreated(true);
     handleEditQuestionClose();
   };
 
@@ -734,7 +735,7 @@ const QuestionnarieQuestionPart = (props) => {
         </Dialog>
         <Dialog
           open={openAddListItem}
-          onClose={handleAddListItemClose}
+          // onClose={handleAddListItemClose}
           aria-labelledby="form-dialog-title"
           fullWidth
         >
@@ -796,13 +797,18 @@ const QuestionnarieQuestionPart = (props) => {
               )}
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleAddListItemClose} color="default">
+              <Button
+                onClick={handleAddListItemClose}
+                disabled={!listItemOptions?.length > 0}
+                color="default"
+              >
                 Close
               </Button>
               <Button
                 onClick={handleAddingListItemOptions}
                 type="button"
                 color="primary"
+                disabled={!listItem}
               >
                 Add
               </Button>

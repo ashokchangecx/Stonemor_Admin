@@ -272,11 +272,11 @@ const SurveyPart = (props) => {
         ]}
       />
       {/* <AdminMenu /> */}
-      {/* <div className={classes.root}>
+      <div className={classes.root}>
         <Breadcrumbs aria-label="breadcrumb">
           <Typography color="primary">Manage Survey</Typography>
         </Breadcrumbs>
-      </div> */}
+      </div>
       <div>
         <Dialog
           open={open}
