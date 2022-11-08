@@ -100,8 +100,12 @@ const QuestionnairePart = (props) => {
   const [initialLoading, setinitialLoading] = useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [questionnairesId, setQuestionnairesId] = useState("");
-  const [introMsg, setInstroMsg] = useState("");
-  const [endMsg, setEndMsg] = useState("");
+  const [introMsg, setInstroMsg] = useState(
+    "Welcome to StoneMor Suvey. Click continue to attend survey."
+  );
+  const [endMsg, setEndMsg] = useState(
+    "Thank you for completing our survey. If you have requested a follow up,someone will be in touch with you soon."
+  );
   const [openUpdateQuestionnaires, setOpenUpdateQuestionnaires] =
     useState(false);
 

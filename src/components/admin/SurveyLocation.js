@@ -202,10 +202,10 @@ const SurveyLocationPart = (props) => {
 
       <div className={classes.root}>
         <Breadcrumbs aria-label="breadcrumb">
-          <Typography color="primary">SurveyLocation </Typography>
+          <Typography color="primary">Survey Location </Typography>
         </Breadcrumbs>
         <p />
-        <Typography variant="h4">SurveyLocation </Typography> <p />
+        <Typography variant="h4">Survey Location </Typography> <p />
         <div>
           <Dialog
             open={isopen}
@@ -218,7 +218,7 @@ const SurveyLocationPart = (props) => {
               </DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  Are You Sure You Want to Delete this SurveyUser?
+                  Are You Sure You Want to Delete this Survey Location?
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
@@ -346,7 +346,7 @@ const SurveyLocationPart = (props) => {
                   <StyledTableCell>Location</StyledTableCell>
                   <StyledTableCell>Email</StyledTableCell>
 
-                  <StyledTableCell>Manage</StyledTableCell>
+                  <StyledTableCell>Manage SurveyLocation </StyledTableCell>
                 </StyledTableRow>
               </TableHead>
               <TableBody>

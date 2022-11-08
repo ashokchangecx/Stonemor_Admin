@@ -201,10 +201,10 @@ const SurveyUsersPart = (props) => {
 
       <div className={classes.root}>
         <Breadcrumbs aria-label="breadcrumb">
-          <Typography color="primary">SurveyUsers</Typography>
+          <Typography color="primary">Survey Users</Typography>
         </Breadcrumbs>
         <p />
-        <Typography variant="h4">SurveyUser </Typography> <p />
+        <Typography variant="h4">Survey User </Typography> <p />
         <div>
           <Dialog
             open={isopen}
@@ -344,7 +344,7 @@ const SurveyUsersPart = (props) => {
                   <StyledTableCell>S.NO</StyledTableCell>
                   <StyledTableCell>Name</StyledTableCell>
                   <StyledTableCell>Email</StyledTableCell>
-                  <StyledTableCell>Manage</StyledTableCell>
+                  <StyledTableCell>Manage SurveyUser</StyledTableCell>
                 </StyledTableRow>
               </TableHead>
               <TableBody>
