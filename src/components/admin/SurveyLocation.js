@@ -97,7 +97,6 @@ const SurveyLocationPart = (props) => {
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 
-  console.log(surveyLocationOrder);
   const handleClosingSurveyLocationDialog = () => {
     setSurveyLocation("");
     setInchargeEmail("");

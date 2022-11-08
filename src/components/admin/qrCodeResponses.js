@@ -6,7 +6,6 @@ import {
   listSurveyEntriess,
   listResponsess,
   listSurveyUsers,
-  getQuestionnaire,
   listQuestionnaires,
 } from "../../graphql/queries";
 import { v4 as uuid } from "uuid";
@@ -20,20 +19,11 @@ import TableRow from "@material-ui/core/TableRow";
 
 import Button from "@material-ui/core/Button";
 
-import { graphql, compose, withApollo } from "react-apollo";
+import { graphql, compose } from "react-apollo";
 import gql from "graphql-tag";
-import { listSurveys } from "../../graphql/queries";
-import { createSurvey, deleteSurvey, addGroup } from "../../graphql/mutations";
-
-import AdminMenu from "./index";
 
 import {
   Breadcrumbs,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
   Paper,
   TablePagination,
   Typography,
@@ -80,7 +70,7 @@ const StyledTableRow = withStyles((theme) => ({
 
 const qrCodeResponsesPort = (props) => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const {
@@ -123,12 +113,7 @@ const qrCodeResponsesPort = (props) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  function handleOpenDialog() {
-    setOpen(true);
-  }
-  function handleCloseDialog() {
-    setOpen(false);
-  }
+
   return (
     <div className={classes.root}>
       {" "}

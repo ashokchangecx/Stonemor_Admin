@@ -448,9 +448,9 @@ const QuestionnaireQuestions = compose(
 
           update: (store, { data: { createQuestion } }) => {
             const query = gql(listQuestions);
-            console.log("query", query);
+
             const data = store.readQuery({ query });
-            console.log("listQuestions : ", data?.listQuestions);
+
             if (data?.listQuestions?.items?.length > 0) {
               data.listQuestions.items = [
                 ...data.listQuestions.items.filter(

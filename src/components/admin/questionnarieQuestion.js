@@ -180,7 +180,7 @@ const QuestionnarieQuestionPart = (props) => {
   const pngUrl = canvas
     ?.toDataURL("image/png")
     ?.replace("image/png", "image/octet-stream");
-  console.log("pngUrl", pngUrl);
+
   const data = {
     mail: inchargeEmail,
     qrCode: pngUrl,
@@ -200,18 +200,16 @@ const QuestionnarieQuestionPart = (props) => {
           setAlertContentFail("Invalid Email ID");
           setAlertFail(true);
         }
-        console.log("res", res);
       })
       .catch((err) => {
         alert(err);
       });
   };
 
-  console.log("surveyLoc", surveyLoc?.inchargeEmail);
   // const handleSendEmail = (user) => {
   //   setInchargeEmail(user?.id);
   // };
-  console.log("inchargeEmail", inchargeEmail);
+
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -220,7 +218,6 @@ const QuestionnarieQuestionPart = (props) => {
   const handleGeneratingSurveyLink = () => {
     const surveyUrl = `${baseUrl}/surveyquestions/${props.match.params.questionnaire}?uid=${surveyUser}`;
     setUserSurveyLink(surveyUrl);
-    // console.log(surveyUrl, "surveyUrl");
   };
 
   //QR code //

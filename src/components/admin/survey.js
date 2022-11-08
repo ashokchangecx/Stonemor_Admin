@@ -79,7 +79,7 @@ const SurveyPart = (props) => {
   const {
     data: { loading, error, listSurveys, refetch },
   } = props.listSurveys;
-  console.log("listSurveys", listSurveys);
+
   const [open, setOpen] = React.useState(false);
   const [initialLoading, setinitialLoading] = useState(true);
   const [isCreated, setIsCreated] = useState(false);

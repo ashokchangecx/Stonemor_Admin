@@ -59,7 +59,7 @@ const HomePart = (props) => {
   const {
     data: { loading, error, listSurveys },
   } = props.listSurveys;
-  console.log("listSurveys", listSurveys);
+
   const PER_PAGE = 4;
   const data = listSurveys?.items?.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()

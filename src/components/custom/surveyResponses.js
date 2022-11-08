@@ -76,9 +76,7 @@ const surveyResponsesPart = (props) => {
     data: { listResponsess },
   } = props.listResponsess;
 
-  // console.log("listResponsess", listResponsess);
   const qid = props.match.params.responseID;
-  // console.log("qid", qid);
 
   const {
     data: { listSurveyEntriess },
@@ -95,11 +93,8 @@ const surveyResponsesPart = (props) => {
 
   const listUserRes = listSurveyEntriess?.items?.filter((r) => r?.id === qid);
   const listans = listUserRes?.[0]?.responses;
-  // console.log("listans", listans);
-  // console.log("listUserRes", listUserRes);
 
   const questionnairename = listUserRes?.[0]?.questionnaireId;
-  console.log("questionnairename", questionnairename);
 
   const onGettingQuestionnaireById = (id) => {
     const que = listQuestionnaires?.items?.find((q) => q?.id === id);
@@ -116,7 +111,6 @@ const surveyResponsesPart = (props) => {
   const questionCount = listans?.items?.sort(
     (a, b) => a?.qu?.order - b?.qu?.order
   );
-  console.log("questionCount", questionCount);
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));

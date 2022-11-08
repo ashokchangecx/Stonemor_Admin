@@ -83,7 +83,6 @@ const QuestionnairePart = (props) => {
     data: { loading, error, listQuestionnaires, refetch },
   } = props.listQuestionnaires;
 
-  console.log("listQuestionnaires", listQuestionnaires);
   const {
     data: { listSurveys },
   } = props.listSurveys;
@@ -585,9 +584,7 @@ const Question = compose(
               input: response,
             },
           })
-          .then((data) => {
-            //console.log(data)
-          });
+          .then((data) => {});
       },
     }),
   }),

@@ -81,12 +81,10 @@ const responsesPort = (props) => {
   const {
     data: { listSurveyEntriess },
   } = props.listSurveyEntriess;
-  console.log("listSurveyEntriess", listSurveyEntriess);
 
   const {
     data: { listQuestionnaires },
   } = props.listQuestionnaires;
-  // console.log("listQuestionnaires", listQuestionnaires);
 
   const onGettingQuestionnaireById = (id) => {
     const que = listQuestionnaires?.items?.find((q) => q?.id === id);
@@ -105,7 +103,6 @@ const responsesPort = (props) => {
       (a, b) =>
         new Date(b.finishTime).getTime() - new Date(a.finishTime).getTime()
     );
-  console.log("questionCount", questionCount);
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));

@@ -13,12 +13,11 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import MenuIcon from "@material-ui/icons/Menu";
 import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
-import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
-import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
+
 import SelectAllIcon from "@material-ui/icons/SelectAll";
 import PersonIcon from "@material-ui/icons/Person";
 import PinDropIcon from "@material-ui/icons/PinDrop";
-import AdjustIcon from "@material-ui/icons/Adjust";
+
 import LanguageIcon from "@material-ui/icons/Language";
 import { makeStyles, useTheme, withStyles } from "@material-ui/core/styles";
 import MuiListItem from "@material-ui/core/ListItem";
@@ -93,7 +92,6 @@ const Admin = (props) => {
   const [userPoolId] = React.useState(Auth.userPool.userPoolId);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
-  console.log(selectedIndex);
   const handleListItemClick = (event, index) => {
     // event.preventDefault();
 
