@@ -548,7 +548,7 @@ const QuestionnarieQuestionPart = (props) => {
             </DialogTitle>
             <DialogContent>
               <DialogContentText>
-                Are You Sure You Want to Delete this Survey?
+                Are You Sure You Want to Delete this Question?
               </DialogContentText>
             </DialogContent>
             <DialogActions>
