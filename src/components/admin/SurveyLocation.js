@@ -346,7 +346,8 @@ const SurveyLocationPart = (props) => {
                   <StyledTableCell>Location</StyledTableCell>
                   <StyledTableCell>Email</StyledTableCell>
 
-                  <StyledTableCell>Manage SurveyLocation </StyledTableCell>
+                  <StyledTableCell>Manage </StyledTableCell>
+                  <StyledTableCell>Delete </StyledTableCell>
                 </StyledTableRow>
               </TableHead>
               <TableBody>
@@ -378,6 +379,9 @@ const SurveyLocationPart = (props) => {
                       >
                         <EditIcon />
                       </Button>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {" "}
                       <Button
                         onClick={() => handleOpenDeleteDialog(surveyLocation)}
                         size="small"

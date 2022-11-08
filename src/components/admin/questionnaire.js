@@ -468,6 +468,7 @@ const QuestionnairePart = (props) => {
                 {/* <StyledTableCell>Type</StyledTableCell> */}
                 <StyledTableCell>Edit Questionaire</StyledTableCell>
                 <StyledTableCell>Manage Questions</StyledTableCell>
+                <StyledTableCell>Delete</StyledTableCell>
               </StyledTableRow>
             </TableHead>
             <TableBody>
@@ -497,17 +498,20 @@ const QuestionnairePart = (props) => {
                     <Button
                       size="small"
                       color="primary"
-                      onClick={() => handleOpenDeleteDialog(questionnaire)}
-                    >
-                      <DeleteIcon />
-                    </Button>
-                    <Button
-                      size="small"
-                      color="primary"
                       component={Link}
                       to={`/admin/question/${questionnaire.id}`}
                     >
                       <VisibilityIcon />
+                    </Button>
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    {" "}
+                    <Button
+                      size="small"
+                      color="primary"
+                      onClick={() => handleOpenDeleteDialog(questionnaire)}
+                    >
+                      <DeleteIcon />
                     </Button>
                   </StyledTableCell>
                 </StyledTableRow>

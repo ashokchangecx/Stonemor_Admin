@@ -344,7 +344,8 @@ const SurveyUsersPart = (props) => {
                   <StyledTableCell>S.NO</StyledTableCell>
                   <StyledTableCell>Name</StyledTableCell>
                   <StyledTableCell>Email</StyledTableCell>
-                  <StyledTableCell>Manage SurveyUser</StyledTableCell>
+                  <StyledTableCell>Manage </StyledTableCell>
+                  <StyledTableCell>Delete </StyledTableCell>
                 </StyledTableRow>
               </TableHead>
               <TableBody>
@@ -369,6 +370,9 @@ const SurveyUsersPart = (props) => {
                       >
                         <EditIcon />
                       </Button>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {" "}
                       <Button
                         onClick={() => handleOpenDeleteDialog(user)}
                         size="small"

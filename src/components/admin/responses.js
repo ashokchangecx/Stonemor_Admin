@@ -2,13 +2,7 @@
 import React from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import moment from "moment";
-import {
-  listSurveyEntriess,
-  listResponsess,
-  listSurveyUsers,
-  getQuestionnaire,
-  listQuestionnaires,
-} from "../../graphql/queries";
+import { listSurveyEntriess, listQuestionnaires } from "../../graphql/queries";
 import { v4 as uuid } from "uuid";
 
 import VisibilityIcon from "@material-ui/icons/Visibility";
@@ -83,18 +77,12 @@ const responsesPort = (props) => {
   const [open, setOpen] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const {
-    data: { listResponsess },
-  } = props.listResponsess;
 
   const {
     data: { listSurveyEntriess },
   } = props.listSurveyEntriess;
   console.log("listSurveyEntriess", listSurveyEntriess);
 
-  const {
-    data: { listSurveyUsers },
-  } = props.listSurveyUsers;
   const {
     data: { listQuestionnaires },
   } = props.listQuestionnaires;
@@ -214,18 +202,6 @@ const responsesPort = (props) => {
   );
 };
 const Responses = compose(
-  graphql(gql(listResponsess), {
-    options: (props) => ({
-      errorPolicy: "all",
-      fetchPolicy: "cache-and-network",
-      variables: { id: props.match.params.responseID },
-    }),
-    props: (props) => {
-      return {
-        listResponsess: props ? props : [],
-      };
-    },
-  }),
   graphql(gql(listSurveyEntriess), {
     options: (props) => ({
       errorPolicy: "all",
@@ -237,17 +213,7 @@ const Responses = compose(
       };
     },
   }),
-  graphql(gql(listSurveyUsers), {
-    options: (props) => ({
-      errorPolicy: "all",
-      fetchPolicy: "cache-and-network",
-    }),
-    props: (props) => {
-      return {
-        listSurveyUsers: props ? props : [],
-      };
-    },
-  }),
+
   graphql(gql(listQuestionnaires), {
     options: (props) => ({
       errorPolicy: "all",

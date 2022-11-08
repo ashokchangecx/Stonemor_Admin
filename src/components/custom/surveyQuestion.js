@@ -1,18 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { graphql, compose, withApollo } from "react-apollo";
 import gql from "graphql-tag";
+import { useLocation } from "react-router-dom";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { getQuestionnaire } from "../../graphql/queries";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import { v4 as uuid } from "uuid";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import { createResponses } from "../../graphql/mutations";
+import logo1 from "../../assets/MemorialPlanning - Wide - Tag - 4C (2) (1).png";
+import { createResponses, createSurveyEntries } from "../../graphql/mutations";
 
 import {
+  AppBar,
   Box,
   Button,
   Checkbox,
   CircularProgress,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -21,6 +30,7 @@ import {
   Radio,
   RadioGroup,
   TextField,
+  Toolbar,
   Typography,
 } from "@material-ui/core";
 
@@ -32,6 +42,10 @@ const useStyles = makeStyles((theme) =>
       marginLeft: 120,
       marginTop: 10,
       padding: theme.spacing(0, 3),
+    },
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing(3),
     },
     card: {
       maxWidth: 345,
@@ -66,101 +80,117 @@ const useStyles = makeStyles((theme) =>
     },
     logo: {
       maxWidth: 300,
-      paddingTop: 14,
+      paddingTop: 2,
     },
-    content: {
-      flexGrow: 1,
-      padding: theme.spacing(3),
+    loadCenter: {
+      display: "flex",
+      marginTop: "16rem",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    progressBar: {
+      with: "20%",
     },
   })
 );
+const styles = {
+  paperContainer: {
+    backgroundRepeat: "no-repeat",
+    // backgroundImage: `url('https://basis.net/wp-content/uploads/2021/10/house_plant_home.jpeg')`,
+    backgroundSize: "cover",
+    minHeight: "100vh",
+  },
+};
+const startTime = new Date().toISOString();
 
 const SurveyQuestion = (props) => {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
   const classes = useStyles();
+  const [group] = React.useState(uuid());
   const {
     data: { loading, error, getQuestionnaire },
   } = props.getQuestionnaire;
-
   const questions = getQuestionnaire?.question?.items;
-
   const firstQuestion =
     questions?.find((q) => q?.order === 1) ||
     questions?.sort((a, b) => b?.order - a?.order)[questions?.length - 1];
   const lastQuestion = questions?.sort((a, b) => a?.order - b?.order)[
     questions?.length - 1
   ];
+
   const [currentQuestion, setCurrentQuestion] = useState(firstQuestion);
   const [currentAnswer, setCurrentAnswer] = useState("");
+
   const [ANSLIST, setANSLIST] = useState([]);
-  const [checked, setChecked] = React.useState([]);
+
+  const [check, setCheck] = React.useState([]);
   const [final, setFinal] = React.useState(false);
+  const [isPostingResponse, setIsPostingResponse] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
   const onValueChange = (event, newValue) => {
     setCurrentAnswer(newValue);
   };
+  const value = currentQuestion?.order - 1;
+  // console.log("valuie", value);
+  const normalise = () => ((value - MIN) * 100) / (MAX - MIN);
+  const MIN = 0;
+
+  // console.log("MIN", MIN);
+  const MAX = getQuestionnaire?.question?.items?.length;
+  // console.log("MAX", MAX);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const handleChange = (e) => {
-    var temp = checked;
+    e.preventDefault();
+    var temp = check;
     if (e.target.checked === false) {
       temp = temp.filter((a) => {
         return a !== e.target.value;
       });
     }
     e.target.checked
-      ? setChecked([...checked, e.target.value])
-      : setChecked([...temp]);
-    setCurrentAnswer(checked);
+      ? setCheck([...check, e.target.value])
+      : setCheck([...temp]);
   };
-  // console.log("Demo", ANSLIST, currentAnswer);
-  const handleFinish = () => {
-    ANSLIST.map((response) => {
-      console.log("response", response);
-      props.onCreateResponse({
-        responsesQuId: response?.questionId,
-        res: response?.answer,
-      });
-      return <CircularProgress />;
+
+  const handleFinish = async (event) => {
+    event.preventDefault();
+    setIsPostingResponse(true);
+    await props.onCreateSurveyEntries({
+      id: group,
+      startTime: startTime,
+      finishTime: new Date().toISOString(),
+      questionnaireId: getQuestionnaire?.id,
+      surveyEntriesById: params?.get("uid"),
+      surveyEntriesLocationId: params?.get("uid"),
     });
+    await Promise.all(
+      [
+        ...ANSLIST,
+        {
+          questionId: currentQuestion?.id,
+          answer: currentAnswer,
+        },
+      ].map(async (response) => {
+        await props.onCreateResponse({
+          responsesQuId: response?.questionId,
+          res: response?.answer,
+          responsesGroupId: group,
+        });
+        return <CircularProgress />;
+      })
+    );
+    setIsPostingResponse(false);
     props.history.push(`/surveyComplete/${getQuestionnaire.id} `);
     window.location.reload();
   };
 
-  const handleNextClick = () => {
-    setANSLIST([
-      ...ANSLIST,
-      {
-        questionId: currentQuestion?.id,
-        answer: currentAnswer,
-      },
-    ]);
-
-    if (currentQuestion?.listOptions?.length === 1) {
-      setCurrentQuestion(
-        questions.find(
-          (q) => q?.id === currentQuestion?.listOptions[0]?.nextQuestion
-        )
-      );
-    } else {
-      const nextQue = currentQuestion?.listOptions?.find(
-        (l) => l?.listValue === currentAnswer
-      );
-      if (nextQue) {
-        setCurrentQuestion(
-          questions.find((q) => q?.id === nextQue?.nextQuestion)
-        );
-      }
-      if (currentQuestion?.type === "CHECKBOX") {
-        setCurrentQuestion(
-          questions.find(
-            (q) => q?.id === currentQuestion?.listOptions[0]?.nextQuestion
-          )
-        );
-      }
-    }
-
-    setCurrentAnswer("");
-  };
-
   const handleNextClick2 = () => {
+    let tempCurrentQuestion = "";
     setANSLIST([
       ...ANSLIST,
       {
@@ -176,33 +206,36 @@ const SurveyQuestion = (props) => {
       const nextQuestion = currentQuestion?.dependent?.options?.find(
         (o) => o?.dependentValue === ansofDepQuestion?.answer
       );
-      // console.log("CS :", nextQuestion);
-      setCurrentQuestion(
-        questions?.find((q) => q?.id === nextQuestion?.nextQuestion)
+
+      tempCurrentQuestion = questions?.find(
+        (q) => q?.id === nextQuestion?.nextQuestion
       );
     }
     if (currentQuestion?.isSelf) {
       if (currentQuestion?.type === "TEXT") {
         const nextQuestionId = currentQuestion?.listOptions[0].nextQuestion;
-        setCurrentQuestion(questions.find((q) => q?.id === nextQuestionId));
+        tempCurrentQuestion = questions.find((q) => q?.id === nextQuestionId);
       } else {
         const nextQue = currentQuestion?.listOptions?.find(
           (l) => l?.listValue === currentAnswer
         );
         if (nextQue) {
-          setCurrentQuestion(
-            questions.find((q) => q?.id === nextQue?.nextQuestion)
+          tempCurrentQuestion = questions.find(
+            (q) => q?.id === nextQue?.nextQuestion
           );
         }
       }
     }
     if (!currentQuestion?.isDependent && !currentQuestion?.isSelf) {
       const currentQuestionOrder = currentQuestion?.order;
-      setCurrentQuestion(
-        questions?.find((q) => q?.order === currentQuestionOrder + 1)
+
+      tempCurrentQuestion = questions?.find(
+        (q) => q?.order === currentQuestionOrder + 1
       );
     }
     setCurrentAnswer("");
+    setCheck("");
+    setCurrentQuestion(tempCurrentQuestion);
   };
 
   const handlePreviousClick = () => {
@@ -214,9 +247,11 @@ const SurveyQuestion = (props) => {
     if (PreQue) {
       setCurrentQuestion(questions.find((q) => q?.id === PreQue));
       setCurrentAnswer(lastAnswer?.answer);
+      setCheck(lastAnswer?.answer);
     }
     setANSLIST(ANSLIST.slice(0, -1));
   };
+
   const getQuestionView = (q) => {
     switch (q?.type) {
       case "RADIO":
@@ -240,7 +275,7 @@ const SurveyQuestion = (props) => {
               value={currentAnswer}
               onChange={onValueChange}
             >
-              {q?.listOptions.map((option, o) => (
+              {q?.listOptions?.map((option, o) => (
                 <FormControlLabel
                   key={o}
                   value={option?.listValue}
@@ -296,7 +331,7 @@ const SurveyQuestion = (props) => {
               value={currentAnswer}
               onChange={onValueChange}
             >
-              {q?.listOptions.map((option, o) => (
+              {q?.listOptions?.map((option, o) => (
                 <FormControlLabel
                   key={o}
                   value={option?.listValue}
@@ -333,12 +368,18 @@ const SurveyQuestion = (props) => {
                 </Typography>
               </FormLabel>
 
-              {q?.listOptions.map((option, o) => (
+              {q?.listOptions?.map((option, o) => (
                 <FormControlLabel
                   key={o}
                   value={currentAnswer}
-                  onChange={handleChange}
-                  control={<Checkbox key={o} value={option?.listValue} />}
+                  control={
+                    <Checkbox
+                      key={o}
+                      checked={check?.includes(option?.listValue)}
+                      value={option?.listValue}
+                      onChange={(e) => handleChange(e)}
+                    />
+                  }
                   label={option?.listValue}
                 />
               ))}
@@ -365,7 +406,7 @@ const SurveyQuestion = (props) => {
                 </Typography>
               </FormLabel>
 
-              {q?.listOptions.map((option, o) => (
+              {q?.listOptions?.map((option, o) => (
                 <FormControlLabel
                   key={o}
                   value={currentAnswer}
@@ -402,6 +443,15 @@ const SurveyQuestion = (props) => {
   };
 
   useEffect(() => {
+    if (
+      currentQuestion?.type === "CHECKBOX" ||
+      currentQuestion?.type === "CHECKBOXWITHTEXT"
+    ) {
+      setCurrentAnswer(check);
+    }
+  }, [check]);
+
+  useEffect(() => {
     if (questions?.length > 0) {
       setCurrentQuestion(
         questions?.find((q) => q?.order === 1) ?? questions[0]
@@ -418,12 +468,26 @@ const SurveyQuestion = (props) => {
       }
     }
   }, [currentQuestion]);
-  // console.log("ANSLIST", ANSLIST, currentQuestion);
+  // console.log("Demo", ANSLIST, currentAnswer, check);
+
+  // console.log("ANSLIST", params?.get("uid"));
 
   if (loading) {
     return (
       <div>
         <CircularProgress className={classes.progress} />
+      </div>
+    );
+  }
+  if (isPostingResponse) {
+    return (
+      <div style={styles.paperContainer}>
+        <div className={classes.loadCenter}>
+          <CircularProgress className={classes.progress} />
+          <Typography variant="h5" component="h3">
+            Posting Responses.Please wait...
+          </Typography>
+        </div>
       </div>
     );
   }
@@ -443,16 +507,63 @@ const SurveyQuestion = (props) => {
       </div>
     );
   }
-
+  console.log("Check : ", check);
   return (
-    <div className={classes.root}>
-      {/* <img
-        src="https://dynamix-cdn.s3.amazonaws.com/stonemorcom/stonemorcom_616045937.svg"
-        alt="logo"
-        className={classes.logo}
-      /> */}
+    <div className={classes.root} style={styles.paperContainer}>
+      {/* <AppBar position="stickey" style={{ backgroundColor: "#fff" }}>
+        <div style={{ justifyContent: "center", alignItems: "center" }}>
+          <img src={logo1} alt="logo" className={classes.logo} />
+        </div>
+      </AppBar> */}
+
+      <Dialog
+        open={open}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Stonemor"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText
+          // id="alert-dialog-description"
+          >
+            {getQuestionnaire?.introMsg}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary" autoFocus>
+            continue
+          </Button>
+        </DialogActions>
+      </Dialog>
       <main className={classes.root}>
         <Paper className={classes.content}>
+          <div
+            style={{
+              // do your styles depending on your needs.
+              display: "flex",
+              justifyContent: "end",
+              alignItems: "center",
+              marginRight: "3rem",
+              marginTop: "10px",
+            }}
+          >
+            <Box display="flex" alignItems="center" justifyContent="end">
+              <Box width="0%" mr={2.5}>
+                <CircularProgress
+                  variant="determinate"
+                  value={normalise(props.value)}
+                  size="4.75rem"
+                  thickness={5}
+                />
+              </Box>
+              <Box minWidth={40}>
+                <Typography variant="h6" color="textSecondary">{`${Math.round(
+                  normalise(props.value)
+                )}%`}</Typography>
+              </Box>
+            </Box>
+          </div>
+
           <Container maxWidth="md">
             <Typography className={classes.custom} variant="h5">
               {getQuestionnaire?.name}
@@ -506,6 +617,47 @@ const SurveyQuestion = (props) => {
           </Container>
         </Paper>
       </main>
+
+      {/* <div>
+      <Box display="flex" alignItems="center" justifyContent="center" mt={10}>
+        <Box width="20%" mr={1}>
+          <LinearProgress
+            variant="determinate"
+            value={normalise(props.value)}
+          />
+        </Box>
+        <Box minWidth={35}>
+          <Typography variant="body2" color="textSecondary">{`${Math.round(
+            normalise(props.value)
+          )}%`}</Typography>
+        </Box>
+      </Box>
+    </div> */}
+      {/* <div
+        style={{
+          // do your styles depending on your needs.
+          display: "flex",
+          justifyContent: "end",
+          alignItems: "center",
+          marginRight: "3rem",
+        }}
+      >
+        <Box display="flex" alignItems="center" justifyContent="end">
+          <Box width="0%" mr={2.5}>
+            <CircularProgress
+              variant="determinate"
+              value={normalise(props.value)}
+              size="5rem"
+              thickness={5}
+            />
+          </Box>
+          <Box minWidth={40}>
+            <Typography variant="h5" color="textSecondary">{`${Math.round(
+              normalise(props.value)
+            )}%`}</Typography>
+          </Box>
+        </Box>
+      </div> */}
     </div>
   );
 };
@@ -525,10 +677,24 @@ const SurveyQuestionarrireQuestion = compose(
   }),
   graphql(gql(createResponses), {
     props: (props) => ({
-      onCreateResponse: (response) => {
-        props.mutate({
+      onCreateResponse: async (response) => {
+        await props.mutate({
           variables: {
             input: response,
+          },
+        });
+      },
+    }),
+  }),
+  graphql(gql(createSurveyEntries), {
+    options: (props) => ({
+      errorPolicy: "all",
+    }),
+    props: (props) => ({
+      onCreateSurveyEntries: (ip) => {
+        props.mutate({
+          variables: {
+            input: ip,
           },
         });
       },

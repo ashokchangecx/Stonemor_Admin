@@ -119,7 +119,7 @@ export const getSurvey = /* GraphQL */ `
 export const listSurveys = /* GraphQL */ `
   query ListSurveys(
     $filter: ModelSurveyFilterInput
-    $limit: Int
+    $limit: Int = 300000
     $nextToken: String
   ) {
     listSurveys(filter: $filter, limit: $limit, nextToken: $nextToken) {
@@ -263,7 +263,7 @@ export const getQuestionnaire = /* GraphQL */ `
 export const listQuestionnaires = /* GraphQL */ `
   query ListQuestionnaires(
     $filter: ModelQuestionnaireFilterInput
-    $limit: Int
+    $limit: Int = 300000
     $nextToken: String
   ) {
     listQuestionnaires(filter: $filter, limit: $limit, nextToken: $nextToken) {
@@ -408,7 +408,7 @@ export const getQuestion = /* GraphQL */ `
 export const listQuestions = /* GraphQL */ `
   query ListQuestions(
     $filter: ModelQuestionFilterInput
-    $limit: Int
+    $limit: Int = 300000
     $nextToken: String
   ) {
     listQuestions(filter: $filter, limit: $limit, nextToken: $nextToken) {
@@ -514,7 +514,7 @@ export const getResponses = /* GraphQL */ `
 export const listResponsess = /* GraphQL */ `
   query ListResponsess(
     $filter: ModelResponsesFilterInput
-    $limit: Int
+    $limit: Int = 300000
     $nextToken: String
   ) {
     listResponsess(filter: $filter, limit: $limit, nextToken: $nextToken) {
@@ -584,7 +584,7 @@ export const getSurveyEntries = /* GraphQL */ `
 export const listSurveyEntriess = /* GraphQL */ `
   query ListSurveyEntriess(
     $filter: ModelSurveyEntriesFilterInput
-    $limit: Int
+    $limit: Int = 300000
     $nextToken: String
   ) {
     listSurveyEntriess(filter: $filter, limit: $limit, nextToken: $nextToken) {
@@ -595,7 +595,7 @@ export const listSurveyEntriess = /* GraphQL */ `
         questionnaireId
         createdAt
         updatedAt
-        responses {
+        responses(limit: 300000) {
           items {
             id
             res
@@ -647,7 +647,7 @@ export const getSurveyUser = /* GraphQL */ `
 export const listSurveyUsers = /* GraphQL */ `
   query ListSurveyUsers(
     $filter: ModelSurveyUserFilterInput
-    $limit: Int
+    $limit: Int = 300000
     $nextToken: String
   ) {
     listSurveyUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
@@ -676,7 +676,7 @@ export const getSurveyLocation = /* GraphQL */ `
 export const listSurveyLocations = /* GraphQL */ `
   query ListSurveyLocations(
     $filter: ModelSurveyLocationFilterInput
-    $limit: Int
+    $limit: Int = 300000
     $nextToken: String
   ) {
     listSurveyLocations(filter: $filter, limit: $limit, nextToken: $nextToken) {

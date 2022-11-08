@@ -91,6 +91,13 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#fbf9f9",
     color: "gray",
   },
+  customizedButtion1: {
+    position: "absolute",
+    left: "90%",
+    top: "6%",
+    backgroundColor: "#fbf9f9",
+    color: "gray",
+  },
   // createLink: {
   //   marginLeft: "55rem",
   // },
@@ -797,6 +804,14 @@ const QuestionnarieQuestionPart = (props) => {
               )}
             </DialogContent>
             <DialogActions>
+              <IconButton
+                autoFocus
+                onClick={handleAddListItemClose}
+                color="primary"
+                className={classes.customizedButtion1}
+              >
+                <CloseIcon />
+              </IconButton>
               <Button
                 onClick={handleAddListItemClose}
                 disabled={!listItemOptions?.length > 0}
@@ -1126,87 +1141,7 @@ const QuestionnarieQuestionPart = (props) => {
             </DialogActions>
           </FormControl>
         </Dialog>
-        <Dialog
-          open={openSurveyQrCode}
-          onClose={handleopenSurveyQrCodeClose}
-          aria-labelledby="responsive-dialog-title"
-          fullWidth={fullWidth}
-          maxWidth={maxWidth}
-        >
-          {" "}
-          {alertSuccess ? (
-            <Alert severity="success">{alertContentSuccess}</Alert>
-          ) : (
-            ""
-          )}
-          {alertFail ? <Alert severity="error">{alertContentFail}</Alert> : ""}
-          <FormControl>
-            <DialogTitle id="responsive-dialog-title">
-              Creating survey QR Code
-            </DialogTitle>
 
-            <DialogContent>
-              <FormControl fullWidth>
-                <InputLabel>Select Location</InputLabel>
-                <Select
-                  margin="dense"
-                  fullWidth
-                  value={surveyLocation}
-                  onChange={(event) => setSuveyLocation(event.target.value)}
-                >
-                  {listSurveyLocations?.items?.map((user, u) => (
-                    <MenuItem value={user?.id} key={u}>
-                      {user?.location}
-                    </MenuItem>
-                  ))}
-                </Select>
-                <TextField
-                  margin="dense"
-                  id="InchargeEmail"
-                  label="Email"
-                  value={inchargeEmail}
-                  onChange={(event) => setInchargeEmail(event.target.value)}
-                  fullWidth
-                />
-              </FormControl>
-            </DialogContent>
-
-            <DialogActions>
-              <IconButton
-                autoFocus
-                onClick={handleopenSurveyQrCodeClose}
-                color="primary"
-                className={classes.customizedButtion}
-              >
-                <CloseIcon />
-              </IconButton>
-              <QRCode
-                id="qr-gen"
-                value={surveyQrcode}
-                size={280}
-                level={"H"}
-                includeMargin={true}
-              />
-
-              <Button
-                type="button"
-                variant="contained"
-                color="primary"
-                onClick={handleSendEmail}
-              >
-                Send Mail
-              </Button>
-              <Button
-                type="button"
-                variant="contained"
-                color="primary"
-                onClick={downloadQRCode}
-              >
-                Download QR Code
-              </Button>
-            </DialogActions>
-          </FormControl>
-        </Dialog>
         <Dialog
           open={openSurveyQrCode}
           onClose={handleopenSurveyQrCodeClose}
@@ -1326,6 +1261,7 @@ const QuestionnarieQuestionPart = (props) => {
                   <StyledTableCell>Type</StyledTableCell>
                   <StyledTableCell>List Options</StyledTableCell>
                   <StyledTableCell>Manage</StyledTableCell>
+                  <StyledTableCell>Delete</StyledTableCell>
                 </TableRow>
               </TableHead>
               {(rowsPerPage > 0
@@ -1336,10 +1272,6 @@ const QuestionnarieQuestionPart = (props) => {
                 : questionCount
               ).map((question, i) => (
                 <StyledTableRow key={i}>
-                  {/* {getQuestionnaire?.question?.items
-                  .sort((a, b) => a?.order - b?.order)
-                  .map((question, i) => ( */}
-                  {/* <StyledTableRow > */}
                   <StyledTableCell component="th" scope="row">
                     {question?.order}
                   </StyledTableCell>
@@ -1360,6 +1292,9 @@ const QuestionnarieQuestionPart = (props) => {
                     >
                       <EditIcon />
                     </Button>
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    {" "}
                     <Button
                       size="small"
                       color="primary"
@@ -1368,7 +1303,6 @@ const QuestionnarieQuestionPart = (props) => {
                       <DeleteIcon />
                     </Button>
                   </StyledTableCell>
-                  {/* </StyledTableRow> */}
                 </StyledTableRow>
               ))}
             </Table>

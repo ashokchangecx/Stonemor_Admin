@@ -61,7 +61,9 @@ const HomePart = (props) => {
   } = props.listSurveys;
   console.log("listSurveys", listSurveys);
   const PER_PAGE = 4;
-  const data = listSurveys?.items;
+  const data = listSurveys?.items?.sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
   const count = Math.ceil(data?.length / PER_PAGE);
   const _DATA = usePagination(data, PER_PAGE);
 
