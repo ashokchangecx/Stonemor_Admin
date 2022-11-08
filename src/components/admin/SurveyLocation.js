@@ -91,7 +91,7 @@ const SurveyLocationPart = (props) => {
   const [deleteSurveyLocation, setDeleteSurveyLocation] = useState("");
   const [surveyLocationId, setSurveyLocationId] = useState("");
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const surveyLocationOrder = listSurveyLocations?.items?.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -158,7 +158,7 @@ const SurveyLocationPart = (props) => {
         refetch({ limit: 300 });
         setIsCreated(false);
       }
-    }, 1500);
+    }, 300);
     return () => clearTimeout(timer);
   }, [isCreated]);
   useEffect(() => {
@@ -331,8 +331,8 @@ const SurveyLocationPart = (props) => {
           </Dialog>
         </div>
       </div>
-      <main className={classes.root}>
-        <Paper className={classes.content}>
+      <div className={classes.root}>
+        <Paper className={classes.content} elevation={10}>
           {listSurveyLocations?.items?.length > 0 && (
             <Table
               className={classes.table}
@@ -411,7 +411,7 @@ const SurveyLocationPart = (props) => {
             <AddCircleIcon className={classes.rightIcon} /> Add SurveyLocation
           </Button>
         </Paper>
-      </main>
+      </div>
     </div>
   );
 };

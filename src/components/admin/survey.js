@@ -90,7 +90,7 @@ const SurveyPart = (props) => {
   const [isopen, setIsOpen] = React.useState(false);
   const [deleteSurvey, setDeleteSurvey] = React.useState("");
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [image, setImage] = React.useState(
     "https://dynamix-cdn.s3.amazonaws.com/stonemorcom/stonemorcom_616045937.svg"
   );
@@ -418,7 +418,7 @@ const SurveyPart = (props) => {
       <main className={classes.root}>
         <Typography variant="h4">Manage Surveys</Typography>
         <p />
-        <Paper className={classes.content}>
+        <Paper className={classes.content} elevation={10}>
           <Table className={classes.table}>
             <TableHead>
               <StyledTableRow>
@@ -481,15 +481,16 @@ const SurveyPart = (props) => {
             rowsPerPage={rowsPerPage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={handleOpenDialog}
+          >
+            <AddCircleIcon className={classes.rightIcon} /> Add Survey
+          </Button>
         </Paper>
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          onClick={handleOpenDialog}
-        >
-          <AddCircleIcon className={classes.rightIcon} /> Add Survey
-        </Button>
+
         {/* <Button
           variant="contained"
           color="primary"

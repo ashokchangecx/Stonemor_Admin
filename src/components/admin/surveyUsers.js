@@ -93,7 +93,7 @@ const SurveyUsersPart = (props) => {
   const [isopen, setIsOpen] = React.useState(false);
   const [deleteSurveyUser, setDeleteSurveyUser] = useState("");
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleClosingSurveyUsersDialog = () => {
     setUserName("");
@@ -158,7 +158,7 @@ const SurveyUsersPart = (props) => {
         refetch({ limit: 300 });
         setIsCreated(false);
       }
-    }, 1500);
+    }, 300);
     return () => clearTimeout(timer);
   }, [isCreated]);
   useEffect(() => {
@@ -332,7 +332,7 @@ const SurveyUsersPart = (props) => {
         </div>
       </div>
       <main className={classes.root}>
-        <Paper className={classes.content}>
+        <Paper className={classes.content} elevation={10}>
           {listSurveyUsers?.items?.length > 0 && (
             <Table
               className={classes.table}

@@ -145,7 +145,7 @@ const QuestionnarieQuestionPart = (props) => {
   const [dependentQuestion, setDependentQuestion] = useState("");
   const [dependentQuestionOptions, setDependentQuestionOptions] = useState([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [openSurveyLink, setOpenSurveyLink] = React.useState(false);
   const [openSurveyQrCode, setOpenSurveyQrCode] = React.useState(false);
   const [surveyUser, setSuveyUser] = React.useState("");
@@ -494,7 +494,7 @@ const QuestionnarieQuestionPart = (props) => {
         refetch({ limit: 300 });
         setIsCreated(false);
       }
-    }, 1500);
+    }, 300);
     return () => clearTimeout(timer);
   }, [isCreated]);
   useEffect(() => {
@@ -1020,6 +1020,7 @@ const QuestionnarieQuestionPart = (props) => {
                       type="button"
                       variant="outlined"
                       color="secondary"
+                      disabled={!listItem}
                     >
                       Add
                     </Button>
@@ -1244,7 +1245,7 @@ const QuestionnarieQuestionPart = (props) => {
           </Button>
         </div>
         <p />
-        <Paper className={classes.content}>
+        <Paper className={classes.content} elevation={10}>
           <TableContainer className={classes.container}>
             <Table
               className={classes.table}
@@ -1313,15 +1314,16 @@ const QuestionnarieQuestionPart = (props) => {
             rowsPerPage={rowsPerPage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={handleOpenDialog}
+          >
+            <AddCircleIcon className={classes.rightIcon} /> Add Question
+          </Button>
         </Paper>
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          onClick={handleOpenDialog}
-        >
-          <AddCircleIcon className={classes.rightIcon} /> Add Question
-        </Button>
+
         {/* <Button
           variant="contained"
           color="primary"

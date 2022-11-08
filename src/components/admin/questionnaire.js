@@ -97,7 +97,7 @@ const QuestionnairePart = (props) => {
   const [page, setPage] = React.useState(0);
   const [isCreated, setIsCreated] = useState(false);
   const [initialLoading, setinitialLoading] = useState(true);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [questionnairesId, setQuestionnairesId] = useState("");
   const [introMsg, setInstroMsg] = useState(
     "Welcome to StoneMor Suvey. Click continue to attend survey."
@@ -458,7 +458,7 @@ const QuestionnairePart = (props) => {
       <main className={classes.root}>
         <Typography variant="h4">Manage Questionnaires</Typography>
         <p />
-        <Paper className={classes.content}>
+        <Paper className={classes.content} elevation={10}>
           <Table className={classes.table}>
             <TableHead>
               <StyledTableRow>
@@ -525,15 +525,15 @@ const QuestionnairePart = (props) => {
             rowsPerPage={rowsPerPage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={handleOpenDialog}
+          >
+            <AddCircleIcon className={classes.rightIcon} /> Add Questionnaire
+          </Button>
         </Paper>
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          onClick={handleOpenDialog}
-        >
-          <AddCircleIcon className={classes.rightIcon} /> Add Questionnaire
-        </Button>
       </main>
     </div>
   );

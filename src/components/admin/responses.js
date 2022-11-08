@@ -125,7 +125,7 @@ const responsesPort = (props) => {
       </div>
       <div className={classes.root}>
         <Typography variant="h4">Survey Link Response </Typography> <p />
-        <Paper className={classes.content}>
+        <Paper className={classes.content} elevation={10}>
           {listSurveyEntriess?.items?.length > 0 && (
             <Table
               className={classes.table}
