@@ -93,7 +93,7 @@ const SurveyUsersPart = (props) => {
   const [isopen, setIsOpen] = React.useState(false);
   const [deleteSurveyUser, setDeleteSurveyUser] = useState("");
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleClosingSurveyUsersDialog = () => {
     setUserName("");

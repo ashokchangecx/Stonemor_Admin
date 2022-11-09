@@ -91,7 +91,7 @@ const SurveyLocationPart = (props) => {
   const [deleteSurveyLocation, setDeleteSurveyLocation] = useState("");
   const [surveyLocationId, setSurveyLocationId] = useState("");
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const surveyLocationOrder = listSurveyLocations?.items?.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
