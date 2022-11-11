@@ -367,6 +367,7 @@ const SurveyQuestion = (props) => {
               className={classes.textField}
               margin="normal"
               variant="outlined"
+              multiline
               value={currentAnswer}
               onChange={(e) => setCurrentAnswer(e.target.value)}
             />
