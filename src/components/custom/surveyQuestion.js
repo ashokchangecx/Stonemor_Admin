@@ -10,6 +10,11 @@ import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import logo1 from "../../assets/MemorialPlanning - Wide - Tag - 4C (2) (1).png";
 import { createResponses, createSurveyEntries } from "../../graphql/mutations";
 
+import SentimentVeryDissatisfiedIcon from "@material-ui/icons/SentimentVeryDissatisfied";
+import SentimentDissatisfiedIcon from "@material-ui/icons/SentimentDissatisfied";
+import SentimentSatisfiedIcon from "@material-ui/icons/SentimentSatisfied";
+import SentimentSatisfiedAltIcon from "@material-ui/icons/SentimentSatisfiedAltOutlined";
+import SentimentVerySatisfiedIcon from "@material-ui/icons/SentimentVerySatisfied";
 import {
   AppBar,
   Box,
@@ -32,7 +37,9 @@ import {
   TextField,
   Toolbar,
   Typography,
+  withStyles,
 } from "@material-ui/core";
+import { Rating } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -93,6 +100,19 @@ const useStyles = makeStyles((theme) =>
     },
   })
 );
+
+const StyledRating = withStyles({
+  iconFilled: {
+    color: "red",
+  },
+  iconHover: {
+    color: "orange",
+  },
+  iconEmpty: {
+    color: "#484145",
+  },
+})(Rating);
+
 const styles = {
   paperContainer: {
     backgroundRepeat: "no-repeat",
@@ -120,6 +140,7 @@ const SurveyQuestion = (props) => {
   ];
 
   const [currentQuestion, setCurrentQuestion] = useState(firstQuestion);
+
   const [currentAnswer, setCurrentAnswer] = useState("");
 
   const [ANSLIST, setANSLIST] = useState([]);
@@ -128,6 +149,48 @@ const SurveyQuestion = (props) => {
   const [final, setFinal] = React.useState(false);
   const [isPostingResponse, setIsPostingResponse] = React.useState(false);
   const [open, setOpen] = React.useState(true);
+
+  //rating//
+  const customIcons = {
+    1: {
+      icon: (
+        <SentimentVeryDissatisfiedIcon
+          style={{ width: "50px", height: "50px" }}
+        />
+      ),
+      label: "Very Dissatisfied",
+    },
+    2: {
+      icon: (
+        <SentimentDissatisfiedIcon style={{ width: "50px", height: "50px" }} />
+      ),
+      label: "Dissatisfied",
+    },
+    3: {
+      icon: (
+        <SentimentSatisfiedIcon style={{ width: "50px", height: "50px" }} />
+      ),
+      label: "Neutral",
+    },
+    4: {
+      icon: (
+        <SentimentSatisfiedAltIcon style={{ width: "50px", height: "50px" }} />
+      ),
+      label: "Satisfied",
+    },
+    5: {
+      icon: (
+        <SentimentVerySatisfiedIcon style={{ width: "50px", height: "50px" }} />
+      ),
+      label: "Very Satisfied",
+    },
+  };
+
+  function IconContainer(props) {
+    const { value, ...other } = props;
+
+    return <span {...other}>{customIcons[value].icon}</span>;
+  }
 
   const onValueChange = (event, newValue) => {
     setCurrentAnswer(newValue);
@@ -142,6 +205,7 @@ const SurveyQuestion = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
+
   const handleChange = (e) => {
     e.preventDefault();
     var temp = check;
@@ -306,6 +370,46 @@ const SurveyQuestion = (props) => {
               value={currentAnswer}
               onChange={(e) => setCurrentAnswer(e.target.value)}
             />
+          </FormControl>
+        );
+
+      case "LIST":
+        return (
+          <FormControl>
+            <Box
+              component="fieldset"
+              mb={3}
+              borderColor="transparent"
+              style={{ margin: "10px 0px", color: "black" }}
+            >
+              <Typography sx={{ paddingTop: 2 }}>
+                {" "}
+                Q.
+                {q?.qu}
+              </Typography>
+              <Box style={{ margin: "50px 0px", color: "black" }}>
+                <StyledRating
+                  name="customized-icons"
+                  defaultValue={2}
+                  getLabelText={(value) => customIcons[value]?.label}
+                  IconContainerComponent={IconContainer}
+                  value={currentAnswer}
+                  onChange={onValueChange}
+                />
+                {value !== null && (
+                  <Box
+                    ml={10}
+                    style={{
+                      marginTop: "30px ",
+                      color: "red",
+                      fontWeight: 900,
+                    }}
+                  >
+                    {customIcons[currentAnswer]?.label}
+                  </Box>
+                )}
+              </Box>
+            </Box>
           </FormControl>
         );
       case "RADIOWITHTEXT":

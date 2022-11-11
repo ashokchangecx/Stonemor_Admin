@@ -125,8 +125,8 @@ const qrCodeResponsesPort = (props) => {
       </div>
       <div className={classes.root}>
         <Typography variant="h4">QR Code Response </Typography> <p />
-        <Paper className={classes.content} elevation={10}>
-          {listSurveyEntriess?.items?.length > 0 && (
+        {questionCount.length > 0 && (
+          <Paper className={classes.content} elevation={10}>
             <Table
               className={classes.table}
               stickyHeader
@@ -188,16 +188,16 @@ const qrCodeResponsesPort = (props) => {
                 ))}
               </TableBody>
             </Table>
-          )}
-          <TablePagination
-            component="div"
-            count={questionCount?.length}
-            page={page}
-            onPageChange={handleChangePage}
-            rowsPerPage={rowsPerPage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
+            <TablePagination
+              component="div"
+              count={questionCount?.length}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Paper>
+        )}
       </div>
     </div>
   );

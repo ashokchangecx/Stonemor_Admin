@@ -98,7 +98,7 @@ const responsesPort = (props) => {
   //   (a, b) => a?.order - b?.order
   // );
   const questionCount = listSurveyEntriess?.items
-    ?.filter((user) => user?.by?.name)
+    // ?.filter((user) => user?.by?.name)
     .sort(
       (a, b) =>
         new Date(b.finishTime).getTime() - new Date(a.finishTime).getTime()
@@ -125,75 +125,76 @@ const responsesPort = (props) => {
       </div>
       <div className={classes.root}>
         <Typography variant="h4">Survey Link Response </Typography> <p />
-        <Paper className={classes.content} elevation={10}>
-          {listSurveyEntriess?.items?.length > 0 && (
-            <Table
-              className={classes.table}
-              stickyHeader
-              aria-label="sticky table"
-            >
-              <TableHead>
-                <StyledTableRow>
-                  <StyledTableCell>S.NO</StyledTableCell>
-                  <StyledTableCell>Name</StyledTableCell>
-                  <StyledTableCell>Email</StyledTableCell>
+        {questionCount?.length > 0 && (
+          <Paper className={classes.content} elevation={10}>
+            <>
+              <Table
+                className={classes.table}
+                stickyHeader
+                aria-label="sticky table"
+              >
+                <TableHead>
+                  <StyledTableRow>
+                    <StyledTableCell>S.NO</StyledTableCell>
+                    <StyledTableCell>Name</StyledTableCell>
+                    <StyledTableCell>Email</StyledTableCell>
 
-                  <StyledTableCell>Questionnaire</StyledTableCell>
-                  <StyledTableCell>Start Time</StyledTableCell>
-                  <StyledTableCell>Finish Time</StyledTableCell>
-                  <StyledTableCell>Manage</StyledTableCell>
-                </StyledTableRow>
-              </TableHead>
-              <TableBody>
-                {(rowsPerPage > 0
-                  ? questionCount?.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
-                    )
-                  : questionCount
-                ).map((user, u) => (
-                  <StyledTableRow key={u}>
-                    <StyledTableCell>{u + 1}</StyledTableCell>
-                    <StyledTableCell>{user?.by?.name}</StyledTableCell>
-                    <StyledTableCell>{user?.by?.email}</StyledTableCell>
-
-                    <StyledTableCell>
-                      {" "}
-                      {onGettingQuestionnaireById(user?.questionnaireId)}
-                    </StyledTableCell>
-
-                    <StyledTableCell>
-                      {moment(user?.startTime).format("DD-MM-YYYY hh:mm A")}
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      {moment(user?.finishTime).format("DD-MM-YYYY hh:mm A")}
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      <Button
-                        size="small"
-                        color="primary"
-                        component={Link}
-                        // to={`/surveyResponses/${user?.questionnaireId}?uid=${user?.by?.id}`}
-                        to={`/surveyResponses/${user?.id}`}
-                        // onClick={handleOpenDialog}
-                      >
-                        <VisibilityIcon />
-                      </Button>
-                    </StyledTableCell>
+                    <StyledTableCell>Questionnaire</StyledTableCell>
+                    <StyledTableCell>Start Time</StyledTableCell>
+                    <StyledTableCell>Finish Time</StyledTableCell>
+                    <StyledTableCell>Manage</StyledTableCell>
                   </StyledTableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-          <TablePagination
-            component="div"
-            count={questionCount?.length}
-            page={page}
-            onPageChange={handleChangePage}
-            rowsPerPage={rowsPerPage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
+                </TableHead>
+                <TableBody>
+                  {(rowsPerPage > 0
+                    ? questionCount?.slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                    : questionCount
+                  ).map((user, u) => (
+                    <StyledTableRow key={u}>
+                      <StyledTableCell>{u + 1}</StyledTableCell>
+                      <StyledTableCell>{user?.by?.name}</StyledTableCell>
+                      <StyledTableCell>{user?.by?.email}</StyledTableCell>
+
+                      <StyledTableCell>
+                        {" "}
+                        {onGettingQuestionnaireById(user?.questionnaireId)}
+                      </StyledTableCell>
+
+                      <StyledTableCell>
+                        {moment(user?.startTime).format("DD-MM-YYYY hh:mm A")}
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        {moment(user?.finishTime).format("DD-MM-YYYY hh:mm A")}
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <Button
+                          size="small"
+                          color="primary"
+                          component={Link}
+                          // to={`/surveyResponses/${user?.questionnaireId}?uid=${user?.by?.id}`}
+                          to={`/surveyResponses/${user?.id}`}
+                        >
+                          <VisibilityIcon />
+                        </Button>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              <TablePagination
+                component="div"
+                count={questionCount?.length}
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={rowsPerPage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </>
+          </Paper>
+        )}
       </div>
     </div>
   );

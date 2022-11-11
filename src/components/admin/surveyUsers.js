@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     overflow: "hidden",
     marginLeft: 120,
-    marginTop: 10,
+    marginTop: 20,
     padding: theme.spacing(0, 3),
   },
   content: {
@@ -198,12 +198,12 @@ const SurveyUsersPart = (props) => {
   return (
     <div className={classes.root}>
       {/* <AdminMenu /> */}
-
       <div className={classes.root}>
         <Breadcrumbs aria-label="breadcrumb">
           <Typography color="primary">Survey Users</Typography>
         </Breadcrumbs>
-        <p />
+      </div>
+      <main className={classes.root}>
         <Typography variant="h4">Survey User </Typography> <p />
         <div>
           <Dialog
@@ -330,8 +330,6 @@ const SurveyUsersPart = (props) => {
             </FormControl>
           </Dialog>
         </div>
-      </div>
-      <main className={classes.root}>
         <Paper className={classes.content} elevation={10}>
           {listSurveyUsers?.items?.length > 0 && (
             <Table

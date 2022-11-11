@@ -90,7 +90,7 @@ const SurveyPart = (props) => {
   const [isopen, setIsOpen] = React.useState(false);
   const [deleteSurvey, setDeleteSurvey] = React.useState("");
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [image, setImage] = React.useState(
     "https://dynamix-cdn.s3.amazonaws.com/stonemorcom/stonemorcom_616045937.svg"
   );

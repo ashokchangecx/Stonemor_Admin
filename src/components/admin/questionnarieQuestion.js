@@ -205,7 +205,7 @@ const QuestionnarieQuestionPart = (props) => {
         alert(err);
       });
   };
-
+  console.log("editQuestion", editQuestion);
   // const handleSendEmail = (user) => {
   //   setInchargeEmail(user?.id);
   // };
@@ -387,6 +387,7 @@ const QuestionnarieQuestionPart = (props) => {
         };
       }
     }
+
     if (type && type !== "TEXT") {
       if (listItemOptions.length > 0)
         createQuestionQuery.listOptions = listItemOptions;
@@ -409,6 +410,12 @@ const QuestionnarieQuestionPart = (props) => {
       order: order,
       questionQuestionnaireId: getQuestionnaire?.id,
     };
+    let updateQuestionQueryRating = {
+      id: editQuestion,
+      qu: question,
+      order: order,
+      questionQuestionnaireId: getQuestionnaire?.id,
+    };
     if (currentMode === "dependent") {
       const dependentQuestionQuery = {
         id: dependentQuestion,
@@ -426,11 +433,14 @@ const QuestionnarieQuestionPart = (props) => {
         };
       }
     }
-    if (type && type !== "TEXT") {
+    if (type && type !== "TEXT" && type && type !== "LIST") {
       if (listItemOptions.length > 0)
         updateQuestionQuery.listOptions = listItemOptions;
     }
-    props.onUpadateQuestion(updateQuestionQuery, getQuestionnaire?.id);
+    props.onUpadateQuestion(
+      updateQuestionQuery || updateQuestionQueryRating,
+      getQuestionnaire?.id
+    );
     setIsCreated(true);
     handleEditQuestionClose();
   };
@@ -482,7 +492,7 @@ const QuestionnarieQuestionPart = (props) => {
   }, [surveyLocation]);
   /* Side effect to open List dialog */
   useEffect(() => {
-    if (type && type !== "TEXT" && !editQuestion) {
+    if (type && type !== "TEXT" && type && type !== "LIST" && !editQuestion) {
       if (type === "CHECKBOX") setCurrentMode("normal");
       setOpenAddListItem(true);
     }
@@ -636,9 +646,10 @@ const QuestionnarieQuestionPart = (props) => {
                   value={type}
                   onChange={(event) => onTypeChange(event.target.value)}
                 >
-                  <MenuItem value={"TEXT"}>Text</MenuItem>
-                  <MenuItem value={"RADIO"}>Radio</MenuItem>
-                  <MenuItem value={"CHECKBOX"}>Checkbox</MenuItem>
+                  <MenuItem value={"TEXT"}>Multiline Text</MenuItem>
+                  <MenuItem value={"RADIO"}>Single Option Select</MenuItem>
+                  <MenuItem value={"CHECKBOX"}>Multiple Option Select</MenuItem>
+                  <MenuItem value={"LIST"}>Rating</MenuItem>
                   {/* <MenuItem value={"RADIO_TEXT"}>Radio with Text</MenuItem> */}
                   {/* <MenuItem value={"CHECKBOXTEXT"}>Checkbox Text</MenuItem> */}
                 </Select>
@@ -747,6 +758,7 @@ const QuestionnarieQuestionPart = (props) => {
             <DialogTitle id="form-dialog-title">Add listitems</DialogTitle>
             <DialogContent>
               <TextField
+                autoFocus
                 margin="dense"
                 id="qu"
                 label="Listitem"
@@ -835,9 +847,7 @@ const QuestionnarieQuestionPart = (props) => {
           disableEnforceFocus
         >
           <FormControl>
-            <DialogTitle id="form-dialog-title">
-              Edit Question - {editQuestion}
-            </DialogTitle>
+            <DialogTitle id="form-dialog-title">Edit Question</DialogTitle>
             <DialogContent disableEnforceFocus>
               <TextField
                 autoFocus
@@ -858,52 +868,57 @@ const QuestionnarieQuestionPart = (props) => {
                 onChange={(event) => setOrder(event.target.value)}
                 fullWidth
               />
-              <FormControl fullWidth>
-                <FormLabel
-                  style={{ margin: "10px 0", color: "black" }}
-                  id="demo-radio-buttons-group-label"
-                >
-                  Mode
-                </FormLabel>
-                <RadioGroup
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  name="radio-buttons-group"
-                  value={currentMode}
-                  onChange={onModeChange}
-                  row
-                >
-                  <FormControlLabel
-                    value="normal"
-                    control={<Radio />}
-                    label="Normal"
-                  />
-                  <FormControlLabel
-                    value="self"
-                    control={<Radio />}
-                    label="Self"
-                  />
-                  <FormControlLabel
-                    value="dependent"
-                    control={<Radio />}
-                    label="Dependent"
-                  />
-                </RadioGroup>
-              </FormControl>
-              <FormControl fullWidth>
-                <InputLabel>Type</InputLabel>
-                <Select
-                  margin="dense"
-                  fullWidth
-                  value={type}
-                  onChange={(event) => onTypeChange(event.target.value)}
-                >
-                  <MenuItem value={"TEXT"}>Text</MenuItem>
-                  <MenuItem value={"RADIO"}>Radio</MenuItem>
-                  <MenuItem value={"CHECKBOX"}>Checkbox</MenuItem>
-                  {/* <MenuItem value={"RADIO_TEXT"}>Radio with Text</MenuItem> */}
-                  {/* <MenuItem value={"CHECKBOXTEXT"}>Checkbox Text</MenuItem> */}
-                </Select>
-              </FormControl>
+              {type !== "LIST" && (
+                <FormControl fullWidth>
+                  <FormLabel
+                    style={{ margin: "10px 0", color: "black" }}
+                    id="demo-radio-buttons-group-label"
+                  >
+                    Mode
+                  </FormLabel>
+                  <RadioGroup
+                    aria-labelledby="demo-radio-buttons-group-label"
+                    name="radio-buttons-group"
+                    value={currentMode}
+                    onChange={onModeChange}
+                    row
+                  >
+                    <FormControlLabel
+                      value="normal"
+                      control={<Radio />}
+                      label="Normal"
+                    />
+                    <FormControlLabel
+                      value="self"
+                      control={<Radio />}
+                      label="Self"
+                    />
+                    <FormControlLabel
+                      value="dependent"
+                      control={<Radio />}
+                      label="Dependent"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              )}
+              {type !== "LIST" && (
+                <FormControl fullWidth>
+                  <InputLabel>Type</InputLabel>
+                  <Select
+                    margin="dense"
+                    fullWidth
+                    value={type}
+                    onChange={(event) => onTypeChange(event.target.value)}
+                  >
+                    <MenuItem value={"TEXT"}>Text</MenuItem>
+                    <MenuItem value={"RADIO"}>Radio</MenuItem>
+                    <MenuItem value={"CHECKBOX"}>Checkbox</MenuItem>
+                    {/* <MenuItem value={"RADIO_TEXT"}>Radio with Text</MenuItem> */}
+                    {/* <MenuItem value={"CHECKBOXTEXT"}>Checkbox Text</MenuItem> */}
+                  </Select>
+                </FormControl>
+              )}
+
               {type === "TEXT" && currentMode === "self" && (
                 <FormControl fullWidth>
                   <InputLabel>Next question</InputLabel>
@@ -983,7 +998,7 @@ const QuestionnarieQuestionPart = (props) => {
                       ))}
                 </>
               )}
-              {type !== "TEXT" && (
+              {type !== "TEXT" && type !== "LIST" && (
                 <>
                   <TextField
                     margin="dense"
@@ -1181,6 +1196,7 @@ const QuestionnarieQuestionPart = (props) => {
                   value={inchargeEmail}
                   onChange={(event) => setInchargeEmail(event.target.value)}
                   fullWidth
+                  type="email"
                 />
               </FormControl>
             </DialogContent>

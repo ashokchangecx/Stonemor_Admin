@@ -28,6 +28,13 @@ import {
 } from "../../graphql/queries";
 import { v4 as uuid } from "uuid";
 import { NavLink } from "react-router-dom";
+import { Rating } from "@material-ui/lab";
+
+import SentimentVeryDissatisfiedIcon from "@material-ui/icons/SentimentVeryDissatisfied";
+import SentimentDissatisfiedIcon from "@material-ui/icons/SentimentDissatisfied";
+import SentimentSatisfiedIcon from "@material-ui/icons/SentimentSatisfied";
+import SentimentSatisfiedAltIcon from "@material-ui/icons/SentimentSatisfiedAltOutlined";
+import SentimentVerySatisfiedIcon from "@material-ui/icons/SentimentVerySatisfied";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,6 +59,17 @@ const useStyles = makeStyles((theme) => ({
   //   maxHeight: 2000,
   // },
 }));
+const StyledRating = withStyles({
+  iconFilled: {
+    color: "red",
+  },
+  iconHover: {
+    color: "orange",
+  },
+  iconEmpty: {
+    color: "#484145",
+  },
+})(Rating);
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.primary.main,
@@ -95,7 +113,46 @@ const surveyResponsesPart = (props) => {
   const listans = listUserRes?.[0]?.responses;
 
   const questionnairename = listUserRes?.[0]?.questionnaireId;
+  //rating//
+  const customIcons = {
+    1: {
+      icon: (
+        <SentimentVeryDissatisfiedIcon
+          style={{ width: "25px", height: "25px" }}
+        />
+      ),
+      label: "Very Dissatisfied",
+    },
+    2: {
+      icon: (
+        <SentimentDissatisfiedIcon style={{ width: "25px", height: "25px" }} />
+      ),
+      label: "Dissatisfied",
+    },
+    3: {
+      icon: (
+        <SentimentSatisfiedIcon style={{ width: "25px", height: "25px" }} />
+      ),
+      label: "Neutral",
+    },
+    4: {
+      icon: (
+        <SentimentSatisfiedAltIcon style={{ width: "25px", height: "25px" }} />
+      ),
+      label: "Satisfied",
+    },
+    5: {
+      icon: (
+        <SentimentVerySatisfiedIcon style={{ width: "25px", height: "25px" }} />
+      ),
+      label: "Very Satisfied",
+    },
+  };
+  function IconContainer(props) {
+    const { value, ...other } = props;
 
+    return <span {...other}>{customIcons[value].icon}</span>;
+  }
   const onGettingQuestionnaireById = (id) => {
     const que = listQuestionnaires?.items?.find((q) => q?.id === id);
 
@@ -163,7 +220,20 @@ const surveyResponsesPart = (props) => {
                 <StyledTableRow key={r}>
                   <StyledTableCell>{res?.qu?.order}</StyledTableCell>
                   <StyledTableCell>{res?.qu?.qu}</StyledTableCell>
-                  <StyledTableCell>{res?.res}</StyledTableCell>
+                  {res?.qu?.type === "LIST" && (
+                    <StyledTableCell>
+                      {" "}
+                      <StyledRating
+                        defaultValue={res?.res}
+                        name="read-only"
+                        IconContainerComponent={IconContainer}
+                        readOnly
+                      />
+                    </StyledTableCell>
+                  )}
+                  {res?.qu?.type !== "LIST" && (
+                    <StyledTableCell>{res?.res}</StyledTableCell>
+                  )}
                 </StyledTableRow>
               ))}
             </TableBody>

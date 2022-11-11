@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     overflow: "hidden",
     marginLeft: 120,
-    marginTop: 10,
+    marginTop: 20,
     padding: theme.spacing(0, 3),
   },
   content: {
@@ -198,13 +198,14 @@ const SurveyLocationPart = (props) => {
   return (
     <div className={classes.root}>
       {/* <AdminMenu /> */}
-
       <div className={classes.root}>
         <Breadcrumbs aria-label="breadcrumb">
           <Typography color="primary">Survey Location </Typography>
         </Breadcrumbs>
+      </div>
+      <div className={classes.root}>
+        <Typography variant="h4">Survey Location </Typography>
         <p />
-        <Typography variant="h4">Survey Location </Typography> <p />
         <div>
           <Dialog
             open={isopen}
@@ -307,6 +308,7 @@ const SurveyLocationPart = (props) => {
                   margin="dense"
                   id="InchargeEmail"
                   label="Email"
+                  type="email"
                   value={inchargeEmail}
                   onChange={(event) => setInchargeEmail(event.target.value)}
                   fullWidth
@@ -330,8 +332,6 @@ const SurveyLocationPart = (props) => {
             </FormControl>
           </Dialog>
         </div>
-      </div>
-      <div className={classes.root}>
         <Paper className={classes.content} elevation={10}>
           {listSurveyLocations?.items?.length > 0 && (
             <Table
