@@ -101,7 +101,7 @@ const responsesPort = (props) => {
     ?.filter((user) => user?.by?.name)
     .sort(
       (a, b) =>
-        new Date(b.finishTime).getTime() - new Date(a.finishTime).getTime()
+        new Date(b?.finishTime).getTime() - new Date(a?.finishTime).getTime()
     );
 
   const handleChangeRowsPerPage = (event) => {

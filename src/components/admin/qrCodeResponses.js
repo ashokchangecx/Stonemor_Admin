@@ -80,7 +80,6 @@ const qrCodeResponsesPort = (props) => {
   const {
     data: { listSurveyEntriess },
   } = props.listSurveyEntriess;
-  console.log("listSurveyEntriess", listSurveyEntriess);
 
   const {
     data: { listSurveyUsers },
@@ -105,9 +104,8 @@ const qrCodeResponsesPort = (props) => {
     ?.filter((user) => user?.location?.location)
     ?.sort(
       (a, b) =>
-        new Date(b.finishTime).getTime() - new Date(a.finishTime).getTime()
+        new Date(b?.finishTime).getTime() - new Date(a?.finishTime).getTime()
     );
-  console.log("questionCount", questionCount);
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -125,8 +123,8 @@ const qrCodeResponsesPort = (props) => {
       </div>
       <div className={classes.root}>
         <Typography variant="h4">QR Code Response </Typography> <p />
-        {questionCount.length > 0 && (
-          <Paper className={classes.content} elevation={10}>
+        <Paper className={classes.content} elevation={10}>
+          {questionCount?.length > 0 && (
             <Table
               className={classes.table}
               stickyHeader
@@ -188,16 +186,16 @@ const qrCodeResponsesPort = (props) => {
                 ))}
               </TableBody>
             </Table>
-            <TablePagination
-              component="div"
-              count={questionCount?.length}
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </Paper>
-        )}
+          )}
+          <TablePagination
+            component="div"
+            count={questionCount?.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
       </div>
     </div>
   );
