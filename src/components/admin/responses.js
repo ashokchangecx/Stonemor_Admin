@@ -98,7 +98,7 @@ const responsesPort = (props) => {
   //   (a, b) => a?.order - b?.order
   // );
   const questionCount = listSurveyEntriess?.items
-    // ?.filter((user) => user?.by?.name)
+    ?.filter((user) => user?.by?.name)
     .sort(
       (a, b) =>
         new Date(b.finishTime).getTime() - new Date(a.finishTime).getTime()
