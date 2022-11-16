@@ -147,7 +147,7 @@ const QuestionnarieQuestionPart = (props) => {
   const [dependentQuestion, setDependentQuestion] = useState("");
   const [dependentQuestionOptions, setDependentQuestionOptions] = useState([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [openSurveyLink, setOpenSurveyLink] = React.useState(false);
   const [openSurveyQrCode, setOpenSurveyQrCode] = React.useState(false);
   const [surveyUser, setSuveyUser] = React.useState("");
