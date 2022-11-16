@@ -178,6 +178,7 @@ const QuestionnairePart = (props) => {
       survey
     );
     setOpen(false);
+    setIsCreated(true);
   }
   function handleDelete() {
     props.onDeleteQuestionnaire({
@@ -228,6 +229,7 @@ const QuestionnairePart = (props) => {
     }, 300);
     return () => clearTimeout(timer);
   }, [isCreated]);
+
   useEffect(() => {
     if (!loading) setinitialLoading(false);
   }, [loading]);
