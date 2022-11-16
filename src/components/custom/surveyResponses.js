@@ -21,6 +21,7 @@ import { graphql, compose, withApollo } from "react-apollo";
 import gql from "graphql-tag";
 import {
   getResponses,
+  getSurveyEntries,
   listQuestionnaires,
   listQuestions,
   listResponsess,
@@ -253,11 +254,11 @@ const surveyResponsesPart = (props) => {
 };
 
 const surveyResponses = compose(
-  graphql(gql(getResponses), {
+  graphql(gql(getSurveyEntries), {
     options: (props) => ({
       errorPolicy: "all",
       fetchPolicy: "cache-and-network",
-      // variables: { id: props.match.params.responseID },
+      variables: { id: props.match.params.responseID },
     }),
     props: (props) => {
       return {

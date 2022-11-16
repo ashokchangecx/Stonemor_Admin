@@ -323,7 +323,7 @@ const QuestionnairePart = (props) => {
               <TextField
                 margin="dense"
                 id="endMsg"
-                label="End Message"
+                label="Thank You Message"
                 value={endMsg}
                 onChange={(event) => setEndMsg(event.target.value)}
                 fullWidth
@@ -390,7 +390,7 @@ const QuestionnairePart = (props) => {
               <TextField
                 margin="dense"
                 id="endMsg"
-                label="End Message"
+                label="Thank You Message"
                 value={endMsg}
                 onChange={(event) => setEndMsg(event.target.value)}
                 fullWidth
