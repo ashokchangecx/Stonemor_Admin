@@ -186,6 +186,7 @@ const QuestionnairePart = (props) => {
     });
     setDeleteQuestion("");
     setIsOpen(false);
+    setIsCreated(true);
   }
   const handleOpenDeleteDialog = (questionnaire) => {
     setDeleteQuestion(questionnaire?.id);
