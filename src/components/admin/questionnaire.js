@@ -178,6 +178,7 @@ const QuestionnairePart = (props) => {
       survey
     );
     setOpen(false);
+    setIsCreated(true);
   }
   function handleDelete() {
     props.onDeleteQuestionnaire({
@@ -185,6 +186,7 @@ const QuestionnairePart = (props) => {
     });
     setDeleteQuestion("");
     setIsOpen(false);
+    setIsCreated(true);
   }
   const handleOpenDeleteDialog = (questionnaire) => {
     setDeleteQuestion(questionnaire?.id);
@@ -228,6 +230,7 @@ const QuestionnairePart = (props) => {
     }, 300);
     return () => clearTimeout(timer);
   }, [isCreated]);
+
   useEffect(() => {
     if (!loading) setinitialLoading(false);
   }, [loading]);
@@ -323,7 +326,7 @@ const QuestionnairePart = (props) => {
               <TextField
                 margin="dense"
                 id="endMsg"
-                label="End Message"
+                label="Thank You Message"
                 value={endMsg}
                 onChange={(event) => setEndMsg(event.target.value)}
                 fullWidth
@@ -390,7 +393,7 @@ const QuestionnairePart = (props) => {
               <TextField
                 margin="dense"
                 id="endMsg"
-                label="End Message"
+                label="Thank You Message"
                 value={endMsg}
                 onChange={(event) => setEndMsg(event.target.value)}
                 fullWidth

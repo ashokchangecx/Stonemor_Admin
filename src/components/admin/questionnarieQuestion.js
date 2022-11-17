@@ -26,6 +26,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 // import { Link } from "react-router-dom";
+import copy from "copy-to-clipboard";
+import FileCopyIcon from "@material-ui/icons/FileCopy";
 import Alert from "@material-ui/lab/Alert";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import TablePagination from "@material-ui/core/TablePagination";
@@ -158,8 +160,12 @@ const QuestionnarieQuestionPart = (props) => {
   const [alertSuccess, setAlertSuccess] = useState(false);
   const [alertFail, setAlertFail] = useState(false);
   const [alertContentSuccess, setAlertContentSuccess] = useState("");
+  const [alertCopySuccess, setAlertCopySuccess] = useState("");
   const [alertContentFail, setAlertContentFail] = useState("");
   const [inchargeEmail, setInchargeEmail] = useState("");
+
+  const surveyUrl = `${baseUrl}/surveyquestions/${props.match.params.questionnaire}?uid=${surveyUser}`;
+
   // const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [fullWidth, setFullWidth] = React.useState(true);
   const [maxWidth] = useState("md");
@@ -187,6 +193,18 @@ const QuestionnarieQuestionPart = (props) => {
     survey: surveyName,
     loc: surveyLoc?.location,
   };
+  /* Generating survey Link */
+  const handleGeneratingSurveyLink = () => {
+    const surveyUrl = `${baseUrl}/surveyquestions/${props.match.params.questionnaire}?uid=${surveyUser}`;
+    setUserSurveyLink(surveyUrl);
+  };
+  //copy-clipboard//
+  const copyToClipboard = () => {
+    copy(surveyUrl);
+    setAlertSuccess(true);
+    setAlertCopySuccess("Survey Link copyed successfully");
+  };
+
   const handleSendEmail = async () => {
     axios
       .post(`${emailUrl}`, data)
@@ -213,11 +231,6 @@ const QuestionnarieQuestionPart = (props) => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-  };
-  /* Generating survey Link */
-  const handleGeneratingSurveyLink = () => {
-    const surveyUrl = `${baseUrl}/surveyquestions/${props.match.params.questionnaire}?uid=${surveyUser}`;
-    setUserSurveyLink(surveyUrl);
   };
 
   //QR code //
@@ -271,7 +284,8 @@ const QuestionnarieQuestionPart = (props) => {
   const handleopenSurveyLinkClose = () => {
     setSuveyUser("");
     setUserSurveyLink("");
-
+    setAlertSuccess("");
+    setAlertCopySuccess("");
     setOpenSurveyLink(false);
   };
   /*Opening Creating new surveylink Dialogbox*/
@@ -901,6 +915,19 @@ const QuestionnarieQuestionPart = (props) => {
                   </RadioGroup>
                 </FormControl>
               )}
+              {type === "LIST" && (
+                <FormControl fullWidth>
+                  <TextField
+                    margin="dense"
+                    fullWidth
+                    label="Type"
+                    inputProps={{ readOnly: true }}
+                    value={"Rating"}
+                    disabled
+                    onChange={(event) => onTypeChange(event.target.value)}
+                  />
+                </FormControl>
+              )}
               {type !== "LIST" && (
                 <FormControl fullWidth>
                   <InputLabel>Type</InputLabel>
@@ -1109,6 +1136,11 @@ const QuestionnarieQuestionPart = (props) => {
           aria-labelledby="responsive-dialog-title"
           fullWidth
         >
+          {alertSuccess ? (
+            <Alert severity="success">{alertCopySuccess}</Alert>
+          ) : (
+            ""
+          )}
           <FormControl>
             <DialogTitle id="responsive-dialog-title">
               Creating survey Link
@@ -1130,7 +1162,14 @@ const QuestionnarieQuestionPart = (props) => {
                   ))}
                 </Select>
               </FormControl>
-              {userSurveyLink && <p>{userSurveyLink}</p>}
+              {userSurveyLink && (
+                <>
+                  <p>{userSurveyLink}</p>
+                  <Button onClick={copyToClipboard}>
+                    <FileCopyIcon />
+                  </Button>
+                </>
+              )}
             </DialogContent>
 
             <DialogActions>
@@ -1292,7 +1331,13 @@ const QuestionnarieQuestionPart = (props) => {
                     {question?.order}
                   </StyledTableCell>
                   <StyledTableCell>{question.qu}</StyledTableCell>
-                  <StyledTableCell>{question.type}</StyledTableCell>
+                  {question?.type === "LIST" && (
+                    <StyledTableCell>{"RATING"}</StyledTableCell>
+                  )}
+                  {question?.type !== "LIST" && (
+                    <StyledTableCell>{question.type}</StyledTableCell>
+                  )}
+
                   <StyledTableCell>
                     {question.listOptions
                       ? question.listOptions.map((option, l) => (
