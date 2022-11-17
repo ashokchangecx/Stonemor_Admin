@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import "./App.css";
 
 import Amplify, { Auth } from "aws-amplify";
@@ -52,6 +52,7 @@ import responses from "../admin/responses";
 import QrResponses from "../admin/qrCodeResponses";
 import AdminMenu from "../admin/index";
 import SurveyLocation from "../admin/SurveyLocation";
+const Analytics = React.lazy(() => import("../admin/Analytics"));
 const theme = createTheme({
   palette: {
     primary: {
@@ -251,7 +252,6 @@ function App() {
               )}
             </Toolbar>
           </AppBar>
-
           <AdminMenu />
           <Route exact path="/" component={Home} />
 
@@ -277,6 +277,11 @@ function App() {
           />
           <Route path="/admin/responses" component={responses} />
           <Route path="/admin/qrresponses" component={QrResponses} />
+          <Route path="/admin/analytics">
+            <Suspense fallback={<div>Loading....</div>}>
+              <Analytics />
+            </Suspense>
+          </Route>
 
           <Route
             path="/surveyquestions/:questionnaireID"
