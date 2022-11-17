@@ -26,6 +26,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import { graphql, compose, withApollo } from "react-apollo";
 import gql from "graphql-tag";
+import ShareIcon from "@material-ui/icons/Share";
 import moment from "moment";
 import { listSurveys } from "../../graphql/queries";
 import {
@@ -427,6 +428,7 @@ const SurveyPart = (props) => {
                 <StyledTableCell>Description</StyledTableCell>
                 <StyledTableCell>Questionnaire</StyledTableCell>
                 <StyledTableCell>Manage Survey</StyledTableCell>
+                <StyledTableCell>Share</StyledTableCell>
                 <StyledTableCell>Delete</StyledTableCell>
               </StyledTableRow>
             </TableHead>
@@ -458,6 +460,12 @@ const SurveyPart = (props) => {
                       color="primary"
                     >
                       <EditIcon />
+                    </Button>
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <Button size="small" color="primary">
+                      {" "}
+                      <ShareIcon />
                     </Button>
                   </StyledTableCell>
                   <StyledTableCell>

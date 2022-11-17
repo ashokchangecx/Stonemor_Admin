@@ -52,12 +52,38 @@ import responses from "../admin/responses";
 import QrResponses from "../admin/qrCodeResponses";
 import AdminMenu from "../admin/index";
 import SurveyLocation from "../admin/SurveyLocation";
+import CabinWoff2 from "../../assets/font/cabin-v26-latin-regular.woff2";
+
+const Cabin = {
+  fontFamily: "Cabin",
+  fontStyle: "normal",
+  fontDisplay: "swap",
+  fontWeight: 400,
+  src: `
+    local('Cabin'),
+    local('Cabin-Regular'),
+    url(${CabinWoff2}) format('woff2')
+  `,
+  unicodeRange:
+    "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF",
+};
+
 const theme = createTheme({
   palette: {
     primary: {
       main: "#5E8ABF",
     },
     secondary: indigo,
+  },
+  typography: {
+    fontFamily: "Cabin, Arial",
+  },
+  overrides: {
+    MuiCssBaseline: {
+      "@global": {
+        "@font-face": [Cabin],
+      },
+    },
   },
 });
 

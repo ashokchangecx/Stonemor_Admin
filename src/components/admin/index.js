@@ -61,19 +61,19 @@ const useStyles = makeStyles((theme) => ({
 const ListItem = withStyles({
   root: {
     "&$selected": {
-      backgroundColor: "#5e8abf",
+      backgroundColor: "#5E8ABF",
       color: "white",
       "& .MuiListItemIcon-root": {
         color: "white",
       },
     },
-    // "&$selected:hover": {
-    //   backgroundColor: "purple",
-    //   color: "white",
-    //   "& .MuiListItemIcon-root": {
-    //     color: "white",
-    //   },
-    // },
+    "&$selected:hover": {
+      backgroundColor: "#707cd4",
+      color: "white",
+      "& .MuiListItemIcon-root": {
+        color: "white",
+      },
+    },
     // "&:hover": {
     //   backgroundColor: "blue",
     //   color: "white",
