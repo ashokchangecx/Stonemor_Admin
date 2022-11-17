@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import "./App.css";
 
 import Amplify, { Auth } from "aws-amplify";
@@ -52,6 +52,7 @@ import responses from "../admin/responses";
 import QrResponses from "../admin/qrCodeResponses";
 import AdminMenu from "../admin/index";
 import SurveyLocation from "../admin/SurveyLocation";
+
 import CabinWoff2 from "../../assets/font/cabin-v26-latin-regular.woff2";
 
 const Cabin = {
@@ -67,6 +68,8 @@ const Cabin = {
   unicodeRange:
     "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF",
 };
+
+const Analytics = React.lazy(() => import("../admin/Analytics"));
 
 const theme = createTheme({
   palette: {
@@ -277,7 +280,6 @@ function App() {
               )}
             </Toolbar>
           </AppBar>
-
           <AdminMenu />
           <Route exact path="/" component={Home} />
 
@@ -303,6 +305,11 @@ function App() {
           />
           <Route path="/admin/responses" component={responses} />
           <Route path="/admin/qrresponses" component={QrResponses} />
+          <Route path="/admin/analytics">
+            <Suspense fallback={<div>Loading....</div>}>
+              <Analytics />
+            </Suspense>
+          </Route>
 
           <Route
             path="/surveyquestions/:questionnaireID"
