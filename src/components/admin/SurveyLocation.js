@@ -8,8 +8,11 @@ import {
   DialogContentText,
   DialogTitle,
   FormControl,
+  IconButton,
+  InputBase,
   makeStyles,
   Paper,
+  Box,
   Table,
   TableBody,
   TableCell,
@@ -28,17 +31,26 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import EditIcon from "@material-ui/icons/Edit";
 import { listSurveyLocations } from "../../graphql/queries";
+import SearchIcon from "@material-ui/icons/Search";
 import {
   createSurveyLocation,
   deleteSurveyLocation,
   updateSurveyLocation,
 } from "../../graphql/mutations";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     overflow: "hidden",
     marginLeft: 120,
     marginTop: 20,
+    padding: theme.spacing(0, 3),
+  },
+  Breadcrumbs: {
+    flexGrow: 1,
+    overflow: "hidden",
+    marginLeft: 120,
+    marginTop: 10,
     padding: theme.spacing(0, 3),
   },
   content: {
@@ -51,6 +63,20 @@ const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
     marginTop: 20,
+  },
+  search: {
+    padding: "2px 4px",
+    display: "flex",
+    alignItems: "center",
+    width: 400,
+    marginBottom: 10,
+  },
+  searchInput: {
+    marginLeft: theme.spacing(1),
+    flex: 1,
+  },
+  iconButton: {
+    padding: 10,
   },
   // container: {
   //   maxHeight: 2000,
@@ -73,6 +99,9 @@ const StyledTableRow = withStyles((theme) => ({
     "&:nth-of-type(even)": {
       backgroundColor: theme.palette.action.hover,
     },
+    "&:hover": {
+      boxShadow: "3px 2px 5px 2px #888888",
+    },
   },
 }))(TableRow);
 const SurveyLocationPart = (props) => {
@@ -93,10 +122,32 @@ const SurveyLocationPart = (props) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-  const surveyLocationOrder = listSurveyLocations?.items?.sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
+  const surveyLocationOrder = listSurveyLocations?.items
+    ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  const [search, setSearch] = useState(surveyLocationOrder);
 
+  console.log("search", search);
+  const requestSearch = (searched) => {
+    setSearch(
+      surveyLocationOrder.filter(
+        (item) =>
+          item?.location
+
+            .toString()
+            .toLowerCase()
+            .includes(searched.toString().toLowerCase()) ||
+          item?.inchargeEmail
+
+            .toString()
+            .toLowerCase()
+            .includes(searched.toString().toLowerCase())
+      )
+    );
+  };
   const handleClosingSurveyLocationDialog = () => {
     setSurveyLocation("");
     setInchargeEmail("");
@@ -198,140 +249,175 @@ const SurveyLocationPart = (props) => {
   return (
     <div className={classes.root}>
       {/* <AdminMenu /> */}
-      <div className={classes.root}>
+      <div className={classes.Breadcrumbs}>
         <Breadcrumbs aria-label="breadcrumb">
           <Typography color="primary">Survey Location </Typography>
         </Breadcrumbs>
       </div>
-      <div className={classes.root}>
-        <Typography variant="h4">Survey Location </Typography>
-        <p />
-        <div>
-          <Dialog
-            open={isopen}
-            onClose={handleCloseDialog}
-            aria-labelledby="form-dialog-title"
-          >
-            <FormControl>
-              <DialogTitle id="form-dialog-title">
-                Delete this SurveyUser
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText>
-                  Are You Sure You Want to Delete this Survey Location?
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleCloseDialog} color="default">
-                  Cancel
-                </Button>
-                <Button
-                  onClick={() => {
-                    handleDelete();
-                  }}
-                  type="submit"
-                  color="primary"
-                >
-                  Delete
-                </Button>
-              </DialogActions>
-            </FormControl>
-          </Dialog>
-          <Dialog
-            open={openCreateSurveyLocation}
-            onClose={handleClosingSurveyLocationDialog}
-            aria-labelledby="form-dialog-title"
-            fullWidth
-          >
-            <FormControl fullWidth>
-              <DialogTitle id="form-dialog-title">
-                Create SurveyLocation
-              </DialogTitle>
-              <DialogContent>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  id="surveyLocation"
-                  label="Location"
-                  value={surveyLocation}
-                  onChange={(event) => setSurveyLocation(event.target.value)}
-                  fullWidth
-                />
-                <TextField
-                  margin="dense"
-                  id="InchargeEmail"
-                  label="Email"
-                  value={inchargeEmail}
-                  onChange={(event) => setInchargeEmail(event.target.value)}
-                  fullWidth
-                />
-                <br />
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  onClick={handleClosingSurveyLocationDialog}
-                  color="default"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleCreateSurveyLocation}
-                  type="submit"
-                  color="primary"
-                >
-                  Create
-                </Button>
-              </DialogActions>
-            </FormControl>
-          </Dialog>
-          <Dialog
-            open={openUpdateSurveyLocation}
-            onClose={handleClosingSurveyLocationUpdateDialog}
-            aria-labelledby="form-dialog-title"
-            fullWidth
-          >
-            <FormControl fullWidth>
-              <DialogTitle id="form-dialog-title">
-                Edit SurveyLocation
-              </DialogTitle>
-              <DialogContent>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  id="surveyLocation"
-                  label="Location"
-                  value={surveyLocation}
-                  onChange={(event) => setSurveyLocation(event.target.value)}
-                  fullWidth
-                />
-                <TextField
-                  margin="dense"
-                  id="InchargeEmail"
-                  label="Email"
-                  type="email"
-                  value={inchargeEmail}
-                  onChange={(event) => setInchargeEmail(event.target.value)}
-                  fullWidth
-                />
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  onClick={handleClosingSurveyLocationUpdateDialog}
-                  color="default"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleUpdateSurveyLocation}
-                  type="submit"
-                  color="primary"
-                >
-                  Update
-                </Button>
-              </DialogActions>
-            </FormControl>
-          </Dialog>
-        </div>
+
+      <div>
+        <Dialog
+          open={isopen}
+          onClose={handleCloseDialog}
+          aria-labelledby="form-dialog-title"
+        >
+          <FormControl>
+            <DialogTitle id="form-dialog-title">
+              Delete this SurveyUser
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText color="secondary">
+                Are You Sure You Want to Delete this Survey Location?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={handleCloseDialog}
+                color="secondary"
+                variant="contained"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  handleDelete();
+                }}
+                type="submit"
+                variant="contained"
+                color="primary"
+              >
+                Delete
+              </Button>
+            </DialogActions>
+          </FormControl>
+        </Dialog>
+        <Dialog
+          open={openCreateSurveyLocation}
+          onClose={handleClosingSurveyLocationDialog}
+          aria-labelledby="form-dialog-title"
+          fullWidth
+        >
+          <FormControl fullWidth>
+            <DialogTitle id="form-dialog-title">
+              Create SurveyLocation
+            </DialogTitle>
+            <DialogContent>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="surveyLocation"
+                label="Location"
+                value={surveyLocation}
+                onChange={(event) => setSurveyLocation(event.target.value)}
+                fullWidth
+              />
+              <TextField
+                margin="dense"
+                id="InchargeEmail"
+                label="Email"
+                value={inchargeEmail}
+                onChange={(event) => setInchargeEmail(event.target.value)}
+                fullWidth
+              />
+              <br />
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={handleClosingSurveyLocationDialog}
+                color="secondary"
+                variant="contained"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleCreateSurveyLocation}
+                type="submit"
+                variant="contained"
+                color="primary"
+                disabled={!inchargeEmail}
+              >
+                Create
+              </Button>
+            </DialogActions>
+          </FormControl>
+        </Dialog>
+        <Dialog
+          open={openUpdateSurveyLocation}
+          onClose={handleClosingSurveyLocationUpdateDialog}
+          aria-labelledby="form-dialog-title"
+          fullWidth
+        >
+          <FormControl fullWidth>
+            <DialogTitle id="form-dialog-title">
+              Edit SurveyLocation
+            </DialogTitle>
+            <DialogContent>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="surveyLocation"
+                label="Location"
+                value={surveyLocation}
+                onChange={(event) => setSurveyLocation(event.target.value)}
+                fullWidth
+              />
+              <TextField
+                margin="dense"
+                id="InchargeEmail"
+                label="Email"
+                type="email"
+                value={inchargeEmail}
+                onChange={(event) => setInchargeEmail(event.target.value)}
+                fullWidth
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={handleClosingSurveyLocationUpdateDialog}
+                color="secondary"
+                variant="contained"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleUpdateSurveyLocation}
+                type="submit"
+                variant="contained"
+                color="primary"
+                disabled={!inchargeEmail}
+              >
+                Update
+              </Button>
+            </DialogActions>
+          </FormControl>
+        </Dialog>
+      </div>
+      <main className={classes.Breadcrumbs}>
+        <Box display="flex">
+          <Box flexGrow={1} p={1}>
+            {" "}
+            <Typography variant="h5">Survey Location</Typography>
+          </Box>
+
+          <Box p={0.5}>
+            <Paper component="form" className={classes.search} elevation={5}>
+              <InputBase
+                className={classes.searchInput}
+                placeholder="Search "
+                inputProps={{ "aria-label": "search google maps" }}
+                onInput={(e) => requestSearch(e.target.value)}
+              />
+              <IconButton
+                type="submit"
+                className={classes.iconButton}
+                aria-label="search"
+              >
+                <SearchIcon />
+              </IconButton>
+            </Paper>
+          </Box>
+        </Box>
+
         <Paper className={classes.content} elevation={10}>
           {listSurveyLocations?.items?.length > 0 && (
             <Table
@@ -350,53 +436,49 @@ const SurveyLocationPart = (props) => {
                 </StyledTableRow>
               </TableHead>
               <TableBody>
-                {(rowsPerPage > 0
-                  ? surveyLocationOrder?.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
-                    )
-                  : surveyLocationOrder
-                ).map((surveyLocation, u) => (
-                  <StyledTableRow key={u}>
-                    <StyledTableCell>{u + 1}</StyledTableCell>
-                    <StyledTableCell>
-                      {surveyLocation?.location}
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      {surveyLocation?.inchargeEmail}
-                    </StyledTableCell>
+                {(search?.length > 0 ? search : surveyLocationOrder).map(
+                  (surveyLocation, u) => (
+                    <StyledTableRow key={u}>
+                      <StyledTableCell>{u + 1}</StyledTableCell>
+                      <StyledTableCell>
+                        {surveyLocation?.location}
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        {surveyLocation?.inchargeEmail}
+                      </StyledTableCell>
 
-                    <StyledTableCell>
-                      <Button
-                        size="small"
-                        color="primary"
-                        onClick={() =>
-                          handleopeningUpdatesurveyLocationDialog(
-                            surveyLocation
-                          )
-                        }
-                      >
-                        <EditIcon />
-                      </Button>
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      {" "}
-                      <Button
-                        onClick={() => handleOpenDeleteDialog(surveyLocation)}
-                        size="small"
-                        color="primary"
-                      >
-                        <DeleteIcon />
-                      </Button>
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))}
+                      <StyledTableCell>
+                        <Button
+                          size="small"
+                          color="primary"
+                          onClick={() =>
+                            handleopeningUpdatesurveyLocationDialog(
+                              surveyLocation
+                            )
+                          }
+                        >
+                          <EditIcon />
+                        </Button>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        {" "}
+                        <Button
+                          onClick={() => handleOpenDeleteDialog(surveyLocation)}
+                          size="small"
+                          color="secondary"
+                        >
+                          <DeleteIcon />
+                        </Button>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )
+                )}
               </TableBody>
             </Table>
           )}
           <TablePagination
             component="div"
-            count={listSurveyLocations?.items?.length}
+            count={surveyLocationOrder?.length || search?.length}
             page={page}
             onPageChange={handleChangePage}
             rowsPerPage={rowsPerPage}
@@ -411,7 +493,7 @@ const SurveyLocationPart = (props) => {
             <AddCircleIcon className={classes.rightIcon} /> Add SurveyLocation
           </Button>
         </Paper>
-      </div>
+      </main>
     </div>
   );
 };

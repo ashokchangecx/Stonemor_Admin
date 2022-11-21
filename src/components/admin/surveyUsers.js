@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Box,
   Breadcrumbs,
   Button,
   CircularProgress,
@@ -10,6 +11,8 @@ import {
   DialogTitle,
   Divider,
   FormControl,
+  IconButton,
+  InputBase,
   makeStyles,
   Paper,
   Table,
@@ -24,6 +27,7 @@ import {
 } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import EditIcon from "@material-ui/icons/Edit";
+import SearchIcon from "@material-ui/icons/Search";
 import { graphql, compose, withApollo } from "react-apollo";
 import { withStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -45,6 +49,13 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 20,
     padding: theme.spacing(0, 3),
   },
+  Breadcrumbs: {
+    flexGrow: 1,
+    overflow: "hidden",
+    marginLeft: 120,
+    marginTop: 10,
+    padding: theme.spacing(0, 3),
+  },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
@@ -55,6 +66,20 @@ const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
     marginTop: 20,
+  },
+  search: {
+    padding: "2px 4px",
+    display: "flex",
+    alignItems: "center",
+    width: 400,
+    marginBottom: 10,
+  },
+  searchInput: {
+    marginLeft: theme.spacing(1),
+    flex: 1,
+  },
+  iconButton: {
+    padding: 10,
   },
   // container: {
   //   maxHeight: 2000,
@@ -77,6 +102,9 @@ const StyledTableRow = withStyles((theme) => ({
     "&:nth-of-type(even)": {
       backgroundColor: theme.palette.action.hover,
     },
+    "&:hover": {
+      boxShadow: "3px 2px 5px 2px #888888",
+    },
   },
 }))(TableRow);
 const SurveyUsersPart = (props) => {
@@ -94,16 +122,38 @@ const SurveyUsersPart = (props) => {
   const [deleteSurveyUser, setDeleteSurveyUser] = useState("");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const surveyUserOrder = listSurveyUsers?.items
+    ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  const [search, setSearch] = useState(surveyUserOrder);
+  console.log(listSurveyUsers);
+  const requestSearch = (searched) => {
+    setSearch(
+      surveyUserOrder.filter(
+        (item) =>
+          item?.name
+
+            .toString()
+            .toLowerCase()
+            .includes(searched.toString().toLowerCase()) ||
+          item?.email
+
+            .toString()
+            .toLowerCase()
+            .includes(searched.toString().toLowerCase())
+      )
+    );
+  };
 
   const handleClosingSurveyUsersDialog = () => {
     setUserName("");
     setUserMail("");
     setOpenCreateSurveyUser(false);
   };
-  const surveyUserOrder = listSurveyUsers?.items?.sort(
-    (a, b) => (a, b) =>
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
+
   const handleClosingSurveyUsersUpdateDialog = () => {
     setUserName("");
     setUserMail("");
@@ -198,13 +248,37 @@ const SurveyUsersPart = (props) => {
   return (
     <div className={classes.root}>
       {/* <AdminMenu /> */}
-      <div className={classes.root}>
+      <div className={classes.Breadcrumbs}>
         <Breadcrumbs aria-label="breadcrumb">
           <Typography color="primary">Survey Users</Typography>
         </Breadcrumbs>
       </div>
-      <main className={classes.root}>
-        <Typography variant="h4">Survey User </Typography> <p />
+      <main className={classes.Breadcrumbs}>
+        <Box display="flex">
+          <Box flexGrow={1} p={1}>
+            {" "}
+            <Typography variant="h5">Manage Surveys</Typography>
+          </Box>
+
+          <Box p={0.5}>
+            <Paper component="form" className={classes.search} elevation={5}>
+              <InputBase
+                className={classes.searchInput}
+                placeholder="Search "
+                inputProps={{ "aria-label": "search google maps" }}
+                onInput={(e) => requestSearch(e.target.value)}
+              />
+              <IconButton
+                type="submit"
+                className={classes.iconButton}
+                aria-label="search"
+              >
+                <SearchIcon />
+              </IconButton>
+            </Paper>
+          </Box>
+        </Box>
+
         <div>
           <Dialog
             open={isopen}
@@ -216,12 +290,16 @@ const SurveyUsersPart = (props) => {
                 Delete this SurveyUser
               </DialogTitle>
               <DialogContent>
-                <DialogContentText>
+                <DialogContentText color="secondary">
                   Are You Sure You Want to Delete this SurveyUser?
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleCloseDialog} color="default">
+                <Button
+                  onClick={handleCloseDialog}
+                  color="secondary"
+                  variant="contained"
+                >
                   Cancel
                 </Button>
                 <Button
@@ -230,6 +308,7 @@ const SurveyUsersPart = (props) => {
                   }}
                   type="submit"
                   color="primary"
+                  variant="contained"
                 >
                   Delete
                 </Button>
@@ -269,7 +348,8 @@ const SurveyUsersPart = (props) => {
               <DialogActions>
                 <Button
                   onClick={handleClosingSurveyUsersDialog}
-                  color="default"
+                  color="secondary"
+                  variant="contained"
                 >
                   Cancel
                 </Button>
@@ -277,6 +357,8 @@ const SurveyUsersPart = (props) => {
                   onClick={handleCreateSurveyUser}
                   type="submit"
                   color="primary"
+                  variant="contained"
+                  disabled={!userMail}
                 >
                   Create
                 </Button>
@@ -315,7 +397,8 @@ const SurveyUsersPart = (props) => {
               <DialogActions>
                 <Button
                   onClick={handleClosingSurveyUsersUpdateDialog}
-                  color="default"
+                  color="secondary"
+                  variant="contained"
                 >
                   Cancel
                 </Button>
@@ -323,6 +406,8 @@ const SurveyUsersPart = (props) => {
                   onClick={handleUpdateSurveyUser}
                   type="submit"
                   color="primary"
+                  variant="contained"
+                  disabled={!userMail}
                 >
                   Update
                 </Button>
@@ -347,46 +432,42 @@ const SurveyUsersPart = (props) => {
                 </StyledTableRow>
               </TableHead>
               <TableBody>
-                {(rowsPerPage > 0
-                  ? surveyUserOrder?.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
-                    )
-                  : surveyUserOrder
-                ).map((user, u) => (
-                  <StyledTableRow key={u}>
-                    <StyledTableCell>{u + 1}</StyledTableCell>
-                    <StyledTableCell>{user?.name}</StyledTableCell>
-                    <StyledTableCell>{user?.email}</StyledTableCell>
-                    <StyledTableCell>
-                      <Button
-                        size="small"
-                        color="primary"
-                        onClick={() =>
-                          handleopeninguypdatesurveyUserDialog(user)
-                        }
-                      >
-                        <EditIcon />
-                      </Button>
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      {" "}
-                      <Button
-                        onClick={() => handleOpenDeleteDialog(user)}
-                        size="small"
-                        color="primary"
-                      >
-                        <DeleteIcon />
-                      </Button>
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))}
+                {(search?.length > 0 ? search : surveyUserOrder).map(
+                  (user, u) => (
+                    <StyledTableRow key={u}>
+                      <StyledTableCell>{u + 1}</StyledTableCell>
+                      <StyledTableCell>{user?.name}</StyledTableCell>
+                      <StyledTableCell>{user?.email}</StyledTableCell>
+                      <StyledTableCell>
+                        <Button
+                          size="small"
+                          color="primary"
+                          onClick={() =>
+                            handleopeninguypdatesurveyUserDialog(user)
+                          }
+                        >
+                          <EditIcon />
+                        </Button>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        {" "}
+                        <Button
+                          onClick={() => handleOpenDeleteDialog(user)}
+                          size="small"
+                          color="secondary"
+                        >
+                          <DeleteIcon />
+                        </Button>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )
+                )}
               </TableBody>
             </Table>
           )}
           <TablePagination
             component="div"
-            count={listSurveyUsers?.items?.length}
+            count={search?.length || surveyUserOrder?.length}
             page={page}
             onPageChange={handleChangePage}
             rowsPerPage={rowsPerPage}

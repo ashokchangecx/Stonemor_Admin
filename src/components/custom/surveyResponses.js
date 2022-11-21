@@ -86,6 +86,9 @@ const StyledTableRow = withStyles((theme) => ({
     "&:nth-of-type(even)": {
       backgroundColor: theme.palette.action.hover,
     },
+    "&:hover": {
+      boxShadow: "3px 2px 5px 2px #888888",
+    },
   },
 }))(TableRow);
 const surveyResponsesPart = (props) => {
