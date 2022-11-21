@@ -13,7 +13,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 
 import Button from "@material-ui/core/Button";
-
+import SearchIcon from "@material-ui/icons/Search";
 import { graphql, compose, withApollo } from "react-apollo";
 import gql from "graphql-tag";
 import { listSurveys } from "../../graphql/queries";
@@ -22,24 +22,35 @@ import { createSurvey, deleteSurvey, addGroup } from "../../graphql/mutations";
 import AdminMenu from "./index";
 
 import {
+  Box,
   Breadcrumbs,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   FormControl,
+  IconButton,
+  InputBase,
   Paper,
   TablePagination,
   Typography,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { A } from "aws-amplify-react/lib-esm/AmplifyTheme";
+import { useState } from "react";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     overflow: "hidden",
     marginLeft: 120,
     marginTop: 20,
+    padding: theme.spacing(0, 3),
+  },
+  Breadcrumbs: {
+    flexGrow: 1,
+    overflow: "hidden",
+    marginLeft: 120,
+    marginTop: 10,
     padding: theme.spacing(0, 3),
   },
   content: {
@@ -52,6 +63,20 @@ const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
     marginTop: 20,
+  },
+  search: {
+    padding: "2px 4px",
+    display: "flex",
+    alignItems: "center",
+    width: 400,
+    marginBottom: 10,
+  },
+  searchInput: {
+    marginLeft: theme.spacing(1),
+    flex: 1,
+  },
+  iconButton: {
+    padding: 10,
   },
 }));
 const StyledTableCell = withStyles((theme) => ({
@@ -68,6 +93,9 @@ const StyledTableRow = withStyles((theme) => ({
   root: {
     "&:nth-of-type(even)": {
       backgroundColor: theme.palette.action.hover,
+    },
+    "&:hover": {
+      boxShadow: "3px 2px 5px 2px #888888",
     },
   },
 }))(TableRow);
@@ -86,6 +114,34 @@ const responsesPort = (props) => {
     data: { listQuestionnaires },
   } = props.listQuestionnaires;
 
+  const questionCount = listSurveyEntriess?.items
+    ?.filter((user) => user?.by?.name)
+
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+
+  const [search, setSearch] = useState(questionCount);
+
+  const requestSearch = (searched) => {
+    setSearch(
+      questionCount.filter(
+        (item) =>
+          item?.by?.name
+
+            .toString()
+            .toLowerCase()
+            .includes(searched.toString().toLowerCase()) ||
+          item?.by?.email
+
+            .toString()
+            .toLowerCase()
+            .includes(searched.toString().toLowerCase())
+      )
+    );
+  };
+
   const onGettingQuestionnaireById = (id) => {
     const que = listQuestionnaires?.items?.find((q) => q?.id === id);
 
@@ -97,34 +153,46 @@ const responsesPort = (props) => {
   // const questionCount = listans?.question?.items.sort(
   //   (a, b) => a?.order - b?.order
   // );
-  const questionCount = listSurveyEntriess?.items
-    ?.filter((user) => user?.by?.name)
-    .sort(
-      (a, b) =>
-        new Date(b?.finishTime).getTime() - new Date(a?.finishTime).getTime()
-    );
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  function handleOpenDialog() {
-    setOpen(true);
-  }
-  function handleCloseDialog() {
-    setOpen(false);
-  }
+
   return (
     <div className={classes.root}>
       {" "}
       {/* <AdminMenu /> */}
-      <div className={classes.root}>
+      <div className={classes.Breadcrumbs}>
         <Breadcrumbs aria-label="breadcrumb">
           <Typography color="primary">Survey Link Response</Typography>
         </Breadcrumbs>
       </div>
-      <div className={classes.root}>
-        <Typography variant="h4">Survey Link Response </Typography> <p />
+      <div className={classes.Breadcrumbs}>
+        <Box display="flex">
+          <Box flexGrow={1} p={1}>
+            {" "}
+            <Typography variant="h5">Survey Link Response </Typography>
+          </Box>
+
+          <Box p={0.5}>
+            <Paper component="form" className={classes.search} elevation={5}>
+              <InputBase
+                className={classes.searchInput}
+                placeholder="Search "
+                inputProps={{ "aria-label": "search google maps" }}
+                onInput={(e) => requestSearch(e.target.value)}
+              />
+              <IconButton
+                type="submit"
+                className={classes.iconButton}
+                aria-label="search"
+              >
+                <SearchIcon />
+              </IconButton>
+            </Paper>
+          </Box>
+        </Box>
         {questionCount?.length > 0 && (
           <Paper className={classes.content} elevation={10}>
             <>
@@ -146,47 +214,48 @@ const responsesPort = (props) => {
                   </StyledTableRow>
                 </TableHead>
                 <TableBody>
-                  {(rowsPerPage > 0
-                    ? questionCount?.slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                    : questionCount
-                  ).map((user, u) => (
-                    <StyledTableRow key={u}>
-                      <StyledTableCell>{u + 1}</StyledTableCell>
-                      <StyledTableCell>{user?.by?.name}</StyledTableCell>
-                      <StyledTableCell>{user?.by?.email}</StyledTableCell>
+                  {(search?.length > 0 ? search : questionCount)
+                    ?.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                    .map((user, u) => (
+                      <StyledTableRow key={u}>
+                        <StyledTableCell>{u + 1}</StyledTableCell>
+                        <StyledTableCell>{user?.by?.name}</StyledTableCell>
+                        <StyledTableCell>{user?.by?.email}</StyledTableCell>
 
-                      <StyledTableCell>
-                        {" "}
-                        {onGettingQuestionnaireById(user?.questionnaireId)}
-                      </StyledTableCell>
+                        <StyledTableCell>
+                          {" "}
+                          {onGettingQuestionnaireById(user?.questionnaireId)}
+                        </StyledTableCell>
 
-                      <StyledTableCell>
-                        {moment(user?.startTime).format("DD-MM-YYYY hh:mm A")}
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        {moment(user?.finishTime).format("DD-MM-YYYY hh:mm A")}
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <Button
-                          size="small"
-                          color="primary"
-                          component={Link}
-                          // to={`/surveyResponses/${user?.questionnaireId}?uid=${user?.by?.id}`}
-                          to={`/surveyResponses/${user?.id}`}
-                        >
-                          <VisibilityIcon />
-                        </Button>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  ))}
+                        <StyledTableCell>
+                          {moment(user?.startTime).format("DD-MM-YYYY hh:mm A")}
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          {moment(user?.finishTime).format(
+                            "DD-MM-YYYY hh:mm A"
+                          )}
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <Button
+                            size="small"
+                            color="primary"
+                            component={Link}
+                            // to={`/surveyResponses/${user?.questionnaireId}?uid=${user?.by?.id}`}
+                            to={`/surveyResponses/${user?.id}`}
+                          >
+                            <VisibilityIcon />
+                          </Button>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
                 </TableBody>
               </Table>
               <TablePagination
                 component="div"
-                count={questionCount?.length}
+                count={search?.length || questionCount?.length}
                 page={page}
                 onPageChange={handleChangePage}
                 rowsPerPage={rowsPerPage}

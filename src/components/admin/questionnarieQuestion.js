@@ -75,6 +75,13 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 20,
     padding: theme.spacing(0, 3),
   },
+  Breadcrumbs: {
+    flexGrow: 1,
+    overflow: "hidden",
+    marginLeft: 120,
+    marginTop: 10,
+    padding: theme.spacing(0, 3),
+  },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
@@ -119,6 +126,9 @@ const StyledTableRow = withStyles((theme) => ({
     "&:nth-of-type(even)": {
       backgroundColor: theme.palette.action.hover,
     },
+    "&:hover": {
+      boxShadow: "3px 2px 5px 2px #888888",
+    },
   },
 }))(TableRow);
 
@@ -147,7 +157,7 @@ const QuestionnarieQuestionPart = (props) => {
   const [dependentQuestion, setDependentQuestion] = useState("");
   const [dependentQuestionOptions, setDependentQuestionOptions] = useState([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [openSurveyLink, setOpenSurveyLink] = React.useState(false);
   const [openSurveyQrCode, setOpenSurveyQrCode] = React.useState(false);
   const [surveyUser, setSuveyUser] = React.useState("");
@@ -223,7 +233,7 @@ const QuestionnarieQuestionPart = (props) => {
         alert(err);
       });
   };
-  console.log("editQuestion", editQuestion);
+  // console.log("editQuestion", editQuestion);
   // const handleSendEmail = (user) => {
   //   setInchargeEmail(user?.id);
   // };
@@ -552,7 +562,7 @@ const QuestionnarieQuestionPart = (props) => {
   return (
     <div className={classes.root}>
       {/* <AdminMenu /> */}
-      <div className={classes.root}>
+      <div className={classes.Breadcrumbs}>
         <Breadcrumbs aria-label="breadcrumb">
           <Link underline="hover" color="inherit" href="/admin/questionnaires">
             Manage Questionnaire
@@ -571,12 +581,16 @@ const QuestionnarieQuestionPart = (props) => {
               Delete this Question
             </DialogTitle>
             <DialogContent>
-              <DialogContentText>
+              <DialogContentText color="secondary">
                 Are You Sure You Want to Delete this Question?
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleCloseDialog} color="default">
+              <Button
+                onClick={handleCloseDialog}
+                color="secondary"
+                variant="contained"
+              >
                 Cancel
               </Button>
               <Button
@@ -584,6 +598,7 @@ const QuestionnarieQuestionPart = (props) => {
                   handleDelete();
                 }}
                 type="submit"
+                variant="contained"
                 color="primary"
               >
                 Delete
@@ -753,10 +768,18 @@ const QuestionnarieQuestionPart = (props) => {
               <br />
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose} color="default">
+              <Button
+                onClick={handleClose}
+                color="secondary"
+                variant="contained"
+              >
                 Cancel
               </Button>
-              <Button onClick={(event) => handleCreate(event)} color="primary">
+              <Button
+                onClick={(event) => handleCreate(event)}
+                variant="contained"
+                color="primary"
+              >
                 Create
               </Button>
             </DialogActions>
@@ -838,7 +861,8 @@ const QuestionnarieQuestionPart = (props) => {
               <Button
                 onClick={handleAddListItemClose}
                 disabled={!listItemOptions?.length > 0}
-                color="default"
+                color="secondary"
+                variant="contained"
               >
                 Close
               </Button>
@@ -846,6 +870,7 @@ const QuestionnarieQuestionPart = (props) => {
                 onClick={handleAddingListItemOptions}
                 type="button"
                 color="primary"
+                variant="contained"
                 disabled={!listItem}
               >
                 Add
@@ -1063,7 +1088,7 @@ const QuestionnarieQuestionPart = (props) => {
                       onClick={handleAddingListItemOptions}
                       type="button"
                       variant="outlined"
-                      color="secondary"
+                      color="primary"
                       disabled={!listItem}
                     >
                       Add
@@ -1093,7 +1118,7 @@ const QuestionnarieQuestionPart = (props) => {
                               <TableCell>
                                 <Button
                                   size="small"
-                                  color="primary"
+                                  color="secondary"
                                   onClick={() =>
                                     setListItemOptions(
                                       listItemOptions?.filter(
@@ -1116,7 +1141,11 @@ const QuestionnarieQuestionPart = (props) => {
             </DialogContent>
             <Divider />
             <DialogActions>
-              <Button onClick={handleEditQuestionClose} color="default">
+              <Button
+                onClick={handleEditQuestionClose}
+                color="secondary"
+                variant="contained"
+              >
                 Close
               </Button>
               <Button
@@ -1182,13 +1211,18 @@ const QuestionnarieQuestionPart = (props) => {
                 Create New User
               </ListItem> */}
 
-              <Button onClick={handleopenSurveyLinkClose} color="default">
+              <Button
+                onClick={handleopenSurveyLinkClose}
+                color="secondary"
+                variant="contained"
+              >
                 Close
               </Button>
               <Button
                 onClick={handleGeneratingSurveyLink}
                 type="button"
                 color="primary"
+                variant="contained"
               >
                 Create SurveyLink
               </Button>
@@ -1284,7 +1318,7 @@ const QuestionnarieQuestionPart = (props) => {
           <Typography variant="h4">{getQuestionnaire?.name} </Typography>{" "}
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             className={classes.button}
             onClick={handleOpenCreateSurveyDialog}
           >
@@ -1293,7 +1327,7 @@ const QuestionnarieQuestionPart = (props) => {
           </Button>
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             className={classes.button}
             onClick={handleOpenCreateSurveyLocationDialog}
           >
@@ -1358,7 +1392,7 @@ const QuestionnarieQuestionPart = (props) => {
                     {" "}
                     <Button
                       size="small"
-                      color="primary"
+                      color="secondary"
                       onClick={() => handleOpenDeleteDialog(question)}
                     >
                       <DeleteIcon />

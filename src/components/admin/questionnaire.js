@@ -26,6 +26,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import CloseIcon from "@material-ui/icons/Close";
 import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
+import SearchIcon from "@material-ui/icons/Search";
 import { graphql, compose, withApollo } from "react-apollo";
 import gql from "graphql-tag";
 import { listQuestionnaires, listSurveys } from "../../graphql/queries";
@@ -38,7 +39,12 @@ import {
 
 import AdminMenu from "./index";
 import { Link } from "react-router-dom";
-import { Breadcrumbs, TablePagination } from "@material-ui/core";
+import {
+  Box,
+  Breadcrumbs,
+  InputBase,
+  TablePagination,
+} from "@material-ui/core";
 import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
@@ -47,6 +53,13 @@ const useStyles = makeStyles((theme) => ({
     overflow: "hidden",
     marginLeft: 120,
     marginTop: 20,
+    padding: theme.spacing(0, 3),
+  },
+  Breadcrumbs: {
+    flexGrow: 1,
+    overflow: "hidden",
+    marginLeft: 120,
+    marginTop: 10,
     padding: theme.spacing(0, 3),
   },
   content: {
@@ -58,6 +71,20 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     margin: theme.spacing(1),
+  },
+  search: {
+    padding: "2px 4px",
+    display: "flex",
+    alignItems: "center",
+    width: 400,
+    marginBottom: 10,
+  },
+  searchInput: {
+    marginLeft: theme.spacing(1),
+    flex: 1,
+  },
+  iconButton: {
+    padding: 10,
   },
 }));
 const StyledTableCell = withStyles((theme) => ({
@@ -74,6 +101,9 @@ const StyledTableRow = withStyles((theme) => ({
   root: {
     "&:nth-of-type(even)": {
       backgroundColor: theme.palette.action.hover,
+    },
+    "&:hover": {
+      boxShadow: "3px 2px 5px 2px #888888",
     },
   },
 }))(TableRow);
@@ -105,15 +135,31 @@ const QuestionnairePart = (props) => {
   const [endMsg, setEndMsg] = useState(
     "Thank you for completing our survey. If you have requested a follow up,someone will be in touch with you soon."
   );
+
+  const questionnaireOrder = listQuestionnaires?.items?.sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+
+  const [search, setSearch] = useState(questionnaireOrder);
   const [openUpdateQuestionnaires, setOpenUpdateQuestionnaires] =
     useState(false);
 
   function handleSnackBarClick() {
     setOpenSnackBar(true);
   }
-  const questionnaireOrder = listQuestionnaires?.items?.sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
+  //search//
+
+  const requestSearch = (searched) => {
+    setSearch(
+      questionnaireOrder.filter((item) =>
+        item?.name
+
+          .toString()
+          .toLowerCase()
+          .includes(searched.toString().toLowerCase())
+      )
+    );
+  };
 
   const handleopeningQuestionnaireUpdateDialog = (questionnaire) => {
     setQuestionnairesId(questionnaire?.id);
@@ -259,32 +305,8 @@ const QuestionnairePart = (props) => {
   }
   return (
     <div className={classes.root}>
-      <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        open={openSnackBar}
-        autoHideDuration={3000}
-        onClose={handleSnackBarClose}
-        ContentProps={{
-          "aria-describedby": "message-id",
-        }}
-        message={<span id="message-id">Sorry. Not currently implemented.</span>}
-        action={[
-          <IconButton
-            key="close"
-            aria-label="Close"
-            color="inherit"
-            className={classes.close}
-            onClick={handleSnackBarClose}
-          >
-            <CloseIcon />
-          </IconButton>,
-        ]}
-      />
       {/* <AdminMenu /> */}
-      <div className={classes.root}>
+      <div className={classes.Breadcrumbs}>
         <Breadcrumbs aria-label="breadcrumb">
           <Typography color="primary">Manage Questionnaire</Typography>
         </Breadcrumbs>
@@ -336,7 +358,8 @@ const QuestionnairePart = (props) => {
             <DialogActions>
               <Button
                 onClick={handleClosingQuestionnaireUpdateDialog}
-                color="default"
+                color="secondary"
+                variant="contained"
               >
                 Cancel
               </Button>
@@ -344,6 +367,7 @@ const QuestionnairePart = (props) => {
                 onClick={handleUpdateQuestionnaire}
                 type="submit"
                 color="primary"
+                variant="contained"
               >
                 Update
               </Button>
@@ -398,7 +422,7 @@ const QuestionnairePart = (props) => {
                 onChange={(event) => setEndMsg(event.target.value)}
                 fullWidth
               />
-              <FormControl>
+              <FormControl fullWidth>
                 <InputLabel>Survey</InputLabel>
                 <Select
                   margin="dense"
@@ -418,10 +442,20 @@ const QuestionnairePart = (props) => {
               <br />
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose} color="default">
+              <Button
+                onClick={handleClose}
+                color="secondary"
+                variant="contained"
+              >
                 Cancel
               </Button>
-              <Button onClick={handleCreate} type="submit" color="primary">
+              <Button
+                onClick={handleCreate}
+                type="submit"
+                color="primary"
+                variant="contained"
+                disabled={!survey}
+              >
                 Create
               </Button>
             </DialogActions>
@@ -437,12 +471,16 @@ const QuestionnairePart = (props) => {
               Delete this Questionnaire
             </DialogTitle>
             <DialogContent>
-              <DialogContentText>
+              <DialogContentText color="secondary">
                 Are You Sure You Want to Delete this Questionnaire?
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleCloseDialog} color="default">
+              <Button
+                onClick={handleCloseDialog}
+                color="secondary"
+                variant="contained"
+              >
                 Cancel
               </Button>
               <Button
@@ -451,6 +489,7 @@ const QuestionnairePart = (props) => {
                 }}
                 type="submit"
                 color="primary"
+                variant="contained"
               >
                 Delete
               </Button>
@@ -458,9 +497,31 @@ const QuestionnairePart = (props) => {
           </FormControl>
         </Dialog>
       </div>
-      <main className={classes.root}>
-        <Typography variant="h4">Manage Questionnaires</Typography>
-        <p />
+      <main className={classes.Breadcrumbs}>
+        <Box display="flex">
+          <Box flexGrow={1} p={1}>
+            {" "}
+            <Typography variant="h5">Manage Questionnaires</Typography>
+          </Box>
+
+          <Box p={0.5}>
+            <Paper component="form" className={classes.search} elevation={5}>
+              <InputBase
+                className={classes.searchInput}
+                placeholder="Search "
+                inputProps={{ "aria-label": "search google maps" }}
+                onInput={(e) => requestSearch(e.target.value)}
+              />
+              <IconButton
+                type="submit"
+                className={classes.iconButton}
+                aria-label="search"
+              >
+                <SearchIcon />
+              </IconButton>
+            </Paper>
+          </Box>
+        </Box>
         <Paper className={classes.content} elevation={10}>
           <Table className={classes.table}>
             <TableHead>
@@ -474,55 +535,53 @@ const QuestionnairePart = (props) => {
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {(rowsPerPage > 0
-                ? questionnaireOrder?.slice(
-                    page * rowsPerPage,
-                    page * rowsPerPage + rowsPerPage
-                  )
-                : questionnaireOrder
-              ).map((questionnaire, q) => (
-                <StyledTableRow key={q}>
-                  <StyledTableCell>{questionnaire.name}</StyledTableCell>
-                  <StyledTableCell>{questionnaire.description}</StyledTableCell>
-                  {/* <StyledTableCell>{questionnaire.type}</StyledTableCell> */}
-                  <StyledTableCell>
-                    <Button
-                      size="small"
-                      color="primary"
-                      onClick={() =>
-                        handleopeningQuestionnaireUpdateDialog(questionnaire)
-                      }
-                    >
-                      <EditIcon />
-                    </Button>
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <Button
-                      size="small"
-                      color="primary"
-                      component={Link}
-                      to={`/admin/question/${questionnaire.id}`}
-                    >
-                      <VisibilityIcon />
-                    </Button>
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    {" "}
-                    <Button
-                      size="small"
-                      color="primary"
-                      onClick={() => handleOpenDeleteDialog(questionnaire)}
-                    >
-                      <DeleteIcon />
-                    </Button>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
+              {(search?.length > 0 ? search : questionnaireOrder).map(
+                (questionnaire, q) => (
+                  <StyledTableRow key={q}>
+                    <StyledTableCell>{questionnaire.name}</StyledTableCell>
+                    <StyledTableCell>
+                      {questionnaire.description}
+                    </StyledTableCell>
+                    {/* <StyledTableCell>{questionnaire.type}</StyledTableCell> */}
+                    <StyledTableCell>
+                      <Button
+                        size="small"
+                        color="primary"
+                        onClick={() =>
+                          handleopeningQuestionnaireUpdateDialog(questionnaire)
+                        }
+                      >
+                        <EditIcon />
+                      </Button>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <Button
+                        size="small"
+                        color="primary"
+                        component={Link}
+                        to={`/admin/question/${questionnaire.id}`}
+                      >
+                        <VisibilityIcon />
+                      </Button>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {" "}
+                      <Button
+                        size="small"
+                        color="secondary"
+                        onClick={() => handleOpenDeleteDialog(questionnaire)}
+                      >
+                        <DeleteIcon />
+                      </Button>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )
+              )}
             </TableBody>
           </Table>
           <TablePagination
             component="div"
-            count={listQuestionnaires?.items?.length}
+            count={questionnaireOrder?.length || search?.length}
             page={page}
             onPageChange={handleChangePage}
             rowsPerPage={rowsPerPage}

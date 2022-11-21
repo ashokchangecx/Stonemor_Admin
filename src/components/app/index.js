@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import "./App.css";
 
 import Amplify, { Auth } from "aws-amplify";
@@ -52,12 +52,44 @@ import responses from "../admin/responses";
 import QrResponses from "../admin/qrCodeResponses";
 import AdminMenu from "../admin/index";
 import SurveyLocation from "../admin/SurveyLocation";
+
+import FontTTF from "../../assets/font/Poppins-ExtraBold.ttf";
+
+const Font = {
+  fontFamily: "Poppins",
+  fontStyle: "normal",
+  fontDisplay: "swap",
+  fontWeight: 400,
+  src: `
+    local('Poppins'),
+    local('Poppins-Regular'),
+    url(${FontTTF}) format('ttf')
+  `,
+  unicodeRange:
+    "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF",
+};
+
+const Analytics = React.lazy(() => import("../admin/Analytics"));
+
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#5E8ABF",
+      main: "#5e8abf",
     },
-    secondary: indigo,
+    // secondary: indigo,
+    secondary: {
+      main: "#e53935",
+    },
+  },
+  typography: {
+    fontFamily: "Poppins, Arial",
+  },
+  overrides: {
+    MuiCssBaseline: {
+      "@global": {
+        "@font-face": [Font],
+      },
+    },
   },
 });
 
@@ -251,7 +283,6 @@ function App() {
               )}
             </Toolbar>
           </AppBar>
-
           <AdminMenu />
           <Route exact path="/" component={Home} />
 
@@ -277,6 +308,11 @@ function App() {
           />
           <Route path="/admin/responses" component={responses} />
           <Route path="/admin/qrresponses" component={QrResponses} />
+          <Route path="/admin/analytics">
+            <Suspense fallback={<div>Loading....</div>}>
+              <Analytics />
+            </Suspense>
+          </Route>
 
           <Route
             path="/surveyquestions/:questionnaireID"

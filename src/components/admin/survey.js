@@ -26,7 +26,9 @@ import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import { graphql, compose, withApollo } from "react-apollo";
 import gql from "graphql-tag";
-import moment from "moment";
+import ShareIcon from "@material-ui/icons/Share";
+
+import SearchIcon from "@material-ui/icons/Search";
 import { listSurveys } from "../../graphql/queries";
 import {
   createSurvey,
@@ -36,13 +38,26 @@ import {
 } from "../../graphql/mutations";
 
 import AdminMenu from "./index";
-import { Breadcrumbs, Link, TablePagination } from "@material-ui/core";
+import {
+  Box,
+  Breadcrumbs,
+  InputBase,
+  Link,
+  TablePagination,
+} from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     overflow: "hidden",
     marginLeft: 120,
     marginTop: 20,
+    padding: theme.spacing(0, 3),
+  },
+  Breadcrumbs: {
+    flexGrow: 1,
+    overflow: "hidden",
+    marginLeft: 120,
+    marginTop: 10,
     padding: theme.spacing(0, 3),
   },
   content: {
@@ -55,6 +70,20 @@ const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
     marginTop: 20,
+  },
+  search: {
+    padding: "2px 4px",
+    display: "flex",
+    alignItems: "center",
+    width: 400,
+    marginBottom: 10,
+  },
+  searchInput: {
+    marginLeft: theme.spacing(1),
+    flex: 1,
+  },
+  iconButton: {
+    padding: 10,
   },
 }));
 const StyledTableCell = withStyles((theme) => ({
@@ -71,6 +100,9 @@ const StyledTableRow = withStyles((theme) => ({
   root: {
     "&:nth-of-type(even)": {
       backgroundColor: theme.palette.action.hover,
+    },
+    "&:hover": {
+      boxShadow: "3px 2px 5px 2px #888888",
     },
   },
 }))(TableRow);
@@ -95,16 +127,38 @@ const SurveyPart = (props) => {
     "https://dynamix-cdn.s3.amazonaws.com/stonemorcom/stonemorcom_616045937.svg"
   );
   const [surveyId, setSurveyId] = useState("");
+  const surveyOrder = listSurveys?.items
+    ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  const [search, setSearch] = useState(surveyOrder);
 
   const [openUpdateSurvey, setOpenUpdateSurvey] = useState(false);
 
-  function handleSnackBarClick() {
-    setOpenSnackBar(true);
-  }
+  //search//
 
-  const surveyOrder = listSurveys?.items?.sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
+  const requestSearch = (searched) => {
+    setSearch(
+      surveyOrder.filter(
+        (item) =>
+          item?.name
+
+            .toString()
+            .toLowerCase()
+            .includes(searched.toString().toLowerCase()) ||
+          item?.preQuestionnaire?.name
+
+            .toString()
+            .toLowerCase()
+            .includes(searched.toString().toLowerCase())
+      )
+    );
+  };
+
+  // console.log("search", search);
+
   function handleSnackBarClose(event, reason) {
     if (reason === "clickaway") {
       return;
@@ -247,32 +301,8 @@ const SurveyPart = (props) => {
   }
   return (
     <div className={classes.root}>
-      <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        open={openSnackBar}
-        autoHideDuration={3000}
-        onClose={handleSnackBarClose}
-        ContentProps={{
-          "aria-describedby": "message-id",
-        }}
-        message={<span id="message-id">Sorry. Not currently implemented.</span>}
-        action={[
-          <IconButton
-            key="close"
-            aria-label="Close"
-            color="inherit"
-            className={classes.close}
-            onClick={handleSnackBarClose}
-          >
-            <CloseIcon />
-          </IconButton>,
-        ]}
-      />
       {/* <AdminMenu /> */}
-      <div className={classes.root}>
+      <div className={classes.Breadcrumbs}>
         <Breadcrumbs aria-label="breadcrumb">
           <Typography color="primary">Manage Survey</Typography>
         </Breadcrumbs>
@@ -324,10 +354,20 @@ const SurveyPart = (props) => {
               /> */}
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose} color="default">
+              <Button
+                onClick={handleClose}
+                color="secondary"
+                variant="contained"
+              >
                 Cancel
               </Button>
-              <Button onClick={handleCreate} type="submit" color="primary">
+              <Button
+                onClick={handleCreate}
+                type="submit"
+                variant="contained"
+                color="primary"
+                disabled={!title}
+              >
                 Create
               </Button>
             </DialogActions>
@@ -341,12 +381,16 @@ const SurveyPart = (props) => {
           <FormControl>
             <DialogTitle id="form-dialog-title">Delete this Survey</DialogTitle>
             <DialogContent>
-              <DialogContentText>
+              <DialogContentText color="secondary">
                 Are You Sure You Want to Delete this Survey?
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleCloseDialog} color="default">
+              <Button
+                onClick={handleCloseDialog}
+                color="secondary"
+                variant="contained"
+              >
                 Cancel
               </Button>
               <Button
@@ -355,6 +399,7 @@ const SurveyPart = (props) => {
                 }}
                 type="submit"
                 color="primary"
+                variant="contained"
               >
                 Delete
               </Button>
@@ -401,13 +446,20 @@ const SurveyPart = (props) => {
               />
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClosingSurveyUpdateDialog} color="default">
+              <Button
+                onClick={handleClosingSurveyUpdateDialog}
+                color="secondary"
+                size="small"
+                variant="contained"
+              >
                 Cancel
               </Button>
               <Button
                 onClick={handleUpdateSurvey}
                 type="submit"
                 color="primary"
+                size="small"
+                variant="contained"
               >
                 Update
               </Button>
@@ -415,10 +467,32 @@ const SurveyPart = (props) => {
           </FormControl>
         </Dialog>
       </div>
-      <main className={classes.root}>
-        <Typography variant="h4">Manage Surveys</Typography>
-        <p />
-        <Paper className={classes.content} elevation={10}>
+      <main className={classes.Breadcrumbs}>
+        <Box display="flex">
+          <Box flexGrow={1} p={1}>
+            {" "}
+            <Typography variant="h5">Manage Surveys</Typography>
+          </Box>
+
+          <Box p={0.5}>
+            <Paper component="form" className={classes.search} elevation={5}>
+              <InputBase
+                className={classes.searchInput}
+                placeholder="Search "
+                inputProps={{ "aria-label": "search google maps" }}
+                onInput={(e) => requestSearch(e.target.value)}
+              />
+              <IconButton
+                type="submit"
+                className={classes.iconButton}
+                aria-label="search"
+              >
+                <SearchIcon />
+              </IconButton>
+            </Paper>
+          </Box>
+        </Box>
+        <Paper className={classes.content} elevation={10} p={1}>
           <Table className={classes.table}>
             <TableHead>
               <StyledTableRow>
@@ -427,17 +501,12 @@ const SurveyPart = (props) => {
                 <StyledTableCell>Description</StyledTableCell>
                 <StyledTableCell>Questionnaire</StyledTableCell>
                 <StyledTableCell>Manage Survey</StyledTableCell>
+                <StyledTableCell>Share</StyledTableCell>
                 <StyledTableCell>Delete</StyledTableCell>
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {(rowsPerPage > 0
-                ? surveyOrder?.slice(
-                    page * rowsPerPage,
-                    page * rowsPerPage + rowsPerPage
-                  )
-                : surveyOrder
-              ).map((survey) => (
+              {(search?.length > 0 ? search : surveyOrder).map((survey) => (
                 <StyledTableRow key={survey?.name}>
                   <StyledTableCell>
                     <img
@@ -461,10 +530,16 @@ const SurveyPart = (props) => {
                     </Button>
                   </StyledTableCell>
                   <StyledTableCell>
+                    <Button size="small" color="primary">
+                      {" "}
+                      <ShareIcon />
+                    </Button>
+                  </StyledTableCell>
+                  <StyledTableCell>
                     <Button
                       onClick={() => handleOpenDeleteDialog(survey)}
                       size="small"
-                      color="primary"
+                      color="secondary"
                     >
                       <DeleteIcon />
                     </Button>
@@ -475,7 +550,7 @@ const SurveyPart = (props) => {
           </Table>
           <TablePagination
             component="div"
-            count={listSurveys?.items?.length}
+            count={search?.length || surveyOrder?.length}
             page={page}
             onPageChange={handleChangePage}
             rowsPerPage={rowsPerPage}

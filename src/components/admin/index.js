@@ -19,6 +19,7 @@ import PersonIcon from "@material-ui/icons/Person";
 import PinDropIcon from "@material-ui/icons/PinDrop";
 
 import LanguageIcon from "@material-ui/icons/Language";
+import PieChartIcon from "@material-ui/icons/PieChart";
 import { makeStyles, useTheme, withStyles } from "@material-ui/core/styles";
 import MuiListItem from "@material-ui/core/ListItem";
 
@@ -67,13 +68,17 @@ const ListItem = withStyles({
         color: "white",
       },
     },
-    // "&$selected:hover": {
-    //   backgroundColor: "purple",
-    //   color: "white",
-    //   "& .MuiListItemIcon-root": {
-    //     color: "white",
-    //   },
-    // },
+    "&:hover": {
+      boxShadow: "3px 2px 5px 2px #888888",
+    },
+
+    "&$selected:hover": {
+      backgroundColor: "#9db7d6",
+      color: "white",
+      "& .MuiListItemIcon-root": {
+        color: "white",
+      },
+    },
     // "&:hover": {
     //   backgroundColor: "blue",
     //   color: "white",
@@ -216,7 +221,19 @@ const Admin = (props) => {
           </ListItemIcon>
           <ListItemText primary="QR Responses" />
         </ListItem>
-        {/* <Divider /> */}
+        <Divider />
+        <ListItem
+          button
+          selected={selectedIndex === 7}
+          onClick={(event) => handleListItemClick(event, 7)}
+          component={Link}
+          to="/admin/analytics"
+        >
+          <ListItemIcon>
+            <PieChartIcon />
+          </ListItemIcon>
+          <ListItemText primary="Analytic Data" />
+        </ListItem>
         {/* <ListItem
           button
           component={Link}
