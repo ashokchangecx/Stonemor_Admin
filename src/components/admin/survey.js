@@ -157,7 +157,7 @@ const SurveyPart = (props) => {
     );
   };
 
-  console.log("search", search);
+  // console.log("search", search);
 
   function handleSnackBarClose(event, reason) {
     if (reason === "clickaway") {

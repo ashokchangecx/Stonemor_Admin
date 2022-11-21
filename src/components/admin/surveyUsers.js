@@ -129,7 +129,7 @@ const SurveyUsersPart = (props) => {
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
   const [search, setSearch] = useState(surveyUserOrder);
-  console.log(listSurveyUsers);
+
   const requestSearch = (searched) => {
     setSearch(
       surveyUserOrder.filter(

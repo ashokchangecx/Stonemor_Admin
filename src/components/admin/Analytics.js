@@ -114,7 +114,7 @@ const AnalyticsPort = (props) => {
     }
     return () => null;
   }, [surveyEntriessLoading]);
-  console.log("surveyByLocations : ", surveyByLocations);
+  // console.log("surveyByLocations : ", surveyByLocations);
 
   return (
     <div className={classes?.root}>
@@ -143,7 +143,7 @@ const AnalyticsPort = (props) => {
                 onClick={onClick}
               />
             </div>
-            <div>right</div>
+            <div></div>
           </>
         )}
       </div>

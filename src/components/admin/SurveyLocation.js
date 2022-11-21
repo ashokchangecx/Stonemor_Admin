@@ -130,7 +130,7 @@ const SurveyLocationPart = (props) => {
     );
   const [search, setSearch] = useState(surveyLocationOrder);
 
-  console.log("search", search);
+  // console.log("search", search);
   const requestSearch = (searched) => {
     setSearch(
       surveyLocationOrder.filter(

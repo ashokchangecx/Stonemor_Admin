@@ -233,7 +233,7 @@ const QuestionnarieQuestionPart = (props) => {
         alert(err);
       });
   };
-  console.log("editQuestion", editQuestion);
+  // console.log("editQuestion", editQuestion);
   // const handleSendEmail = (user) => {
   //   setInchargeEmail(user?.id);
   // };
