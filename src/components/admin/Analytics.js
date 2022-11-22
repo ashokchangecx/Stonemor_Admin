@@ -48,7 +48,7 @@ while (colors1.length < 100) {
   do {
     var color1 = Math.floor(Math.random() * 1000000 + 1);
   } while (colors1.indexOf(color1) >= 0);
-  colors1.push("#" + ("123123" + color1.toString(16)).slice(-6));
+  colors1.push("#" + ("000000" + color1.toString(16)).slice(-6));
 }
 var colors2 = [];
 while (colors2.length < 100) {
@@ -62,7 +62,7 @@ while (colors3.length < 100) {
   do {
     var color3 = Math.floor(Math.random() * 1000000 + 1);
   } while (colors3.indexOf(color3) >= 0);
-  colors3.push("#" + ("123123" + color3.toString(16)).slice(-6));
+  colors3.push("#" + ("242442" + color3.toString(16)).slice(-6));
 }
 
 export const options = {
