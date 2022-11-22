@@ -116,7 +116,6 @@ const responsesPort = (props) => {
 
   const questionCount = listSurveyEntriess?.items
     ?.filter((user) => user?.by?.name)
-
     .sort(
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
