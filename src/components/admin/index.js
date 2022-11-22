@@ -13,7 +13,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import MenuIcon from "@material-ui/icons/Menu";
 import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
-
+import LinkIcon from "@material-ui/icons/Link";
 import SelectAllIcon from "@material-ui/icons/SelectAll";
 import PersonIcon from "@material-ui/icons/Person";
 import PinDropIcon from "@material-ui/icons/PinDrop";
@@ -205,7 +205,7 @@ const Admin = (props) => {
           to="/admin/responses"
         >
           <ListItemIcon>
-            <CheckCircleOutlineIcon />
+            <LinkIcon />
           </ListItemIcon>
           <ListItemText primary="Link Responses" />
         </ListItem>

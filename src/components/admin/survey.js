@@ -11,6 +11,7 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import SubjectIcon from "@material-ui/icons/Subject";
+import FileCopyIcon from "@material-ui/icons/FileCopy";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TextField from "@material-ui/core/TextField";
@@ -23,13 +24,23 @@ import FormControl from "@material-ui/core/FormControl";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import CloseIcon from "@material-ui/icons/Close";
 import Snackbar from "@material-ui/core/Snackbar";
+import LinkIcon from "@material-ui/icons/Link";
+import SelectAllIcon from "@material-ui/icons/SelectAll";
 import IconButton from "@material-ui/core/IconButton";
 import { graphql, compose, withApollo } from "react-apollo";
 import gql from "graphql-tag";
+import QRCode from "qrcode.react";
+import copy from "copy-to-clipboard";
 import ShareIcon from "@material-ui/icons/Share";
 
 import SearchIcon from "@material-ui/icons/Search";
-import { listSurveys } from "../../graphql/queries";
+import {
+  getQuestionnaire,
+  listQuestionnaires,
+  listSurveyLocations,
+  listSurveys,
+  listSurveyUsers,
+} from "../../graphql/queries";
 import {
   createSurvey,
   deleteSurvey,
@@ -42,9 +53,14 @@ import {
   Box,
   Breadcrumbs,
   InputBase,
+  InputLabel,
   Link,
+  MenuItem,
+  Select,
   TablePagination,
 } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
+import axios from "axios";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -85,6 +101,20 @@ const useStyles = makeStyles((theme) => ({
   iconButton: {
     padding: 10,
   },
+  customizedButtion: {
+    position: "absolute",
+    left: "93%",
+    top: "2%",
+    backgroundColor: "#fbf9f9",
+    color: "gray",
+  },
+  customizedButtion1: {
+    position: "absolute",
+    left: "90%",
+    top: "6%",
+    backgroundColor: "#fbf9f9",
+    color: "gray",
+  },
 }));
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -106,12 +136,16 @@ const StyledTableRow = withStyles((theme) => ({
     },
   },
 }))(TableRow);
+
+const baseUrl = "https://main.d3d8mcg1fsym22.amplifyapp.com";
 const SurveyPart = (props) => {
   const classes = useStyles();
   const {
     data: { loading, error, listSurveys, refetch },
   } = props.listSurveys;
-
+  const { listSurveyUsers } = props?.listSurveyUsers?.data;
+  const { listSurveyLocations } = props?.listSurveyLocations?.data;
+  const { listQuestionnaires } = props?.listQuestionnaires?.data;
   const [open, setOpen] = React.useState(false);
   const [initialLoading, setinitialLoading] = useState(true);
   const [isCreated, setIsCreated] = useState(false);
@@ -123,10 +157,37 @@ const SurveyPart = (props) => {
   const [deleteSurvey, setDeleteSurvey] = React.useState("");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const [openSurveyLink, setOpenSurveyLink] = React.useState(false);
+  const [openSurveyQrCode, setOpenSurveyQrCode] = React.useState(false);
+  const [surveyUser, setSuveyUser] = React.useState("");
+  const [surveyLocation, setSuveyLocation] = React.useState("");
+  const [userSurveyLink, setUserSurveyLink] = React.useState("");
+
+  const [deleteQuestion, setDeleteQuestion] = React.useState("");
+  const [alertSuccess, setAlertSuccess] = useState(false);
+  const [alertFail, setAlertFail] = useState(false);
+  const [alertContentSuccess, setAlertContentSuccess] = useState("");
+  const [alertCopySuccess, setAlertCopySuccess] = useState("");
+  const [alertContentFail, setAlertContentFail] = useState("");
+  const [inchargeEmail, setInchargeEmail] = useState("");
+
   const [image, setImage] = React.useState(
     "https://dynamix-cdn.s3.amazonaws.com/stonemorcom/stonemorcom_616045937.svg"
   );
+  const surveyLoc = listSurveyLocations?.items?.find(
+    (loc) => loc?.id === surveyLocation
+  );
   const [surveyId, setSurveyId] = useState("");
+
+  /* Get quetion by questionID */
+  const onGettingQuestionById = (id) => {
+    const que = listQuestionnaires?.items?.find((q) => q?.id === id);
+    return que?.name ?? id;
+  };
+
+  const surveyName = onGettingQuestionById(surveyId);
+
   const surveyOrder = listSurveys?.items
     ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
     .sort(
@@ -134,8 +195,103 @@ const SurveyPart = (props) => {
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
   const [search, setSearch] = useState(surveyOrder);
-
+  const surveyUrl = `${baseUrl}/surveyquestions/${surveyId}?uid=${surveyUser}`;
   const [openUpdateSurvey, setOpenUpdateSurvey] = useState(false);
+
+  const surveyQrcode = `${baseUrl}/surveyquestions/${surveyId}?uid=${surveyLocation}`;
+  const emailUrl =
+    "https://stonemor.netlify.app/.netlify/functions/server/send";
+  // const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const [fullWidth, setFullWidth] = React.useState(true);
+  const [maxWidth] = useState("md");
+
+  console.log("listQuestionnaires", listQuestionnaires);
+  /*Opening Creating new surveylink Dialogbox*/
+  const handleOpenCreateSurveyDialog = (survey) => {
+    setSurveyId(survey?.preQuestionnaire?.id);
+    setOpenSurveyLink(true);
+  };
+  /* Generating survey Link */
+  const handleGeneratingSurveyLink = () => {
+    const surveyUrl = `${baseUrl}/surveyquestions/${surveyId}?uid=${surveyUser}`;
+    setUserSurveyLink(surveyUrl);
+  };
+  //copy-clipboard//
+  const copyToClipboard = () => {
+    copy(surveyUrl);
+    setAlertSuccess(true);
+    setAlertCopySuccess("Survey Link copyed successfully");
+  };
+
+  /*Opening Creating new surveyQrCode Dialogbox*/
+  const handleOpenCreateSurveyLocationDialog = (survey) => {
+    setSurveyId(survey?.preQuestionnaire?.id);
+    setOpenSurveyQrCode(true);
+  };
+  /*Opening Creating new surveylink Dialogbox*/
+  const handleopenSurveyLinkClose = () => {
+    setSuveyUser("");
+    setUserSurveyLink("");
+    setAlertSuccess("");
+    setAlertCopySuccess("");
+    setOpenSurveyLink(false);
+  };
+
+  /*Opening Creating new surveylink Dialogbox*/
+  const handleopenSurveyQrCodeClose = () => {
+    setSuveyLocation("");
+    setInchargeEmail("");
+    setAlertSuccess("");
+    setAlertFail("");
+    setOpenSurveyQrCode(false);
+  };
+
+  //QR code //
+
+  const downloadQRCode = () => {
+    // Generate download with use canvas and stream
+    const canvas = document?.getElementById("qr-gen");
+    const pngUrl = canvas
+      ?.toDataURL("image/png")
+      ?.replace("image/png", "image/octet-stream");
+    let downloadLink = document?.createElement("a");
+    downloadLink.href = pngUrl;
+    downloadLink.download = `${surveyName}.png`;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  };
+
+  //mailSent//
+  const canvas = document?.getElementById("qr-gen");
+  const pngUrl = canvas
+    ?.toDataURL("image/png")
+    ?.replace("image/png", "image/octet-stream");
+
+  const data = {
+    mail: inchargeEmail,
+    qrCode: pngUrl,
+    survey: surveyName,
+    loc: surveyLoc?.location,
+  };
+  const handleSendEmail = async () => {
+    axios
+      .post(`${emailUrl}`, data)
+      .then((res) => {
+        if (res.data.mailSent === true) {
+          setAlertContentSuccess(
+            `QR code send to  ${inchargeEmail}  successfully`
+          );
+          setAlertSuccess(true);
+        } else {
+          setAlertContentFail("Invalid Email ID");
+          setAlertFail(true);
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
 
   //search//
 
@@ -276,6 +432,13 @@ const SurveyPart = (props) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  useEffect(() => {
+    const surveyLoc = listSurveyLocations?.items?.find(
+      (loc) => loc?.id === surveyLocation
+    );
+    setInchargeEmail(surveyLoc?.inchargeEmail || " ");
+  }, [surveyLocation]);
   if (loading && initialLoading) {
     return (
       <div>
@@ -407,6 +570,78 @@ const SurveyPart = (props) => {
           </FormControl>
         </Dialog>
 
+        {/* sharesurvey */}
+        <Dialog
+          open={openSurveyLink}
+          onClose={handleopenSurveyLinkClose}
+          aria-labelledby="responsive-dialog-title"
+          fullWidth
+        >
+          {alertSuccess ? (
+            <Alert severity="success">{alertCopySuccess}</Alert>
+          ) : (
+            ""
+          )}
+          <FormControl>
+            <DialogTitle id="responsive-dialog-title">
+              Creating survey Link
+            </DialogTitle>
+
+            <DialogContent>
+              <FormControl fullWidth>
+                <InputLabel>Select User</InputLabel>
+                <Select
+                  margin="dense"
+                  fullWidth
+                  value={surveyUser}
+                  onChange={(event) => setSuveyUser(event.target.value)}
+                >
+                  {listSurveyUsers?.items?.map((user, u) => (
+                    <MenuItem value={user?.id} key={u}>
+                      {user?.name} - {user?.email}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              {userSurveyLink && (
+                <>
+                  <p>{userSurveyLink}</p>
+                  <Button onClick={copyToClipboard}>
+                    <FileCopyIcon />
+                  </Button>
+                </>
+              )}
+            </DialogContent>
+
+            <DialogActions>
+              {/* <ListItem
+                size="small"
+                color="primary"
+                component={Link}
+                to={`/admin/users`}
+              >
+                Create New User
+              </ListItem> */}
+
+              <Button
+                onClick={handleopenSurveyLinkClose}
+                color="secondary"
+                variant="contained"
+              >
+                Close
+              </Button>
+              <Button
+                onClick={handleGeneratingSurveyLink}
+                type="button"
+                color="primary"
+                variant="contained"
+              >
+                Create SurveyLink
+              </Button>
+            </DialogActions>
+          </FormControl>
+        </Dialog>
+
         {/* edit survey   */}
 
         <Dialog
@@ -466,6 +701,89 @@ const SurveyPart = (props) => {
             </DialogActions>
           </FormControl>
         </Dialog>
+
+        <Dialog
+          open={openSurveyQrCode}
+          onClose={handleopenSurveyQrCodeClose}
+          aria-labelledby="responsive-dialog-title"
+          fullWidth={fullWidth}
+          maxWidth={maxWidth}
+        >
+          {" "}
+          {alertSuccess ? (
+            <Alert severity="success">{alertContentSuccess}</Alert>
+          ) : (
+            ""
+          )}
+          {alertFail ? <Alert severity="error">{alertContentFail}</Alert> : ""}
+          <FormControl>
+            <DialogTitle id="responsive-dialog-title">
+              Creating survey QR Code
+            </DialogTitle>
+
+            <DialogContent>
+              <FormControl fullWidth>
+                <InputLabel>Select Location</InputLabel>
+                <Select
+                  margin="dense"
+                  fullWidth
+                  value={surveyLocation}
+                  onChange={(event) => setSuveyLocation(event.target.value)}
+                >
+                  {listSurveyLocations?.items?.map((user, u) => (
+                    <MenuItem value={user?.id} key={u}>
+                      {user?.location}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <TextField
+                  margin="dense"
+                  id="InchargeEmail"
+                  label="Email"
+                  value={inchargeEmail}
+                  onChange={(event) => setInchargeEmail(event.target.value)}
+                  fullWidth
+                  type="email"
+                />
+              </FormControl>
+            </DialogContent>
+
+            <DialogActions>
+              <IconButton
+                autoFocus
+                onClick={handleopenSurveyQrCodeClose}
+                color="primary"
+                className={classes.customizedButtion}
+              >
+                <CloseIcon />
+              </IconButton>
+              <QRCode
+                id="qr-gen"
+                value={surveyQrcode}
+                size={280}
+                level={"H"}
+                includeMargin={true}
+              />
+
+              <Button
+                type="button"
+                variant="contained"
+                color="primary"
+                onClick={handleSendEmail}
+              >
+                Send Mail
+              </Button>
+              <Button
+                type="button"
+                variant="contained"
+                color="primary"
+                onClick={downloadQRCode}
+              >
+                Download QR Code
+              </Button>
+            </DialogActions>
+          </FormControl>
+        </Dialog>
       </div>
       <main className={classes.Breadcrumbs}>
         <Box display="flex">
@@ -501,7 +819,7 @@ const SurveyPart = (props) => {
                 <StyledTableCell>Description</StyledTableCell>
                 <StyledTableCell>Questionnaire</StyledTableCell>
                 <StyledTableCell>Manage Survey</StyledTableCell>
-                <StyledTableCell>Share</StyledTableCell>
+                <StyledTableCell> Share survey</StyledTableCell>
                 <StyledTableCell>Delete</StyledTableCell>
               </StyledTableRow>
             </TableHead>
@@ -530,9 +848,22 @@ const SurveyPart = (props) => {
                     </Button>
                   </StyledTableCell>
                   <StyledTableCell>
-                    <Button size="small" color="primary">
+                    <Button
+                      size="small"
+                      color="primary"
+                      onClick={() => handleOpenCreateSurveyDialog(survey)}
+                    >
+                      <LinkIcon />
+                    </Button>
+                    <Button
+                      size="small"
+                      color="primary"
+                      onClick={() =>
+                        handleOpenCreateSurveyLocationDialog(survey)
+                      }
+                    >
                       {" "}
-                      <ShareIcon />
+                      <SelectAllIcon />
                     </Button>
                   </StyledTableCell>
                   <StyledTableCell>
@@ -587,6 +918,17 @@ const Survey = compose(
     props: (props) => {
       return {
         listSurveys: props ? props : [],
+      };
+    },
+  }),
+  graphql(gql(listQuestionnaires), {
+    options: (props) => ({
+      errorPolicy: "all",
+      fetchPolicy: "cache-and-network",
+    }),
+    props: (props) => {
+      return {
+        listQuestionnaires: props ? props : [],
       };
     },
   }),
@@ -665,6 +1007,29 @@ const Survey = compose(
       },
     }),
   }),
+  graphql(gql(listSurveyUsers), {
+    options: (props) => ({
+      errorPolicy: "all",
+      fetchPolicy: "cache-and-network",
+    }),
+    props: (props) => {
+      return {
+        listSurveyUsers: props ? props : [],
+      };
+    },
+  }),
+  graphql(gql(listSurveyLocations), {
+    options: (props) => ({
+      errorPolicy: "all",
+      fetchPolicy: "cache-and-network",
+    }),
+    props: (props) => {
+      return {
+        listSurveyLocations: props ? props : [],
+      };
+    },
+  }),
+
   graphql(gql(addGroup), {
     options: (props) => ({
       errorPolicy: "all",
