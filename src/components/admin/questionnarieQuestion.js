@@ -1317,7 +1317,7 @@ const QuestionnarieQuestionPart = (props) => {
       <main className={classes.root}>
         <div>
           <Typography variant="h4">{getQuestionnaire?.name} </Typography>{" "}
-          <Button
+          {/* <Button
             variant="contained"
             color="primary"
             className={classes.button}
@@ -1334,7 +1334,7 @@ const QuestionnarieQuestionPart = (props) => {
           >
             <CreateIcon className={classes.rightIcon} />
             Create Survey QR Code
-          </Button>
+          </Button> */}
         </div>
         <p />
         <Paper className={classes.content} elevation={10}>
