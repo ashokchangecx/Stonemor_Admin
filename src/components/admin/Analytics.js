@@ -380,7 +380,7 @@ const AnalyticsPort = (props) => {
     labels: surveyByDate?.map((d) => d?.date1),
     datasets: [
       {
-        label: "#  Survey Count ",
+        label: "Survey Count ",
         data: surveyByDate?.map((d) => d?.count),
         backgroundColor: colors,
         borderColor: colors1,
@@ -392,7 +392,7 @@ const AnalyticsPort = (props) => {
     labels: surveyByLink?.map((d) => d?.date1),
     datasets: [
       {
-        label: "# Survey Count",
+        label: "Survey Count",
         data: surveyByLink?.map((d) => d?.count),
         backgroundColor: colors2,
         borderColor: colors,
@@ -404,7 +404,7 @@ const AnalyticsPort = (props) => {
     labels: surveyByQr?.map((d) => d?.date1),
     datasets: [
       {
-        label: "# Survey Count",
+        label: "Survey Count",
         data: surveyByQr?.map((d) => d?.count),
         backgroundColor: colors3,
         borderColor: colors1,
