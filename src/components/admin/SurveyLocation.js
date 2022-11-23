@@ -128,7 +128,7 @@ const SurveyLocationPart = (props) => {
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
-  const [search, setSearch] = useState(surveyLocationOrder);
+  const [search, setSearch] = useState("");
 
   // console.log("search", search);
   const requestSearch = (searched) => {
@@ -544,7 +544,7 @@ const SurveyLocation = compose(
       errorPolicy: "all",
     }),
     props: (props) => ({
-      onDeleteSurveyUser: (surveyLocation) => {
+      onDeleteSurveyLocation: (surveyLocation) => {
         props.mutate({
           variables: {
             input: surveyLocation,

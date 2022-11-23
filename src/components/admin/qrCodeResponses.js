@@ -117,7 +117,7 @@ const qrCodeResponsesPort = (props) => {
         new Date(b?.finishTime).getTime() - new Date(a?.finishTime).getTime()
     );
 
-  const [search, setSearch] = useState(questionCount);
+  const [search, setSearch] = useState("");
 
   const requestSearch = (searched) => {
     setSearch(

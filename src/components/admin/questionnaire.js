@@ -140,7 +140,7 @@ const QuestionnairePart = (props) => {
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 
-  const [search, setSearch] = useState(questionnaireOrder);
+  const [search, setSearch] = useState("");
   const [openUpdateQuestionnaires, setOpenUpdateQuestionnaires] =
     useState(false);
 
@@ -192,6 +192,7 @@ const QuestionnairePart = (props) => {
       survey
     );
     handleClosingQuestionnaireUpdateDialog();
+
     setIsCreated(true);
   };
 

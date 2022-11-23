@@ -143,6 +143,7 @@ const SurveyPart = (props) => {
   const {
     data: { loading, error, listSurveys, refetch },
   } = props.listSurveys;
+
   const { listSurveyUsers } = props?.listSurveyUsers?.data;
   const { listSurveyLocations } = props?.listSurveyLocations?.data;
   const { listQuestionnaires } = props?.listQuestionnaires?.data;
@@ -194,7 +195,7 @@ const SurveyPart = (props) => {
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
-  const [search, setSearch] = useState(surveyOrder);
+  const [search, setSearch] = useState("");
   const surveyUrl = `${baseUrl}/surveyquestions/${surveyId}?uid=${surveyUser}`;
   const [openUpdateSurvey, setOpenUpdateSurvey] = useState(false);
 
@@ -205,7 +206,6 @@ const SurveyPart = (props) => {
   const [fullWidth, setFullWidth] = React.useState(true);
   const [maxWidth] = useState("md");
 
-  console.log("listQuestionnaires", listQuestionnaires);
   /*Opening Creating new surveylink Dialogbox*/
   const handleOpenCreateSurveyDialog = (survey) => {
     setSurveyId(survey?.preQuestionnaire?.id);
@@ -351,8 +351,8 @@ const SurveyPart = (props) => {
       description: description,
       image: image,
     });
-    handleClosingSurveyUpdateDialog();
     setIsCreated(true);
+    handleClosingSurveyUpdateDialog();
   };
   const handleopeningUpdatesurveyDialog = (survey) => {
     setSurveyId(survey?.id);

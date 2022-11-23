@@ -121,7 +121,7 @@ const responsesPort = (props) => {
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
 
-  const [search, setSearch] = useState(questionCount);
+  const [search, setSearch] = useState("");
 
   const requestSearch = (searched) => {
     setSearch(

@@ -128,7 +128,7 @@ const SurveyUsersPart = (props) => {
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
-  const [search, setSearch] = useState(surveyUserOrder);
+  const [search, setSearch] = useState("");
 
   const requestSearch = (searched) => {
     setSearch(
@@ -211,6 +211,7 @@ const SurveyUsersPart = (props) => {
     }, 300);
     return () => clearTimeout(timer);
   }, [isCreated]);
+
   useEffect(() => {
     if (!loading) setinitialLoading(false);
   }, [loading]);
