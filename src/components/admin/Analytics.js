@@ -285,7 +285,8 @@ const AnalyticsPort = (props) => {
   useEffect(() => {
     if (!surveyEntriessLoading) {
       const counts = listSurveyEntriess?.items
-        ?.filter((data) => data?.location?.location)
+        ?.filter((data) => data?.by?.name)
+
         .reduce((counts, data) => {
           const date1 =
             onGettingQuestionnaireById(data?.questionnaireId) || "no-Survey";
@@ -314,7 +315,7 @@ const AnalyticsPort = (props) => {
   useEffect(() => {
     if (!surveyEntriessLoading) {
       const counts = listSurveyEntriess?.items
-        ?.filter((data) => data?.by?.name)
+        ?.filter((data) => data?.location?.location)
         .reduce((counts, data) => {
           const date1 =
             onGettingQuestionnaireById(data?.questionnaireId) || "no-Survey";
@@ -373,8 +374,6 @@ const AnalyticsPort = (props) => {
     }
     return () => null;
   }, [surveyEntriessLoading]);
-
-  console.log("surveyByDate : ", surveyByDate);
 
   const data = {
     labels: surveyByDate?.map((d) => d?.date1),

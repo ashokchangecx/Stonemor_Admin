@@ -352,6 +352,7 @@ const SurveyPart = (props) => {
       image: image,
     });
     handleClosingSurveyUpdateDialog();
+    setIsCreated(true);
   };
   const handleopeningUpdatesurveyDialog = (survey) => {
     setSurveyId(survey?.id);
