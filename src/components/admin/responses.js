@@ -38,6 +38,7 @@ import {
 import { Link } from "react-router-dom";
 import { A } from "aws-amplify-react/lib-esm/AmplifyTheme";
 import { useState } from "react";
+import { useQuery } from "../../helpers/useQuery";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -102,7 +103,8 @@ const StyledTableRow = withStyles((theme) => ({
 
 const responsesPort = (props) => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const query = useQuery();
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -114,8 +116,17 @@ const responsesPort = (props) => {
     data: { listQuestionnaires },
   } = props.listQuestionnaires;
 
-  const questionCount = listSurveyEntriess?.items
-    ?.filter((user) => user?.by?.name)
+  const lrResId = query.get("Lrid");
+
+  const filterResposnse = () => {
+    if (lrResId) {
+      return listSurveyEntriess?.items?.filter(
+        (user) => user?.questionnaireId === lrResId
+      );
+    } else return listSurveyEntriess?.items;
+  };
+  const questionCount = filterResposnse()
+    .filter((user) => user?.by?.name)
     .sort(
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()

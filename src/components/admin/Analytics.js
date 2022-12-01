@@ -251,6 +251,8 @@ const AnalyticsPort = (props) => {
   const [surveyBySurveyData, setSurveyBySurveyData] = useState([]);
   const [surveyRatings, setSurveyRatings] = useState([]);
 
+  console.log("surveyByQr", surveyByQr);
+  console.log("surveyByLocations", surveyByLocations);
   const {
     error: surveyEntriessError,
     loading: surveyEntriessLoading,
@@ -268,6 +270,14 @@ const AnalyticsPort = (props) => {
   const onClickSurveyByLocationNav = (event) => {
     const { locationId } = event;
     histroy.push(`/admin/qrresponses?lid=${locationId}`);
+  };
+  const onClickSurveyByQrResponsesNav = (event) => {
+    const { QrResId } = event;
+    histroy.push(`/admin/qrresponses?Qrid=${QrResId}`);
+  };
+  const onClickSurveyByLinkResponsesNav = (event) => {
+    const { LinkResId } = event;
+    histroy.push(`/admin/responses?Lrid=${LinkResId}`);
   };
 
   const handleChange = (event, newValue) => {
@@ -340,6 +350,7 @@ const AnalyticsPort = (props) => {
         ?.filter((data) => data?.by?.name)
 
         .reduce((counts, data) => {
+          const LinkResId = data?.questionnaireId;
           const date1 =
             onGettingQuestionnaireById(data?.questionnaireId) || "no-Survey";
           const surveyName =
@@ -350,6 +361,7 @@ const AnalyticsPort = (props) => {
             date1,
             surveyName,
             count,
+            LinkResId,
           };
           counts[date1] = loc;
           return counts;
@@ -369,6 +381,7 @@ const AnalyticsPort = (props) => {
       const counts = listSurveyEntriess?.items
         ?.filter((data) => data?.location?.location)
         .reduce((counts, data) => {
+          const QrResId = data?.questionnaireId;
           const date1 =
             onGettingQuestionnaireById(data?.questionnaireId) || "no-Survey";
           const surveyName =
@@ -379,6 +392,7 @@ const AnalyticsPort = (props) => {
             date1,
             surveyName,
             count,
+            QrResId,
           };
           counts[date1] = loc;
           return counts;
@@ -558,12 +572,20 @@ const AnalyticsPort = (props) => {
             <Loader />
           ) : (
             <>
-              <div style={{ minHeight: "400px", marginTop: "50px" }}>
-                <Bar options={options1} ref={chartRef} data={data1} />
-              </div>
-              <div style={{ minHeight: "400px", marginTop: "50px" }}>
-                <Bar options={options2} ref={chartRef} data={data2} />
-              </div>
+              <BarChart
+                data={surveyByLink}
+                title="StoneMor Survey by link Responses"
+                xAxisKey="surveyName"
+                yAxisKey="count"
+                onClickingNav={onClickSurveyByLinkResponsesNav}
+              />
+              <BarChart
+                data={surveyByQr}
+                title="StoneMor Survey by Qr Responses"
+                xAxisKey="surveyName"
+                yAxisKey="count"
+                onClickingNav={onClickSurveyByQrResponsesNav}
+              />
             </>
           )}
         </div>

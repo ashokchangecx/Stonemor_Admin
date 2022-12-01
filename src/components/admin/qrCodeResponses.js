@@ -111,11 +111,16 @@ const qrCodeResponsesPort = (props) => {
   } = props.listQuestionnaires;
   // console.log("listQuestionnaires", listQuestionnaires);
   const locationID = query.get("lid");
+  const qrResId = query.get("Qrid");
 
   const filterResposnse = () => {
     if (locationID) {
       return listSurveyEntriess?.items.filter(
         (user) => user?.location?.id === locationID
+      );
+    } else if (qrResId) {
+      return listSurveyEntriess?.items.filter(
+        (user) => user?.questionnaireId === qrResId
       );
     } else return listSurveyEntriess?.items;
   };
