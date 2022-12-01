@@ -1,7 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
 import gql from "graphql-tag";
 import { compose, graphql } from "react-apollo";
-import { makeStyles } from "@material-ui/core";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import { Box, makeStyles, Typography } from "@material-ui/core";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,19 +17,29 @@ import {
   PointElement,
   Tooltip,
   Legend,
+  RadialLinearScale,
 } from "chart.js";
-import { Bar, getElementAtEvent, Doughnut, Line } from "react-chartjs-2";
+import {
+  Bar,
+  getElementAtEvent,
+  Doughnut,
+  Line,
+  PolarArea,
+} from "react-chartjs-2";
 import moment from "moment";
 import {
   listQuestionnaires,
+  listResponsess,
   listSurveyEntriess,
   listSurveyUsers,
 } from "../../graphql/queries";
+import BarChart from "../analytics/BarChart";
 
 /* ChartJS registeration*/
 ChartJS.register(
   CategoryScale,
   LinearScale,
+  RadialLinearScale,
   BarElement,
   ArcElement,
   LinearScale,
@@ -166,20 +180,43 @@ export const options3 = {
     // },
     title: {
       display: true,
-      text: "StoneMor Survey by survey",
+      text: "By Questionarie",
     },
   },
-  // scales: {
-  //   y: {
-  //     min: 0, // minimum value
-  //     max: 20, // maximum value
-  //   },
-  // },
-  // parsing: {
-  //   xAxisKey: "surveyName",
-  //   yAxisKey: "count",
-  // },
 };
+
+const TabPanel = (props) => {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`scrollable-auto-tabpanel-${index}`}
+      aria-labelledby={`scrollable-auto-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+};
+
+const a11yProps = (index) => {
+  return {
+    id: `scrollable-auto-tab-${index}`,
+    "aria-controls": `scrollable-auto-tabpanel-${index}`,
+  };
+};
+
+const Loader = () => (
+  <div>
+    <CircularProgress />
+  </div>
+);
 
 /* MUI style */
 const useStyles = makeStyles((theme) => ({
@@ -203,13 +240,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AnalyticsPort = (props) => {
+  const histroy = useHistory();
   const chartRef = useRef();
   const classes = useStyles();
+  const [value, setValue] = useState(0);
   const [surveyByLocations, setSurveyByLocations] = useState([]);
   const [surveyByLink, setSurveyByLink] = useState([]);
   const [surveyByQr, setSurveyByQr] = useState([]);
   const [surveyByDate, setSurveyByDate] = useState([]);
   const [surveyBySurveyData, setSurveyBySurveyData] = useState([]);
+  const [surveyRatings, setSurveyRatings] = useState([]);
 
   const {
     error: surveyEntriessError,
@@ -217,30 +257,39 @@ const AnalyticsPort = (props) => {
     listSurveyEntriess,
   } = props?.listSurveyEntriess?.data;
   const { listQuestionnaires } = props?.listQuestionnaires?.data;
+  const { listResponsess, loading: listResponsessLoading } =
+    props?.listResponsess?.data;
 
   const onGettingQuestionnaireById = (id) => {
     const que = listQuestionnaires?.items?.find((q) => q?.id === id);
 
     return que?.name ?? id;
   };
-  const onClick = (event) => {
-    console.log(getElementAtEvent(chartRef.current, event));
+  const onClickSurveyByLocationNav = (event) => {
+    const { locationId } = event;
+    histroy.push(`/admin/qrresponses?lid=${locationId}`);
+  };
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
   };
 
   useEffect(() => {
     if (!surveyEntriessLoading) {
       const counts = listSurveyEntriess?.items?.reduce(
         (counts, { location }) => {
-          const locationId = location?.id || "no-loc";
+          if (location?.id) {
+            const locationId = location?.id || "no-loc";
 
-          const locationName = location?.location || "No Location";
-          const count = (counts[locationId]?.count || 0) + 1;
-          const loc = {
-            locationId,
-            locationName,
-            count,
-          };
-          counts[locationId] = loc;
+            const locationName = location?.location || "No Location";
+            const count = (counts[locationId]?.count || 0) + 1;
+            const loc = {
+              locationId,
+              locationName,
+              count,
+            };
+            counts[locationId] = loc;
+          }
           return counts;
         },
         {}
@@ -257,24 +306,27 @@ const AnalyticsPort = (props) => {
 
   useEffect(() => {
     if (!surveyEntriessLoading) {
-      const counts = listSurveyEntriess?.items.reduce((counts, data) => {
-        const date1 =
-          onGettingQuestionnaireById(data?.questionnaireId) || "no-Survey";
-        const surveyName =
-          onGettingQuestionnaireById(data?.questionnaireId) || "No Survey";
-        const count = (counts[date1]?.count || 0) + 1;
+      const countsDate = listSurveyEntriess?.items.reduce(
+        (countsDate, data) => {
+          const date1 =
+            onGettingQuestionnaireById(data?.questionnaireId) || "no-Survey";
+          const surveyName =
+            onGettingQuestionnaireById(data?.questionnaireId) || "No Survey";
+          const count = (countsDate[date1]?.count || 0) + 1;
 
-        const loc = {
-          date1,
-          surveyName,
-          count,
-        };
-        counts[date1] = loc;
-        return counts;
-      }, {});
+          const loc = {
+            date1,
+            surveyName,
+            count,
+          };
+          countsDate[date1] = loc;
+          return countsDate;
+        },
+        {}
+      );
 
       setSurveyByDate(
-        Object.entries(counts)
+        Object.entries(countsDate)
           ?.map(([name, obj]) => obj)
           ?.sort((a, b) => b?.count - a?.count)
       );
@@ -375,6 +427,30 @@ const AnalyticsPort = (props) => {
     return () => null;
   }, [surveyEntriessLoading]);
 
+  useEffect(() => {
+    if (!listResponsessLoading) {
+      const counts = listResponsess?.items
+        ?.filter((m) => m?.qu?.type === "LIST")
+        ?.reduce((counts, { qu, res }) => {
+          const resId = res;
+          const count = (counts[resId]?.count || 0) + 1;
+          const loc = {
+            resId,
+            count,
+          };
+          counts[resId] = loc;
+          return counts;
+        }, {});
+
+      setSurveyRatings(
+        Object.entries(counts)
+          ?.map(([name, obj]) => obj)
+          ?.sort((a, b) => b?.resId - a?.resId)
+      );
+    }
+    return () => null;
+  }, [listResponsessLoading]);
+
   const data = {
     labels: surveyByDate?.map((d) => d?.date1),
     datasets: [
@@ -425,41 +501,63 @@ const AnalyticsPort = (props) => {
     ],
   };
 
+  const dataForPolarArea = {
+    labels: surveyRatings?.map((d) => d?.resId),
+    datasets: [
+      {
+        // label: "# Survey Rating",
+        data: surveyRatings?.map((d) => d?.count),
+        backgroundColor: colors2,
+        // borderColor: colors3,
+        borderWidth: 1,
+      },
+    ],
+  };
+  // console.log(
+  //   "RPS : ",
+  //   listResponsess?.items?.filter((m) => m?.qu?.type === "LIST")
+  // );
   return (
     <div className={classes?.root}>
-      <div className={classes?.chartCon}>
-        {surveyByLocations?.length < 0 ? (
-          <div>surveyLoading...</div>
-        ) : (
-          <>
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        indicatorColor="primary"
+        textColor="primary"
+        variant="scrollable"
+        scrollButtons="auto"
+        aria-label="scrollable auto tabs example"
+      >
+        <Tab label="Locations" {...a11yProps(0)} />
+        <Tab label="Survey Type" {...a11yProps(1)} />
+        <Tab label="Date & Rating" {...a11yProps(2)} />
+      </Tabs>
+      <TabPanel value={value} index={0}>
+        <div className={classes?.chartCon}>
+          {surveyByLocations?.length < 0 ? (
+            <Loader />
+          ) : (
             <>
-              <>
-                <div style={{ minHeight: "250px" }}>
-                  <Bar
-                    ref={chartRef}
-                    options={options}
-                    data={{
-                      //   labels: surveyByLocations?.map(
-                      //     (loc) => loc?.locationName + " (" + loc?.count + " )"
-                      //   ),
-                      datasets: [
-                        {
-                          label: "Survey Count",
-                          //   data: surveyByLocations?.map((loc) => loc?.count),
-                          data: surveyByLocations,
-                          backgroundColor: colors1,
-                          borderColor: colors,
-                          borderWidth: 1,
-                        },
-                      ],
-                    }}
-                    onClick={onClick}
-                  />
-                </div>
-                <div style={{ minHeight: "400px" }}>
-                  <Doughnut options={options3} data={data} />{" "}
-                </div>
-              </>
+              <BarChart
+                data={surveyByLocations}
+                title="By Locations"
+                xAxisKey="locationName"
+                yAxisKey="count"
+                onClickingNav={onClickSurveyByLocationNav}
+              />
+              <div style={{ minHeight: "400px" }}>
+                <Doughnut options={options3} data={data} />
+              </div>
+            </>
+          )}
+        </div>
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <div className={classes?.chartCon}>
+          {surveyByLocations?.length < 0 ? (
+            <Loader />
+          ) : (
+            <>
               <div style={{ minHeight: "400px", marginTop: "50px" }}>
                 <Bar options={options1} ref={chartRef} data={data1} />
               </div>
@@ -467,12 +565,25 @@ const AnalyticsPort = (props) => {
                 <Bar options={options2} ref={chartRef} data={data2} />
               </div>
             </>
-            <div style={{ minHeight: "400px", marginTop: "50px" }}>
-              <Line options={options4} data={data3} />{" "}
-            </div>
-          </>
-        )}
-      </div>
+          )}
+        </div>
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <div className={classes?.chartCon}>
+          {surveyByLocations?.length < 0 ? (
+            <Loader />
+          ) : (
+            <>
+              <div style={{ minHeight: "400px", marginTop: "50px" }}>
+                <Line options={options4} data={data3} />{" "}
+              </div>
+              <div style={{ minHeight: "400px", marginTop: "50px" }}>
+                <PolarArea data={dataForPolarArea} />{" "}
+              </div>
+            </>
+          )}
+        </div>
+      </TabPanel>
     </div>
   );
 };
@@ -508,6 +619,22 @@ const Analytics = compose(
     props: (props) => {
       return {
         listQuestionnaires: props ? props : [],
+      };
+    },
+  }),
+  graphql(gql(listResponsess), {
+    options: (props) => ({
+      errorPolicy: "all",
+      fetchPolicy: "cache-and-network",
+      variables: {
+        filter: null,
+        limit: 300,
+        nextToken: null,
+      },
+    }),
+    props: (props) => {
+      return {
+        listResponsess: props ? props : [],
       };
     },
   })
