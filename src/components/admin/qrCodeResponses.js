@@ -32,6 +32,7 @@ import {
 import { Link } from "react-router-dom";
 import { A } from "aws-amplify-react/lib-esm/AmplifyTheme";
 import { useState } from "react";
+import { useQuery } from "../../helpers/useQuery";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -97,7 +98,7 @@ const StyledTableRow = withStyles((theme) => ({
 
 const qrCodeResponsesPort = (props) => {
   const classes = useStyles();
-
+  const query = useQuery();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -109,8 +110,17 @@ const qrCodeResponsesPort = (props) => {
     data: { listQuestionnaires },
   } = props.listQuestionnaires;
   // console.log("listQuestionnaires", listQuestionnaires);
+  const locationID = query.get("lid");
 
-  const questionCount = listSurveyEntriess?.items
+  const filterResposnse = () => {
+    if (locationID) {
+      return listSurveyEntriess?.items.filter(
+        (user) => user?.location?.id === locationID
+      );
+    } else return listSurveyEntriess?.items;
+  };
+
+  const questionCount = filterResposnse()
     ?.filter((user) => user?.location?.location)
     ?.sort(
       (a, b) =>
