@@ -544,7 +544,7 @@ const AnalyticsPort = (props) => {
       >
         <Tab label="Locations" {...a11yProps(0)} />
         <Tab label="Survey Type" {...a11yProps(1)} />
-        <Tab label="Date & Rating" {...a11yProps(2)} />
+        <Tab label="Date " {...a11yProps(2)} />
       </Tabs>
       <TabPanel value={value} index={0}>
         <div className={classes?.chartCon}>
@@ -599,9 +599,9 @@ const AnalyticsPort = (props) => {
               <div style={{ minHeight: "400px", marginTop: "50px" }}>
                 <Line options={options4} data={data3} />{" "}
               </div>
-              <div style={{ minHeight: "400px", marginTop: "50px" }}>
+              {/* <div style={{ minHeight: "400px", marginTop: "50px" }}>
                 <PolarArea data={dataForPolarArea} />{" "}
-              </div>
+              </div> */}
             </>
           )}
         </div>

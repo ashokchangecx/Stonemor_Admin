@@ -116,8 +116,6 @@ const ratingResponsesPort = (props) => {
   //   console.log(ratingName.find((q) => q?.id === 2));
 
   const onGettingQuestionnaireById = (id) => {
-    const que = ratingName?.find((q) => q?.id === id);
-
     return ratingName[id]?.name;
   };
   useEffect(() => {

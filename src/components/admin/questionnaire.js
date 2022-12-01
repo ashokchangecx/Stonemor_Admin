@@ -513,11 +513,7 @@ const QuestionnairePart = (props) => {
                 inputProps={{ "aria-label": "search google maps" }}
                 onInput={(e) => requestSearch(e.target.value)}
               />
-              <IconButton
-                type="submit"
-                className={classes.iconButton}
-                aria-label="search"
-              >
+              <IconButton className={classes.iconButton} aria-label="search">
                 <SearchIcon />
               </IconButton>
             </Paper>
