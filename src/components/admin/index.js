@@ -17,11 +17,12 @@ import LinkIcon from "@material-ui/icons/Link";
 import SelectAllIcon from "@material-ui/icons/SelectAll";
 import PersonIcon from "@material-ui/icons/Person";
 import PinDropIcon from "@material-ui/icons/PinDrop";
-
+import StarHalfIcon from "@material-ui/icons/StarHalf";
 import LanguageIcon from "@material-ui/icons/Language";
 import PieChartIcon from "@material-ui/icons/PieChart";
 import { makeStyles, useTheme, withStyles } from "@material-ui/core/styles";
 import MuiListItem from "@material-ui/core/ListItem";
+import PollIcon from "@material-ui/icons/Poll";
 
 const drawerWidth = 240;
 
@@ -230,9 +231,21 @@ const Admin = (props) => {
           to="/admin/analytics"
         >
           <ListItemIcon>
-            <PieChartIcon />
+            <PollIcon />
           </ListItemIcon>
           <ListItemText primary="Analytic Data" />
+        </ListItem>
+        <ListItem
+          button
+          selected={selectedIndex === 8}
+          onClick={(event) => handleListItemClick(event, 8)}
+          component={Link}
+          to="/admin/ratingQuestion"
+        >
+          <ListItemIcon>
+            <StarHalfIcon />
+          </ListItemIcon>
+          <ListItemText primary="Rating Analysis" />
         </ListItem>
         {/* <ListItem
           button

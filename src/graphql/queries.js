@@ -408,7 +408,7 @@ export const getQuestion = /* GraphQL */ `
 export const listQuestions = /* GraphQL */ `
   query ListQuestions(
     $filter: ModelQuestionFilterInput
-    $limit: Int
+    $limit: Int = 30000
     $nextToken: String
   ) {
     listQuestions(filter: $filter, limit: $limit, nextToken: $nextToken) {

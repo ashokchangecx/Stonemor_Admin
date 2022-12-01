@@ -52,7 +52,8 @@ import responses from "../admin/responses";
 import QrResponses from "../admin/qrCodeResponses";
 import AdminMenu from "../admin/index";
 import SurveyLocation from "../admin/SurveyLocation";
-
+import RatingQuestion from "../admin/ratingQuestion";
+import RatingResponses from "../admin/ratingResponses";
 import FontTTF from "../../assets/font/Poppins-ExtraBold.ttf";
 
 const Font = {
@@ -306,8 +307,10 @@ function App() {
             path="/surveyResponses/:responseID"
             component={surveyResponses}
           />
-          <Route path="/admin/responses" component={responses} />
           <Route path="/admin/qrresponses" component={QrResponses} />
+          <Route path="/admin/ratingResponses" component={RatingResponses} />
+          <Route path="/admin/ratingQuestion" component={RatingQuestion} />
+          <Route path="/admin/responses" component={responses} />
           <Route path="/admin/analytics">
             <Suspense fallback={<div>Loading....</div>}>
               <Analytics />

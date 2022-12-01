@@ -73,14 +73,14 @@ const BarChart = ({ data, title, xAxisKey, yAxisKey, onClickingNav }) => {
     onClickingNav(el?.element?.$context?.raw);
   };
   return (
-    <div style={{ minHeight: "300px" }}>
+    <div style={{ minHeight: "400px" }}>
       <Bar
         ref={chartRef}
         options={finalOptions}
         data={{
           datasets: [
             {
-              label: "Survey Count",
+              label: " Count",
 
               data: data,
               backgroundColor: COLORS,

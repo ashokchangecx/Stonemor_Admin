@@ -111,6 +111,7 @@ const useStyles = makeStyles((theme) => ({
   //   marginLeft: "55rem",
   // },
 }));
+
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.primary.main,
