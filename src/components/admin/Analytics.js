@@ -293,8 +293,7 @@ const AnalyticsPort = (props) => {
     );
   const [ratingQuestion, setRatingQuestion] = useState("");
   const [questionarie, setQuestionarie] = useState("");
-  const [surveyType, setsurveyType] = useState("");
-  console.log("surveyRatings", surveyRatings);
+
   const {
     error: surveyEntriessError,
     loading: surveyEntriessLoading,
@@ -328,8 +327,6 @@ const AnalyticsPort = (props) => {
 
   //rating//
 
-  console.log("surveyRatingList", surveyRatingList);
-
   const onGettingQuestionById = (id) => {
     return ratingName[id]?.name;
   };
@@ -338,7 +335,7 @@ const AnalyticsPort = (props) => {
     const surveyQue = listQuestions?.items?.find(
       (loc) => loc?.id === ratingQuestion
     );
-    console.log(surveyQue);
+
     setQuestionarie(surveyQue?.questionnaire?.name || "");
   }, [ratingQuestion]);
 
