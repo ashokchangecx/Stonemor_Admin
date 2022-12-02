@@ -291,9 +291,7 @@ const AnalyticsPort = (props) => {
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
-  const [ratingQuestion, setRatingQuestion] = useState(
-    surveyRatingList[0]?.id || ""
-  );
+  const [ratingQuestion, setRatingQuestion] = useState("");
   const [questionarie, setQuestionarie] = useState("");
   const [surveyType, setsurveyType] = useState("");
   console.log("surveyRatings", surveyRatings);
