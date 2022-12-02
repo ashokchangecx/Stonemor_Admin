@@ -235,7 +235,7 @@ const Admin = (props) => {
           </ListItemIcon>
           <ListItemText primary="Analytic Data" />
         </ListItem>
-        <ListItem
+        {/* <ListItem
           button
           selected={selectedIndex === 8}
           onClick={(event) => handleListItemClick(event, 8)}
@@ -246,7 +246,7 @@ const Admin = (props) => {
             <StarHalfIcon />
           </ListItemIcon>
           <ListItemText primary="Rating Analysis" />
-        </ListItem>
+        </ListItem> */}
         {/* <ListItem
           button
           component={Link}

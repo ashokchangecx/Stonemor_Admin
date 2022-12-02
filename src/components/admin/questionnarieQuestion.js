@@ -677,9 +677,11 @@ const QuestionnarieQuestionPart = (props) => {
                   value={type}
                   onChange={(event) => onTypeChange(event.target.value)}
                 >
-                  <MenuItem value={"TEXT"}> Text</MenuItem>
-                  <MenuItem value={"RADIO"}>Single Option Select</MenuItem>
-                  <MenuItem value={"CHECKBOX"}>Multiple Option Select</MenuItem>
+                  <MenuItem value={"TEXT"}> Text Area</MenuItem>
+                  <MenuItem value={"RADIO"}>Single Options Select</MenuItem>
+                  <MenuItem value={"CHECKBOX"}>
+                    Multiple Options Select
+                  </MenuItem>
                   <MenuItem value={"LIST"}>Rating</MenuItem>
                   {/* <MenuItem value={"RADIO_TEXT"}>Radio with Text</MenuItem> */}
                   {/* <MenuItem value={"CHECKBOXTEXT"}>Checkbox Text</MenuItem> */}
@@ -964,10 +966,10 @@ const QuestionnarieQuestionPart = (props) => {
                     value={type}
                     onChange={(event) => onTypeChange(event.target.value)}
                   >
-                    <MenuItem value={"TEXT"}>Text</MenuItem>
-                    <MenuItem value={"RADIO"}>Single Option Select</MenuItem>
+                    <MenuItem value={"TEXT"}>Text Area</MenuItem>
+                    <MenuItem value={"RADIO"}>Single Options Select</MenuItem>
                     <MenuItem value={"CHECKBOX"}>
-                      Multiple Option Select
+                      Multiple Options Select
                     </MenuItem>
                     {/* <MenuItem value={"RADIO_TEXT"}>Radio with Text</MenuItem> */}
                     {/* <MenuItem value={"CHECKBOXTEXT"}>Checkbox Text</MenuItem> */}

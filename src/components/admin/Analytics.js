@@ -4,7 +4,15 @@ import gql from "graphql-tag";
 import { compose, graphql } from "react-apollo";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import { Box, makeStyles, Typography } from "@material-ui/core";
+import {
+  Box,
+  InputLabel,
+  makeStyles,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {
   Chart as ChartJS,
@@ -32,6 +40,7 @@ import {
   listResponsess,
   listSurveyEntriess,
   listSurveyUsers,
+  listQuestions,
 } from "../../graphql/queries";
 import BarChart from "../analytics/BarChart";
 
@@ -239,6 +248,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const ratingName = [
+  {
+    id: 1,
+    name: "Very Dissatisfied",
+  },
+  {
+    id: 2,
+    name: "Dissatisfied",
+  },
+  {
+    id: 3,
+    name: "Neutral",
+  },
+  {
+    id: 4,
+    name: "Satisfied",
+  },
+  {
+    id: 5,
+    name: "Very Satisfied",
+  },
+];
+
 const AnalyticsPort = (props) => {
   const histroy = useHistory();
   const chartRef = useRef();
@@ -250,9 +282,21 @@ const AnalyticsPort = (props) => {
   const [surveyByDate, setSurveyByDate] = useState([]);
   const [surveyBySurveyData, setSurveyBySurveyData] = useState([]);
   const [surveyRatings, setSurveyRatings] = useState([]);
-
-  console.log("surveyByQr", surveyByQr);
-  console.log("surveyByLocations", surveyByLocations);
+  const {
+    data: { listQuestions },
+  } = props.listQuestions;
+  const surveyRatingList = listQuestions?.items
+    ?.filter((m) => m?.type === "LIST")
+    ?.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  const [ratingQuestion, setRatingQuestion] = useState(
+    surveyRatingList[0]?.id || ""
+  );
+  const [questionarie, setQuestionarie] = useState("");
+  const [surveyType, setsurveyType] = useState("");
+  console.log("surveyRatings", surveyRatings);
   const {
     error: surveyEntriessError,
     loading: surveyEntriessLoading,
@@ -283,6 +327,51 @@ const AnalyticsPort = (props) => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  //rating//
+
+  console.log("surveyRatingList", surveyRatingList);
+
+  const onGettingQuestionById = (id) => {
+    return ratingName[id]?.name;
+  };
+
+  useEffect(() => {
+    const surveyQue = listQuestions?.items?.find(
+      (loc) => loc?.id === ratingQuestion
+    );
+    console.log(surveyQue);
+    setQuestionarie(surveyQue?.questionnaire?.name || "");
+  }, [ratingQuestion]);
+
+  useEffect(() => {
+    if (ratingQuestion) {
+      const counts = listResponsess?.items
+        ?.filter((m) => m?.qu?.id === ratingQuestion)
+        ?.reduce((counts, { qu, res }) => {
+          const rating = onGettingQuestionById(res - 1);
+          const resId = res;
+          const question = qu?.qu;
+
+          const count = (counts[resId]?.count || 0) + 1;
+          const loc = {
+            resId,
+            count,
+            question,
+            rating,
+          };
+          counts[resId] = loc;
+          return counts;
+        }, {});
+
+      setSurveyRatings(
+        Object.entries(counts)
+          ?.map(([name, obj]) => obj)
+          ?.sort((a, b) => b?.resId - a?.resId)
+      );
+    }
+    return () => null;
+  }, [ratingQuestion]);
 
   useEffect(() => {
     if (!surveyEntriessLoading) {
@@ -441,29 +530,29 @@ const AnalyticsPort = (props) => {
     return () => null;
   }, [surveyEntriessLoading]);
 
-  useEffect(() => {
-    if (!listResponsessLoading) {
-      const counts = listResponsess?.items
-        ?.filter((m) => m?.qu?.type === "LIST")
-        ?.reduce((counts, { qu, res }) => {
-          const resId = res;
-          const count = (counts[resId]?.count || 0) + 1;
-          const loc = {
-            resId,
-            count,
-          };
-          counts[resId] = loc;
-          return counts;
-        }, {});
+  // useEffect(() => {
+  //   if (!listResponsessLoading) {
+  //     const counts = listResponsess?.items
+  //       ?.filter((m) => m?.qu?.type === "LIST")
+  //       ?.reduce((counts, { qu, res }) => {
+  //         const resId = res;
+  //         const count = (counts[resId]?.count || 0) + 1;
+  //         const loc = {
+  //           resId,
+  //           count,
+  //         };
+  //         counts[resId] = loc;
+  //         return counts;
+  //       }, {});
 
-      setSurveyRatings(
-        Object.entries(counts)
-          ?.map(([name, obj]) => obj)
-          ?.sort((a, b) => b?.resId - a?.resId)
-      );
-    }
-    return () => null;
-  }, [listResponsessLoading]);
+  //     setSurveyRatings(
+  //       Object.entries(counts)
+  //         ?.map(([name, obj]) => obj)
+  //         ?.sort((a, b) => b?.resId - a?.resId)
+  //     );
+  //   }
+  //   return () => null;
+  // }, [listResponsessLoading]);
 
   const data = {
     labels: surveyByDate?.map((d) => d?.date1),
@@ -545,6 +634,7 @@ const AnalyticsPort = (props) => {
         <Tab label="Locations" {...a11yProps(0)} />
         <Tab label="Survey Type" {...a11yProps(1)} />
         <Tab label="Date " {...a11yProps(2)} />
+        <Tab label=" Rating" {...a11yProps(3)} />
       </Tabs>
       <TabPanel value={value} index={0}>
         <div className={classes?.chartCon}>
@@ -606,6 +696,49 @@ const AnalyticsPort = (props) => {
           )}
         </div>
       </TabPanel>
+      <TabPanel value={value} index={3}>
+        <div className={classes?.chartCon}>
+          {surveyByLocations?.length < 0 ? (
+            <Loader />
+          ) : (
+            <>
+              <div style={{ minHeight: "400px", marginTop: "50px" }}>
+                {" "}
+                <Typography variant="h6">Rating Question</Typography>
+                <Select
+                  margin="dense"
+                  fullWidth
+                  value={ratingQuestion}
+                  onChange={(event) => setRatingQuestion(event.target.value)}
+                >
+                  {surveyRatingList?.map((user, u) => (
+                    <MenuItem value={user?.id} key={u}>
+                      {user?.qu}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="title"
+                  label="Questionarie"
+                  value={questionarie}
+                  inputProps={{ readOnly: true }}
+                  onChange={(event) => setQuestionarie(event.target.value)}
+                  fullWidth
+                />
+              </div>
+
+              <BarChart
+                data={surveyRatings}
+                title={surveyRatings[0]?.question}
+                xAxisKey="rating"
+                yAxisKey="count"
+              />
+            </>
+          )}
+        </div>
+      </TabPanel>
     </div>
   );
 };
@@ -650,13 +783,24 @@ const Analytics = compose(
       fetchPolicy: "cache-and-network",
       variables: {
         filter: null,
-        limit: 300,
+        limit: 300000,
         nextToken: null,
       },
     }),
     props: (props) => {
       return {
         listResponsess: props ? props : [],
+      };
+    },
+  }),
+  graphql(gql(listQuestions), {
+    options: (props) => ({
+      errorPolicy: "all",
+      fetchPolicy: "cache-and-network",
+    }),
+    props: (props) => {
+      return {
+        listQuestions: props ? props : [],
       };
     },
   })

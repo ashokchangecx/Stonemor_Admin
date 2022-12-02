@@ -124,16 +124,7 @@ const ratingQuestionPort = (props) => {
   } = props.listQuestions;
   console.log("listQuestions", listQuestions);
 
-  const lrResId = query.get("Lrid");
-
-  const filterResposnse = () => {
-    if (lrResId) {
-      return listQuestions?.items?.filter(
-        (user) => user?.questionnaireId === lrResId
-      );
-    } else return listQuestions?.items;
-  };
-  const questionCount = filterResposnse()
+  const questionCount = listQuestions?.items
     ?.filter((m) => m?.type === "LIST")
     ?.sort(
       (a, b) =>
