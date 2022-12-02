@@ -438,7 +438,7 @@ const AnalyticsPort = (props) => {
       const counts = listSurveyEntriess?.items
         ?.filter((data) => data?.by?.name)
 
-        .reduce((counts, data) => {
+        ?.reduce((counts, data) => {
           const LinkResId = data?.questionnaireId;
           const date1 =
             onGettingQuestionnaireById(data?.questionnaireId) || "no-Survey";
