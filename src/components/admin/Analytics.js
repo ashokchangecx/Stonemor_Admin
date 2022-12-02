@@ -79,6 +79,21 @@ const useStyles = makeStyles((theme) => ({
     gridGap: theme.spacing(3, 5),
   },
 }));
+
+const COLORS = [
+  "#ff6600",
+  "#009900",
+
+  "#ac000b",
+  "#cc00cc",
+  "#002d98",
+  "#a46a50",
+  "#004c00",
+  "#ffcdc1",
+  "#ff0000",
+  "#3333cc",
+];
+
 var colors = [];
 while (colors.length < 100) {
   do {
@@ -555,8 +570,8 @@ const AnalyticsPort = (props) => {
       {
         label: "Survey Count ",
         data: surveyByDate?.map((d) => d?.count),
-        backgroundColor: colors,
-        borderColor: colors1,
+        backgroundColor: COLORS,
+        borderColor: COLORS,
         borderWidth: 1,
       },
     ],
@@ -567,8 +582,8 @@ const AnalyticsPort = (props) => {
       {
         label: "Survey Count",
         data: surveyByLink?.map((d) => d?.count),
-        backgroundColor: colors2,
-        borderColor: colors,
+        backgroundColor: COLORS,
+        borderColor: COLORS,
         borderWidth: 1,
       },
     ],
@@ -579,8 +594,8 @@ const AnalyticsPort = (props) => {
       {
         label: "Survey Count",
         data: surveyByQr?.map((d) => d?.count),
-        backgroundColor: colors3,
-        borderColor: colors1,
+        backgroundColor: COLORS,
+        borderColor: COLORS,
         borderWidth: 1,
       },
     ],
@@ -592,8 +607,8 @@ const AnalyticsPort = (props) => {
       {
         label: "# Survey Count",
         data: surveyBySurveyData?.map((d) => d?.count),
-        backgroundColor: colors2,
-        borderColor: colors3,
+        backgroundColor: COLORS,
+        borderColor: COLORS,
         borderWidth: 1,
       },
     ],
@@ -605,8 +620,8 @@ const AnalyticsPort = (props) => {
       {
         // label: "# Survey Rating",
         data: surveyRatings?.map((d) => d?.count),
-        backgroundColor: colors2,
-        // borderColor: colors3,
+        backgroundColor: COLORS,
+        // borderColor: COLORS,
         borderWidth: 1,
       },
     ],
@@ -658,36 +673,31 @@ const AnalyticsPort = (props) => {
           ) : (
             <>
               <BarChart
-                data={surveyByLink}
-                title="StoneMor Survey by link Responses"
-                xAxisKey="surveyName"
-                yAxisKey="count"
-                onClickingNav={onClickSurveyByLinkResponsesNav}
-              />
-              <BarChart
                 data={surveyByQr}
                 title="StoneMor Survey by Qr Responses"
                 xAxisKey="surveyName"
                 yAxisKey="count"
                 onClickingNav={onClickSurveyByQrResponsesNav}
               />
+              <BarChart
+                data={surveyByLink}
+                title="StoneMor Survey by link Responses"
+                xAxisKey="surveyName"
+                yAxisKey="count"
+                onClickingNav={onClickSurveyByLinkResponsesNav}
+              />
             </>
           )}
         </div>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <div className={classes?.chartCon}>
+        <div>
           {surveyByLocations?.length < 0 ? (
             <Loader />
           ) : (
-            <>
-              <div style={{ minHeight: "400px", marginTop: "50px" }}>
-                <Line options={options4} data={data3} />{" "}
-              </div>
-              {/* <div style={{ minHeight: "400px", marginTop: "50px" }}>
-                <PolarArea data={dataForPolarArea} />{" "}
-              </div> */}
-            </>
+            <div style={{ minHeight: "400px", marginTop: "50px" }}>
+              <Line options={options4} data={data3} />{" "}
+            </div>
           )}
         </div>
       </TabPanel>

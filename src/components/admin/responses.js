@@ -126,8 +126,8 @@ const responsesPort = (props) => {
     } else return listSurveyEntriess?.items;
   };
   const questionCount = filterResposnse()
-    .filter((user) => user?.by?.name)
-    .sort(
+    ?.filter((user) => user?.by?.name)
+    ?.sort(
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
@@ -136,7 +136,7 @@ const responsesPort = (props) => {
 
   const requestSearch = (searched) => {
     setSearch(
-      questionCount.filter(
+      questionCount?.filter(
         (item) =>
           item?.by?.name
 

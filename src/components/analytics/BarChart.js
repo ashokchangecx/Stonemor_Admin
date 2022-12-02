@@ -19,18 +19,7 @@ ChartJS.register(
   Legend
 );
 
-const COLORS = [
-  "#00ae00",
-  "#7a04b1",
-  "#00d7b1",
-  "#ac000b",
-  "#00daff",
-  "#002d98",
-  "#004c00",
-  "#ffcdc1",
-  "#001b00",
-  "#a46a50",
-];
+const COLORS = ["	 #00cc00", "#739900", " #ffff00", " #ff9900", " #ff1a1a"];
 
 var colors = [];
 while (colors.length < 100) {
