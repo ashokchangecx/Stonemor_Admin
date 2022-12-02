@@ -702,19 +702,24 @@ const AnalyticsPort = (props) => {
             <>
               <div style={{ minHeight: "400px", marginTop: "50px" }}>
                 {" "}
-                <Typography variant="h6">Rating Question</Typography>
-                <Select
-                  margin="dense"
-                  fullWidth
-                  value={ratingQuestion}
-                  onChange={(event) => setRatingQuestion(event.target.value)}
-                >
-                  {surveyRatingList?.map((user, u) => (
-                    <MenuItem value={user?.id} key={u}>
-                      {user?.qu}
-                    </MenuItem>
-                  ))}
-                </Select>
+                <div style={{ marginBottom: "20px" }}>
+                  <Typography variant="h5">Rating Question</Typography>
+                </div>
+                <div style={{ margin: "10px 0" }}>
+                  <InputLabel>Rating Question</InputLabel>
+                  <Select
+                    margin="dense"
+                    fullWidth
+                    value={ratingQuestion}
+                    onChange={(event) => setRatingQuestion(event.target.value)}
+                  >
+                    {surveyRatingList?.map((user, u) => (
+                      <MenuItem value={user?.id} key={u}>
+                        {user?.qu}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
                 <TextField
                   autoFocus
                   margin="dense"
