@@ -58,6 +58,27 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+/* MUI style */
+const useStyles = makeStyles((theme) => ({
+  root: {
+    [theme.breakpoints.up("sm")]: {
+      marginLeft: 240,
+    },
+    flexGrow: 1,
+    overflow: "hidden",
+    marginTop: 20,
+    padding: theme.spacing(0, 3),
+  },
+  chartCon: {
+    [theme.breakpoints.up("md")]: {
+      gridTemplateColumns: "repeat(2,1fr)",
+    },
+    display: "grid",
+    gridTemplateColumns: "1fr",
+    gridGap: theme.spacing(3, 5),
+  },
+}));
 var colors = [];
 while (colors.length < 100) {
   do {
@@ -226,27 +247,6 @@ const Loader = () => (
     <CircularProgress />
   </div>
 );
-
-/* MUI style */
-const useStyles = makeStyles((theme) => ({
-  root: {
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: 240,
-    },
-    flexGrow: 1,
-    overflow: "hidden",
-    marginTop: 20,
-    padding: theme.spacing(0, 3),
-  },
-  chartCon: {
-    [theme.breakpoints.up("md")]: {
-      gridTemplateColumns: "repeat(2,1fr)",
-    },
-    display: "grid",
-    gridTemplateColumns: "1fr",
-    gridGap: theme.spacing(3, 5),
-  },
-}));
 
 const ratingName = [
   {
@@ -713,11 +713,13 @@ const AnalyticsPort = (props) => {
                     {surveyRatingList?.map((user, u) => (
                       <MenuItem value={user?.id} key={u}>
                         {user?.qu}
+                        {" - "}
+                        {user?.questionnaire?.name}
                       </MenuItem>
                     ))}
                   </Select>
                 </div>
-                <TextField
+                {/* <TextField
                   autoFocus
                   margin="dense"
                   id="title"
@@ -726,7 +728,7 @@ const AnalyticsPort = (props) => {
                   inputProps={{ readOnly: true }}
                   onChange={(event) => setQuestionarie(event.target.value)}
                   fullWidth
-                />
+                /> */}
               </div>
 
               <BarChart

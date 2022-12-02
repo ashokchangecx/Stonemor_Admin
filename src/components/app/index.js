@@ -308,8 +308,8 @@ function App() {
             component={surveyResponses}
           />
           <Route path="/admin/qrresponses" component={QrResponses} />
-          <Route path="/admin/ratingResponses" component={RatingResponses} />
-          <Route path="/admin/ratingQuestion" component={RatingQuestion} />
+          {/* <Route path="/admin/ratingResponses" component={RatingResponses} />
+          <Route path="/admin/ratingQuestion" component={RatingQuestion} /> */}
           <Route path="/admin/responses" component={responses} />
           <Route path="/admin/analytics">
             <Suspense fallback={<div>Loading....</div>}>
