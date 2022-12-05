@@ -444,7 +444,7 @@ export const getQuestion = /* GraphQL */ `
 export const listQuestions = /* GraphQL */ `
   query ListQuestions(
     $filter: ModelQuestionFilterInput
-    $limit: Int
+    $limit: Int = 30000
     $nextToken: String
   ) {
     listQuestions(filter: $filter, limit: $limit, nextToken: $nextToken) {
@@ -671,7 +671,23 @@ export const listSurveyEntriess = /* GraphQL */ `
         complete
         createdAt
         updatedAt
-        responses {
+        responses(limit: 300000) {
+          items {
+            id
+            res
+            createdAt
+            updatedAt
+            qu {
+              id
+              qu
+              type
+              isSelf
+              isDependent
+              order
+              createdAt
+              updatedAt
+            }
+          }
           nextToken
         }
         by {

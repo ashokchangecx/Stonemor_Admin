@@ -341,10 +341,11 @@ const AnalyticsPort = (props) => {
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 
-  console.log("SurveyQuestionarrire", SurveyQuestionarrire);
-  console.log("ratingQuestion", ratingQuestion);
-  console.log("listSurveys", listSurveys);
-  console.log("ratingSurvey", ratingSurvey);
+  // console.log("SurveyQuestionarrire", SurveyQuestionarrire);
+  // console.log("ratingQuestion", ratingQuestion);
+  // console.log("surveyRatings", surveyRatings);
+  // console.log("ratingSurvey", ratingSurvey);
+  // console.log("ratingQuestionnaires", ratingQuestionnaires);
 
   const onGettingQuestionnaireById = (id) => {
     const que = listQuestionnaires?.items?.find((q) => q?.id === id);

@@ -9,7 +9,7 @@ import { v4 as uuid } from "uuid";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import logo1 from "../../assets/MemorialPlanning - Wide - Tag - 4C (2) (1).png";
 import { createResponses, createSurveyEntries } from "../../graphql/mutations";
-
+import { ListItemIcon } from "@material-ui/core";
 import SentimentVeryDissatisfiedIcon from "@material-ui/icons/SentimentVeryDissatisfied";
 import SentimentDissatisfiedIcon from "@material-ui/icons/SentimentDissatisfied";
 import SentimentSatisfiedIcon from "@material-ui/icons/SentimentSatisfied";
@@ -31,6 +31,7 @@ import {
   FormControlLabel,
   FormGroup,
   FormLabel,
+  ListItem,
   Paper,
   Radio,
   RadioGroup,
@@ -323,11 +324,7 @@ const SurveyQuestion = (props) => {
               style={{ margin: "10px 0", color: "black" }}
               id="demo-radio-buttons-group-label"
             >
-              <Typography sx={{ paddingTop: 2 }}>
-                {" "}
-                Q.
-                {q?.qu}
-              </Typography>
+              <Typography sx={{ paddingTop: 2 }}>{q?.qu}</Typography>
             </FormLabel>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
@@ -354,11 +351,7 @@ const SurveyQuestion = (props) => {
               style={{ margin: "10px 0", color: "black" }}
               id="demo-radio-buttons-group-label"
             >
-              <Typography sx={{ paddingTop: 2 }}>
-                {" "}
-                Q.
-                {q?.qu}
-              </Typography>
+              <Typography sx={{ paddingTop: 2 }}> {q?.qu}</Typography>
             </FormLabel>
             <TextField
               required
@@ -383,11 +376,7 @@ const SurveyQuestion = (props) => {
               borderColor="transparent"
               style={{ margin: "10px 0px", color: "black" }}
             >
-              <Typography sx={{ paddingTop: 2 }}>
-                {" "}
-                Q.
-                {q?.qu}
-              </Typography>
+              <Typography sx={{ paddingTop: 2 }}> {q?.qu}</Typography>
               <Box style={{ margin: "50px 0px", color: "black" }}>
                 <StyledRating
                   name="customized-icons"
@@ -423,11 +412,7 @@ const SurveyQuestion = (props) => {
               style={{ margin: "10px 0", color: "black" }}
               id="demo-radio-buttons-group-label"
             >
-              <Typography sx={{ paddingTop: 2 }}>
-                {" "}
-                Q.
-                {q?.qu}
-              </Typography>
+              <Typography sx={{ paddingTop: 2 }}> {q?.qu}</Typography>
             </FormLabel>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
@@ -466,11 +451,7 @@ const SurveyQuestion = (props) => {
                 style={{ margin: "10px 0", color: "black" }}
                 id="demo-radio-buttons-group-label"
               >
-                <Typography sx={{ paddingTop: 2 }}>
-                  {" "}
-                  Q.
-                  {q?.qu}
-                </Typography>
+                <Typography sx={{ paddingTop: 2 }}> {q?.qu}</Typography>
               </FormLabel>
 
               {q?.listOptions?.map((option, o) => (
@@ -504,11 +485,7 @@ const SurveyQuestion = (props) => {
                 style={{ margin: "10px 0", color: "black" }}
                 id="demo-radio-buttons-group-label"
               >
-                <Typography sx={{ paddingTop: 2 }}>
-                  {" "}
-                  Q.
-                  {q?.qu}
-                </Typography>
+                <Typography sx={{ paddingTop: 2 }}> {q?.qu}</Typography>
               </FormLabel>
 
               {q?.listOptions?.map((option, o) => (
@@ -543,7 +520,7 @@ const SurveyQuestion = (props) => {
           </FormControl>
         );
       default:
-        return <p>Q. {q?.qu}</p>;
+        return <p> {q?.qu}</p>;
     }
   };
 
