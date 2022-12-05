@@ -41,6 +41,7 @@ import {
   listSurveyEntriess,
   listSurveyUsers,
   listQuestions,
+  listSurveys,
 } from "../../graphql/queries";
 import BarChart from "../analytics/BarChart";
 
@@ -297,15 +298,27 @@ const AnalyticsPort = (props) => {
   const [surveyByDate, setSurveyByDate] = useState([]);
   const [surveyBySurveyData, setSurveyBySurveyData] = useState([]);
   const [surveyRatings, setSurveyRatings] = useState([]);
+  const [ratingQuestionnaires, setRatingQuestionnaires] = useState("");
+  const [ratingSurvey, setRatingSurvey] = useState("");
   const {
     data: { listQuestions },
   } = props.listQuestions;
+  const {
+    data: { listSurveys },
+  } = props.listSurveys;
+
   const surveyRatingList = listQuestions?.items
-    ?.filter((m) => m?.type === "LIST")
+    ?.filter(
+      (m) =>
+        m?.type === "LIST" &&
+        m.questionnaire !== null &&
+        m.questionnaire?.id === ratingQuestionnaires
+    )
     ?.sort(
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
+
   const [ratingQuestion, setRatingQuestion] = useState("");
   const [questionarie, setQuestionarie] = useState("");
 
@@ -317,6 +330,21 @@ const AnalyticsPort = (props) => {
   const { listQuestionnaires } = props?.listQuestionnaires?.data;
   const { listResponsess, loading: listResponsessLoading } =
     props?.listResponsess?.data;
+
+  const SurveyQuestionarrire = listSurveys?.items
+    ?.filter((m) => m?.id === ratingSurvey)
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  const Survey = listSurveys?.items?.sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+
+  console.log("SurveyQuestionarrire", SurveyQuestionarrire);
+  console.log("ratingQuestion", ratingQuestion);
+  console.log("listSurveys", listSurveys);
+  console.log("ratingSurvey", ratingSurvey);
 
   const onGettingQuestionnaireById = (id) => {
     const que = listQuestionnaires?.items?.find((q) => q?.id === id);
@@ -346,6 +374,8 @@ const AnalyticsPort = (props) => {
     return ratingName[id]?.name;
   };
 
+  console.log("surveyRatingList", surveyRatingList);
+
   useEffect(() => {
     const surveyQue = listQuestions?.items?.find(
       (loc) => loc?.id === ratingQuestion
@@ -353,6 +383,13 @@ const AnalyticsPort = (props) => {
 
     setQuestionarie(surveyQue?.questionnaire?.name || "");
   }, [ratingQuestion]);
+
+  useEffect(() => {
+    if (ratingSurvey) {
+      setRatingQuestionnaires("");
+      setRatingQuestion("");
+    }
+  }, [ratingSurvey]);
 
   useEffect(() => {
     if (ratingQuestion) {
@@ -713,32 +750,66 @@ const AnalyticsPort = (props) => {
                   <Typography variant="h5">Rating Question</Typography>
                 </div>
                 <div style={{ margin: "10px 0" }}>
-                  <InputLabel>Rating Question</InputLabel>
-                  <Select
-                    margin="dense"
-                    fullWidth
-                    value={ratingQuestion}
-                    onChange={(event) => setRatingQuestion(event.target.value)}
-                  >
-                    {surveyRatingList?.map((user, u) => (
-                      <MenuItem value={user?.id} key={u}>
-                        {user?.qu}
-                        {" - "}
-                        {user?.questionnaire?.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
+                  <div style={{ margin: "20px 0" }}>
+                    <InputLabel> Survey</InputLabel>
+                    <Select
+                      margin="dense"
+                      fullWidth
+                      value={ratingSurvey}
+                      onChange={(event) => setRatingSurvey(event.target.value)}
+                    >
+                      {Survey?.map((user, u) => (
+                        <MenuItem value={user?.id} key={u}>
+                          {user?.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </div>
+                  <div style={{ margin: "20px 0" }}>
+                    <InputLabel> Questionnaire</InputLabel>
+                    <Select
+                      margin="dense"
+                      fullWidth
+                      value={ratingQuestionnaires}
+                      onChange={(event) =>
+                        setRatingQuestionnaires(event.target.value)
+                      }
+                    >
+                      {SurveyQuestionarrire?.map((user, u) => (
+                        <MenuItem value={user?.preQuestionnaire?.id} key={u}>
+                          {user?.preQuestionnaire?.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </div>
+                  <div style={{ margin: "20px 0" }}>
+                    <InputLabel>Rating Question</InputLabel>
+                    <Select
+                      margin="dense"
+                      fullWidth
+                      value={ratingQuestion}
+                      onChange={(event) =>
+                        setRatingQuestion(event.target.value)
+                      }
+                    >
+                      {surveyRatingList?.map((user, u) => (
+                        <MenuItem value={user?.id} key={u}>
+                          {user?.qu}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </div>
                 </div>
                 {/* <TextField
-                  autoFocus
-                  margin="dense"
-                  id="title"
-                  label="Questionarie"
-                  value={questionarie}
-                  inputProps={{ readOnly: true }}
-                  onChange={(event) => setQuestionarie(event.target.value)}
-                  fullWidth
-                /> */}
+                    autoFocus
+                    margin="dense"
+                    id="title"
+                    label="Questionarie"
+                    value={questionarie}
+                    inputProps={{ readOnly: true }}
+                    onChange={(event) => setQuestionarie(event.target.value)}
+                    fullWidth
+                  /> */}
               </div>
 
               <BarChart
@@ -775,6 +846,17 @@ const Analytics = compose(
     props: (props) => {
       return {
         listSurveyUsers: props ? props : [],
+      };
+    },
+  }),
+  graphql(gql(listSurveys), {
+    options: (props) => ({
+      errorPolicy: "all",
+      fetchPolicy: "cache-and-network",
+    }),
+    props: (props) => {
+      return {
+        listSurveys: props ? props : [],
       };
     },
   }),
