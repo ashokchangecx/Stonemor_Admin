@@ -133,6 +133,7 @@ const qrCodeResponsesPort = (props) => {
     );
 
   const qrResponses = questionCount?.filter((user) => user?.testing === null);
+  console.log("questionCount", questionCount);
   const [search, setSearch] = useState("");
 
   const requestSearch = (searched) => {

@@ -45,10 +45,10 @@ import { Rating } from "@material-ui/lab";
 const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
+      [theme.breakpoints.up("sm")]: {},
       flexGrow: 1,
       overflow: "hidden",
-      marginLeft: 120,
-      marginTop: 10,
+      marginTop: 20,
       padding: theme.spacing(0, 3),
     },
     content: {

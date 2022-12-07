@@ -158,7 +158,6 @@ const testResponsesPort = (props) => {
     );
 
   const testLinkRes = questionCount?.filter((user) => user?.testing === true);
-  console.log("testLinkRes", testLinkRes);
 
   const [search, setSearch] = useState("");
 

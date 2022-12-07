@@ -331,6 +331,9 @@ const AnalyticsPort = (props) => {
   const { listResponsess, loading: listResponsessLoading } =
     props?.listResponsess?.data;
 
+  const userResponses = listSurveyEntriess?.items?.filter(
+    (user) => user?.testing === null
+  );
   const SurveyQuestionarrire = listSurveys?.items
     ?.filter((m) => m?.id === ratingSurvey)
     .sort(
@@ -423,24 +426,21 @@ const AnalyticsPort = (props) => {
 
   useEffect(() => {
     if (!surveyEntriessLoading) {
-      const counts = listSurveyEntriess?.items?.reduce(
-        (counts, { location }) => {
-          if (location?.id) {
-            const locationId = location?.id || "no-loc";
+      const counts = userResponses?.reduce((counts, { location }) => {
+        if (location?.id) {
+          const locationId = location?.id || "no-loc";
 
-            const locationName = location?.location || "No Location";
-            const count = (counts[locationId]?.count || 0) + 1;
-            const loc = {
-              locationId,
-              locationName,
-              count,
-            };
-            counts[locationId] = loc;
-          }
-          return counts;
-        },
-        {}
-      );
+          const locationName = location?.location || "No Location";
+          const count = (counts[locationId]?.count || 0) + 1;
+          const loc = {
+            locationId,
+            locationName,
+            count,
+          };
+          counts[locationId] = loc;
+        }
+        return counts;
+      }, {});
 
       setSurveyByLocations(
         Object.entries(counts)
@@ -453,24 +453,21 @@ const AnalyticsPort = (props) => {
 
   useEffect(() => {
     if (!surveyEntriessLoading) {
-      const countsDate = listSurveyEntriess?.items.reduce(
-        (countsDate, data) => {
-          const date1 =
-            onGettingQuestionnaireById(data?.questionnaireId) || "no-Survey";
-          const surveyName =
-            onGettingQuestionnaireById(data?.questionnaireId) || "No Survey";
-          const count = (countsDate[date1]?.count || 0) + 1;
+      const countsDate = userResponses.reduce((countsDate, data) => {
+        const date1 =
+          onGettingQuestionnaireById(data?.questionnaireId) || "no-Survey";
+        const surveyName =
+          onGettingQuestionnaireById(data?.questionnaireId) || "No Survey";
+        const count = (countsDate[date1]?.count || 0) + 1;
 
-          const loc = {
-            date1,
-            surveyName,
-            count,
-          };
-          countsDate[date1] = loc;
-          return countsDate;
-        },
-        {}
-      );
+        const loc = {
+          date1,
+          surveyName,
+          count,
+        };
+        countsDate[date1] = loc;
+        return countsDate;
+      }, {});
 
       setSurveyByDate(
         Object.entries(countsDate)
@@ -483,7 +480,7 @@ const AnalyticsPort = (props) => {
 
   useEffect(() => {
     if (!surveyEntriessLoading) {
-      const counts = listSurveyEntriess?.items
+      const counts = userResponses
         ?.filter((data) => data?.by?.name)
 
         ?.reduce((counts, data) => {
@@ -515,7 +512,7 @@ const AnalyticsPort = (props) => {
 
   useEffect(() => {
     if (!surveyEntriessLoading) {
-      const counts = listSurveyEntriess?.items
+      const counts = userResponses
         ?.filter((data) => data?.location?.location)
         .reduce((counts, data) => {
           const QrResId = data?.questionnaireId;
@@ -548,7 +545,7 @@ const AnalyticsPort = (props) => {
 
   useEffect(() => {
     if (!surveyEntriessLoading) {
-      const counts = listSurveyEntriess?.items.reduce((counts, data) => {
+      const counts = userResponses?.reduce((counts, data) => {
         const date1 =
           moment(data?.finishTime).format("YYYY-MM-DD") || "no-Survey";
         const surveyName =
