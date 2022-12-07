@@ -24,6 +24,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 import moment from "moment";
+import validator from "validator";
 import gql from "graphql-tag";
 import React, { useEffect, useState } from "react";
 import { compose, graphql } from "react-apollo";
@@ -37,6 +38,7 @@ import {
   deleteSurveyLocation,
   updateSurveyLocation,
 } from "../../graphql/mutations";
+import { Alert } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -121,6 +123,10 @@ const SurveyLocationPart = (props) => {
   const [surveyLocationId, setSurveyLocationId] = useState("");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [emailError, setEmailError] = useState("");
+  const [emailSuccess, setEmailSuccess] = useState("");
+  const [alertSuccess, setAlertSuccess] = useState(false);
+  const [alertError, setAlertError] = useState(false);
 
   const surveyLocationOrder = listSurveyLocations?.items
     ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -130,6 +136,19 @@ const SurveyLocationPart = (props) => {
     );
   const [search, setSearch] = useState("");
 
+  //emai validation//
+  const handleEmail = (e) => {
+    setInchargeEmail(e.target.value);
+    if (validator.isEmail(inchargeEmail)) {
+      setEmailSuccess("valid email");
+      setAlertSuccess(true);
+      setAlertError(false);
+    } else {
+      setEmailError("Enter valid Email!");
+      setAlertError(true);
+      setAlertSuccess(false);
+    }
+  };
   // console.log("search", search);
   const requestSearch = (searched) => {
     setSearch(
@@ -151,12 +170,20 @@ const SurveyLocationPart = (props) => {
   const handleClosingSurveyLocationDialog = () => {
     setSurveyLocation("");
     setInchargeEmail("");
+    setEmailError("");
+    setEmailSuccess("");
+    setAlertError(false);
+    setAlertSuccess(false);
     setOpenCreateSurveyLocation(false);
   };
 
   const handleClosingSurveyLocationUpdateDialog = () => {
     setSurveyLocation("");
     setInchargeEmail("");
+    setEmailError("");
+    setEmailSuccess("");
+    setAlertError(false);
+    setAlertSuccess(false);
     setOpenUpdateSurveyLocation(false);
   };
 
@@ -316,10 +343,16 @@ const SurveyLocationPart = (props) => {
                 id="InchargeEmail"
                 label="Email"
                 value={inchargeEmail}
-                onChange={(event) => setInchargeEmail(event.target.value)}
+                onChange={(e) => handleEmail(e)}
                 fullWidth
               />
               <br />
+              {alertSuccess ? (
+                <Alert severity="success">{emailSuccess}</Alert>
+              ) : (
+                ""
+              )}
+              {alertError ? <Alert severity="error">{emailError}</Alert> : ""}
             </DialogContent>
             <DialogActions>
               <Button
@@ -334,7 +367,7 @@ const SurveyLocationPart = (props) => {
                 type="submit"
                 variant="contained"
                 color="primary"
-                disabled={!inchargeEmail}
+                disabled={!alertSuccess}
               >
                 Create
               </Button>
@@ -367,9 +400,16 @@ const SurveyLocationPart = (props) => {
                 label="Email"
                 type="email"
                 value={inchargeEmail}
-                onChange={(event) => setInchargeEmail(event.target.value)}
+                onChange={(e) => handleEmail(e)}
                 fullWidth
               />
+              <br />
+              {alertSuccess ? (
+                <Alert severity="success">{emailSuccess}</Alert>
+              ) : (
+                ""
+              )}
+              {alertError ? <Alert severity="error">{emailError}</Alert> : ""}
             </DialogContent>
             <DialogActions>
               <Button
@@ -384,7 +424,7 @@ const SurveyLocationPart = (props) => {
                 type="submit"
                 variant="contained"
                 color="primary"
-                disabled={!inchargeEmail}
+                disabled={!alertSuccess}
               >
                 Update
               </Button>

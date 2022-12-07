@@ -19,6 +19,7 @@ import PersonIcon from "@material-ui/icons/Person";
 import PinDropIcon from "@material-ui/icons/PinDrop";
 import StarHalfIcon from "@material-ui/icons/StarHalf";
 import LanguageIcon from "@material-ui/icons/Language";
+import DeveloperBoardIcon from "@material-ui/icons/DeveloperBoard";
 import PieChartIcon from "@material-ui/icons/PieChart";
 import { makeStyles, useTheme, withStyles } from "@material-ui/core/styles";
 import MuiListItem from "@material-ui/core/ListItem";
@@ -222,11 +223,23 @@ const Admin = (props) => {
           </ListItemIcon>
           <ListItemText primary="QR Responses" />
         </ListItem>
-        <Divider />
         <ListItem
           button
           selected={selectedIndex === 7}
           onClick={(event) => handleListItemClick(event, 7)}
+          component={Link}
+          to="/admin/testresponses"
+        >
+          <ListItemIcon>
+            <DeveloperBoardIcon />
+          </ListItemIcon>
+          <ListItemText primary="Test Responses" />
+        </ListItem>
+        <Divider />
+        <ListItem
+          button
+          selected={selectedIndex === 8}
+          onClick={(event) => handleListItemClick(event, 8)}
           component={Link}
           to="/admin/analytics"
         >
@@ -235,33 +248,6 @@ const Admin = (props) => {
           </ListItemIcon>
           <ListItemText primary="Analytic Data" />
         </ListItem>
-        {/* <ListItem
-          button
-          selected={selectedIndex === 8}
-          onClick={(event) => handleListItemClick(event, 8)}
-          component={Link}
-          to="/admin/ratingQuestion"
-        >
-          <ListItemIcon>
-            <StarHalfIcon />
-          </ListItemIcon>
-          <ListItemText primary="Rating Analysis" />
-        </ListItem> */}
-        {/* <ListItem
-          button
-          component={Link}
-          to={{
-            pathname: "/admin/groups",
-            state: {
-              userPoolId: userPoolId,
-            },
-          }}
-        >
-          <ListItemIcon>
-            <SupervisedUserCircleIcon />
-          </ListItemIcon>
-          <ListItemText primary="Groups" />
-        </ListItem> */}
       </List>
     </div>
   );

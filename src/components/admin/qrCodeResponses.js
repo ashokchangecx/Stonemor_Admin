@@ -132,11 +132,12 @@ const qrCodeResponsesPort = (props) => {
         new Date(b?.finishTime).getTime() - new Date(a?.finishTime).getTime()
     );
 
+  const qrResponses = questionCount?.filter((user) => user?.testing === null);
   const [search, setSearch] = useState("");
 
   const requestSearch = (searched) => {
     setSearch(
-      questionCount.filter(
+      qrResponses?.filter(
         (item) =>
           item?.location?.location
 
@@ -200,7 +201,7 @@ const qrCodeResponsesPort = (props) => {
           </Box>
         </Box>
         <Paper className={classes.content} elevation={10}>
-          {questionCount?.length > 0 && (
+          {qrResponses?.length > 0 && (
             <Table
               className={classes.table}
               stickyHeader
@@ -219,7 +220,7 @@ const qrCodeResponsesPort = (props) => {
                 </StyledTableRow>
               </TableHead>
               <TableBody>
-                {(search?.length > 0 ? search : questionCount)
+                {(search?.length > 0 ? search : qrResponses)
                   ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((user, u) => (
                     <StyledTableRow key={u}>
@@ -261,7 +262,7 @@ const qrCodeResponsesPort = (props) => {
           )}
           <TablePagination
             component="div"
-            count={search?.length || questionCount?.length}
+            count={search?.length || qrResponses?.length}
             page={page}
             onPageChange={handleChangePage}
             rowsPerPage={rowsPerPage}

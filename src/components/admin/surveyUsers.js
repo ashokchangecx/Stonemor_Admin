@@ -34,6 +34,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import gql from "graphql-tag";
 import AdminMenu from "./index";
 import { listSurveyUsers } from "../../graphql/queries";
+import validator from "validator";
 import {
   createSurveyUser,
   deleteSurveyUser,
@@ -41,6 +42,7 @@ import {
 } from "../../graphql/mutations";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import { Alert } from "@material-ui/lab";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -117,6 +119,10 @@ const SurveyUsersPart = (props) => {
   const [openUpdateSurveyUser, setOpenUpdateSurveyUser] = useState(false);
   const [userName, setUserName] = useState("");
   const [userMail, setUserMail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [emailSuccess, setEmailSuccess] = useState("");
+  const [alertSuccess, setAlertSuccess] = useState(false);
+  const [alertError, setAlertError] = useState(false);
   const [currentUserId, setCurrentUserId] = useState("");
   const [isopen, setIsOpen] = React.useState(false);
   const [deleteSurveyUser, setDeleteSurveyUser] = useState("");
@@ -129,6 +135,20 @@ const SurveyUsersPart = (props) => {
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
   const [search, setSearch] = useState("");
+
+  //emai validation//
+  const handleEmail = (e) => {
+    setUserMail(e.target.value);
+    if (validator.isEmail(userMail)) {
+      setEmailSuccess("valid email");
+      setAlertSuccess(true);
+      setAlertError(false);
+    } else {
+      setEmailError("Enter valid Email!");
+      setAlertError(true);
+      setAlertSuccess(false);
+    }
+  };
 
   const requestSearch = (searched) => {
     setSearch(
@@ -151,12 +171,20 @@ const SurveyUsersPart = (props) => {
   const handleClosingSurveyUsersDialog = () => {
     setUserName("");
     setUserMail("");
+    setEmailError("");
+    setEmailSuccess("");
+    setAlertError(false);
+    setAlertSuccess(false);
     setOpenCreateSurveyUser(false);
   };
 
   const handleClosingSurveyUsersUpdateDialog = () => {
     setUserName("");
     setUserMail("");
+    setEmailError("");
+    setEmailSuccess("");
+    setAlertError(false);
+    setAlertSuccess(false);
     setOpenUpdateSurveyUser(false);
   };
 
@@ -258,7 +286,7 @@ const SurveyUsersPart = (props) => {
         <Box display="flex">
           <Box flexGrow={1} p={1}>
             {" "}
-            <Typography variant="h5">Manage Surveys</Typography>
+            <Typography variant="h5">Manage Survey Users</Typography>
           </Box>
 
           <Box p={0.5}>
@@ -338,9 +366,15 @@ const SurveyUsersPart = (props) => {
                   id="email"
                   label="Email"
                   value={userMail}
-                  onChange={(event) => setUserMail(event.target.value)}
+                  onChange={(e) => handleEmail(e)}
                   fullWidth
-                />
+                />{" "}
+                {alertSuccess ? (
+                  <Alert severity="success">{emailSuccess}</Alert>
+                ) : (
+                  ""
+                )}
+                {alertError ? <Alert severity="error">{emailError}</Alert> : ""}
               </DialogContent>
               <DialogActions>
                 <Button
@@ -355,7 +389,7 @@ const SurveyUsersPart = (props) => {
                   type="submit"
                   color="primary"
                   variant="contained"
-                  disabled={!userMail}
+                  disabled={!alertSuccess}
                 >
                   Create
                 </Button>
@@ -387,9 +421,15 @@ const SurveyUsersPart = (props) => {
                   id="email"
                   label="Email"
                   value={userMail}
-                  onChange={(event) => setUserMail(event.target.value)}
+                  onChange={(e) => handleEmail(e)}
                   fullWidth
                 />
+                {alertSuccess ? (
+                  <Alert severity="success">{emailSuccess}</Alert>
+                ) : (
+                  ""
+                )}
+                {alertError ? <Alert severity="error">{emailError}</Alert> : ""}
               </DialogContent>
               <DialogActions>
                 <Button
@@ -404,7 +444,7 @@ const SurveyUsersPart = (props) => {
                   type="submit"
                   color="primary"
                   variant="contained"
-                  disabled={!userMail}
+                  disabled={!alertSuccess}
                 >
                   Update
                 </Button>

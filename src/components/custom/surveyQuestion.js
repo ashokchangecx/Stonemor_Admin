@@ -230,6 +230,7 @@ const SurveyQuestion = (props) => {
       questionnaireId: getQuestionnaire?.id,
       surveyEntriesById: params?.get("uid"),
       surveyEntriesLocationId: params?.get("uid"),
+      testing: true,
     });
     await Promise.all(
       [
@@ -650,7 +651,7 @@ const SurveyQuestion = (props) => {
             <div className={classes.cont}>
               <div>{getQuestionView(currentQuestion)}</div>
               <Box>
-                <Button
+                {/* <Button
                   variant="contained"
                   color="primary"
                   className={classes.button}
@@ -667,7 +668,7 @@ const SurveyQuestion = (props) => {
                 >
                   <ArrowBackIcon />
                   Prev
-                </Button>
+                </Button> */}
                 {final ? (
                   <Button
                     variant="contained"

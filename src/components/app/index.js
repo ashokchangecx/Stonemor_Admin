@@ -50,6 +50,7 @@ import surveyResponses from "../custom/surveyResponses";
 import Chart from "../custom/Chart";
 import responses from "../admin/responses";
 import QrResponses from "../admin/qrCodeResponses";
+import TestResponses from "../admin/testResponses";
 import AdminMenu from "../admin/index";
 import SurveyLocation from "../admin/SurveyLocation";
 import RatingQuestion from "../admin/ratingQuestion";
@@ -285,8 +286,8 @@ function App() {
             </Toolbar>
           </AppBar>
           <AdminMenu />
-          <Route exact path="/" component={Home} />
 
+          <Route exact path="/" component={Home} />
           <Route path="/addentry/:questionnaireID" component={AddEntry} />
           <Route exact path="/admin" component={AdminSurvey} />
           <Route path="/admin/questions" component={AdminQuestion} />
@@ -308,6 +309,7 @@ function App() {
             component={surveyResponses}
           />
           <Route path="/admin/qrresponses" component={QrResponses} />
+          <Route path="/admin/testresponses" component={TestResponses} />
           {/* <Route path="/admin/ratingResponses" component={RatingResponses} />
           <Route path="/admin/ratingQuestion" component={RatingQuestion} /> */}
           <Route path="/admin/responses" component={responses} />
@@ -316,11 +318,6 @@ function App() {
               <Analytics />
             </Suspense>
           </Route>
-
-          <Route
-            path="/surveyquestions/:questionnaireID"
-            component={SurveyQuestionarrireQuestion}
-          />
           <Route
             path="/admin/editQuestion/:editQuestionID"
             component={EditQuestion}
@@ -332,6 +329,11 @@ function App() {
           <Route path="/settings" component={Settings} />
           <Route path="/survey/:surveyID" component={Survey} />
           <Route path="/chart" component={Chart} />
+
+          <Route
+            path="/surveyquestions/:questionnaireID"
+            component={SurveyQuestionarrireQuestion}
+          />
         </BrowserRouter>
       </MuiThemeProvider>
     </div>

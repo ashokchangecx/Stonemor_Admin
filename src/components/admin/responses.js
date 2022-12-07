@@ -3,15 +3,12 @@ import React from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import moment from "moment";
 import { listSurveyEntriess, listQuestionnaires } from "../../graphql/queries";
-import { v4 as uuid } from "uuid";
-
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-
 import Button from "@material-ui/core/Button";
 import SearchIcon from "@material-ui/icons/Search";
 import { graphql, compose, withApollo } from "react-apollo";
@@ -131,12 +128,12 @@ const responsesPort = (props) => {
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
-
+  const linkResponses = questionCount?.filter((user) => user?.testing === null);
   const [search, setSearch] = useState("");
 
   const requestSearch = (searched) => {
     setSearch(
-      questionCount?.filter(
+      linkResponses?.filter(
         (item) =>
           item?.by?.name
 
@@ -199,7 +196,7 @@ const responsesPort = (props) => {
             </Paper>
           </Box>
         </Box>
-        {questionCount?.length > 0 && (
+        {linkResponses?.length > 0 && (
           <Paper className={classes.content} elevation={10}>
             <>
               <Table
@@ -220,7 +217,7 @@ const responsesPort = (props) => {
                   </StyledTableRow>
                 </TableHead>
                 <TableBody>
-                  {(search?.length > 0 ? search : questionCount)
+                  {(search?.length > 0 ? search : linkResponses)
                     ?.slice(
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
@@ -261,7 +258,7 @@ const responsesPort = (props) => {
               </Table>
               <TablePagination
                 component="div"
-                count={search?.length || questionCount?.length}
+                count={search?.length || linkResponses?.length}
                 page={page}
                 onPageChange={handleChangePage}
                 rowsPerPage={rowsPerPage}
