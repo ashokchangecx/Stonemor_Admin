@@ -41,12 +41,14 @@ import {
   withStyles,
 } from "@material-ui/core";
 import { Rating } from "@material-ui/lab";
+import moment from "moment";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
       [theme.breakpoints.up("sm")]: {},
       flexGrow: 1,
+      marginLeft: 120,
       overflow: "hidden",
       marginTop: 20,
       padding: theme.spacing(0, 3),
@@ -99,6 +101,13 @@ const useStyles = makeStyles((theme) =>
     progressBar: {
       with: "20%",
     },
+    time: {
+      fontSize: 10,
+    },
+    fineshBution: {
+      marginLeft: 20,
+      marginTop: 30,
+    },
   })
 );
 
@@ -150,6 +159,7 @@ const SurveyQuestion = (props) => {
   const [final, setFinal] = React.useState(false);
   const [isPostingResponse, setIsPostingResponse] = React.useState(false);
   const [open, setOpen] = React.useState(true);
+  const [totalTime, setTotalTime] = useState("");
 
   //rating//
   const customIcons = {
@@ -198,10 +208,33 @@ const SurveyQuestion = (props) => {
   };
   const value = currentQuestion?.order - 1;
 
+  const MAX = getQuestionnaire?.question?.items?.length;
   const normalise = () => ((value - MIN) * 100) / (MAX - MIN);
   const MIN = 0;
 
-  const MAX = getQuestionnaire?.question?.items?.length;
+  const surveyCompletedstatus =
+    ((currentQuestion?.order - MIN) * 100) / (MAX - MIN);
+
+  console.log("surveyCompletedstatus", surveyCompletedstatus);
+  //timer//
+
+  const handleTotelTime = () => {
+    setTotalTime(questions?.length * 20);
+  };
+
+  useEffect(() => {
+    handleTotelTime();
+  }, [getQuestionnaire]);
+
+  console.log("surveyTime", totalTime);
+
+  const time = totalTime / 60;
+
+  let sliceNumber = (num, len) => +String(num).slice(0, len);
+
+  const timeformat = sliceNumber(time, 2);
+
+  console.log("timeformat", timeformat);
 
   const handleClose = () => {
     setOpen(false);
@@ -216,7 +249,7 @@ const SurveyQuestion = (props) => {
       });
     }
     e.target.checked
-      ? setCheck([...check, e.target.value])
+      ? setCheck([...check, e.target.yvalue])
       : setCheck([...temp]);
   };
 
@@ -231,6 +264,7 @@ const SurveyQuestion = (props) => {
       surveyEntriesById: params?.get("uid"),
       surveyEntriesLocationId: params?.get("uid"),
       testing: true,
+      complete: surveyCompletedstatus,
     });
     await Promise.all(
       [
@@ -617,33 +651,34 @@ const SurveyQuestion = (props) => {
       </Dialog>
       <main className={classes.root}>
         <Paper className={classes.content}>
-          <div
-            style={{
-              // do your styles depending on your needs.
-              display: "flex",
-              justifyContent: "end",
-              alignItems: "center",
-              marginRight: "3rem",
-              marginTop: "10px",
-            }}
-          >
-            <Box display="flex" alignItems="center" justifyContent="end">
-              <Box width="0%" mr={2.5}>
-                <CircularProgress
-                  variant="determinate"
-                  value={normalise(props.value)}
-                  size="4.75rem"
-                  thickness={5}
-                />
+          <div>
+            <div
+              style={{
+                // do your styles depending on your needs.
+                display: "flex",
+                justifyContent: "end",
+                alignItems: "center",
+                marginRight: "3rem",
+                marginTop: "10px",
+              }}
+            >
+              <Box display="flex" alignItems="center" justifyContent="end">
+                <Box width="0%" mr={2.5}>
+                  <CircularProgress
+                    variant="determinate"
+                    value={normalise(props.value)}
+                    size="4.75rem"
+                    thickness={5}
+                  />
+                </Box>
+                <Box minWidth={40}>
+                  <Typography variant="h6" color="textSecondary">{`${Math.round(
+                    normalise(props.value)
+                  )}%`}</Typography>
+                </Box>
               </Box>
-              <Box minWidth={40}>
-                <Typography variant="h6" color="textSecondary">{`${Math.round(
-                  normalise(props.value)
-                )}%`}</Typography>
-              </Box>
-            </Box>
+            </div>
           </div>
-
           <Container maxWidth="md">
             <Typography className={classes.custom} variant="h5">
               {getQuestionnaire?.name}
@@ -692,8 +727,27 @@ const SurveyQuestion = (props) => {
                     <ArrowForwardIcon />
                   </Button>
                 )}
+
+                {final ? null : (
+                  <div className={classes.fineshBution}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      data-amplify-analytics-on="click"
+                      onClick={handleFinish}
+                    >
+                      Finish
+                      {/* <ArrowForwardIcon /> */}
+                    </Button>
+                  </div>
+                )}
               </Box>
             </div>
+            {currentQuestion?.order === 1 && (
+              <Typography className={classes.time}>
+                {timeformat} minutes to complete this survey{" "}
+              </Typography>
+            )}
           </Container>
         </Paper>
       </main>

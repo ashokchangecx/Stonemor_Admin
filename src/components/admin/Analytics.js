@@ -332,7 +332,7 @@ const AnalyticsPort = (props) => {
     props?.listResponsess?.data;
 
   const userResponses = listSurveyEntriess?.items?.filter(
-    (user) => user?.testing === null
+    (user) => user?.testing === null || user.testing === false
   );
   const SurveyQuestionarrire = listSurveys?.items
     ?.filter((m) => m?.id === ratingSurvey)

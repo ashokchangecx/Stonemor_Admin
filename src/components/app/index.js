@@ -53,6 +53,7 @@ import QrResponses from "../admin/qrCodeResponses";
 import TestResponses from "../admin/testResponses";
 import AdminMenu from "../admin/index";
 import SurveyLocation from "../admin/SurveyLocation";
+import Archive from "../admin/archive";
 import RatingQuestion from "../admin/ratingQuestion";
 import RatingResponses from "../admin/ratingResponses";
 import FontTTF from "../../assets/font/Poppins-ExtraBold.ttf";
@@ -291,6 +292,7 @@ function App() {
           <Route path="/addentry/:questionnaireID" component={AddEntry} />
           <Route exact path="/admin" component={AdminSurvey} />
           <Route path="/admin/questions" component={AdminQuestion} />
+          <Route path="/admin/archive" component={Archive} />
           <Route path="/admin/questionnaires" component={AdminQuestionnaire} />
           <Route
             path="/admin/question/:questionnaire"
@@ -328,7 +330,6 @@ function App() {
           />
           <Route path="/settings" component={Settings} />
           <Route path="/survey/:surveyID" component={Survey} />
-          <Route path="/chart" component={Chart} />
 
           <Route
             path="/surveyquestions/:questionnaireID"

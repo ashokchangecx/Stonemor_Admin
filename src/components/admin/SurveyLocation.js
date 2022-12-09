@@ -121,6 +121,7 @@ const SurveyLocationPart = (props) => {
   const [isopen, setIsOpen] = React.useState(false);
   const [deleteSurveyLocation, setDeleteSurveyLocation] = useState("");
   const [surveyLocationId, setSurveyLocationId] = useState("");
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [emailError, setEmailError] = useState("");

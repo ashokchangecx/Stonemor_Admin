@@ -128,6 +128,7 @@ const SurveyUsersPart = (props) => {
   const [deleteSurveyUser, setDeleteSurveyUser] = useState("");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
   const surveyUserOrder = listSurveyUsers?.items
     ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
     .sort(

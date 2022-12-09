@@ -11,6 +11,7 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import SubjectIcon from "@material-ui/icons/Subject";
+import ArchiveIcon from "@material-ui/icons/Archive";
 import validator from "validator";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import EditIcon from "@material-ui/icons/Edit";
@@ -162,6 +163,7 @@ const SurveyPart = (props) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const [openSurveyLink, setOpenSurveyLink] = React.useState(false);
+  const [openSurveyLinkTest, setOpenSurveyLinkTest] = React.useState(false);
   const [openSurveyQrCode, setOpenSurveyQrCode] = React.useState(false);
   const [openSurveyQrCodeTest, setOpenSurveyQrCodeTest] = React.useState(false);
   const [surveyUser, setSuveyUser] = React.useState("");
@@ -180,6 +182,28 @@ const SurveyPart = (props) => {
   const [alertSuccessEmail, setAlertSuccessEmail] = useState(false);
   const [alertError, setAlertError] = useState(false);
 
+  //archived//
+  const [archivedModelOpen, setArchivedModelOpen] = useState(false);
+  const [archivedSurvey, setArchivedSurvey] = useState("");
+
+  const handleOpenArchivedDialog = (que) => {
+    setArchivedSurvey(que?.id);
+    setArchivedModelOpen(true);
+  };
+  function handleCloseArchiveDialog() {
+    setArchivedModelOpen(false);
+  }
+
+  const handleArchiveSurvey = (event) => {
+    event.preventDefault();
+    props.onUpdateSurvey({
+      id: archivedSurvey,
+      archived: true,
+    });
+    setIsCreated(true);
+
+    handleCloseArchiveDialog();
+  };
   const [image, setImage] = React.useState(
     "https://dynamix-cdn.s3.amazonaws.com/stonemorcom/stonemorcom_616045937.svg"
   );
@@ -234,6 +258,10 @@ const SurveyPart = (props) => {
     setSurveyId(survey?.preQuestionnaire?.id);
     setOpenSurveyLink(true);
   };
+  const handleOpenCreateSurveyDialogTest = (survey) => {
+    setSurveyId(survey?.preQuestionnaire?.id);
+    setOpenSurveyLinkTest(true);
+  };
   /* Generating survey Link */
   const handleGeneratingSurveyLink = () => {
     const surveyUrl = `${baseUrl}/surveyquestions/${surveyId}?uid=${surveyUser}`;
@@ -273,6 +301,7 @@ const SurveyPart = (props) => {
     setAlertSuccess("");
     setAlertCopySuccess("");
     setOpenSurveyLink(false);
+    setOpenSurveyLinkTest(false);
   };
 
   /*Opening Creating new surveylink Dialogbox*/
@@ -373,12 +402,6 @@ const SurveyPart = (props) => {
 
   // console.log("search", search);
 
-  function handleSnackBarClose(event, reason) {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenSnackBar(false);
-  }
   function handleOpenDialog() {
     setOpen(true);
   }
@@ -389,6 +412,7 @@ const SurveyPart = (props) => {
       description: description,
       image: image,
       groups: groupName,
+      archived: false,
     });
     setIsCreated(true);
     setOpen(false);
@@ -498,6 +522,9 @@ const SurveyPart = (props) => {
     );
     setInchargeEmail(surveyLoc?.inchargeEmail || " ");
   }, [surveyLocation]);
+
+  console.log("listSurveys", listSurveys);
+
   if (loading && initialLoading) {
     return (
       <div>
@@ -628,6 +655,39 @@ const SurveyPart = (props) => {
             </DialogActions>
           </FormControl>
         </Dialog>
+        <Dialog
+          open={archivedModelOpen}
+          onClose={handleCloseArchiveDialog}
+          aria-labelledby="form-dialog-title"
+        >
+          <FormControl>
+            <DialogTitle id="form-dialog-title">
+              Archive this survey
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText color="primary">
+                Are you want to archive this survey?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={handleCloseArchiveDialog}
+                color="secondary"
+                variant="contained"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleArchiveSurvey}
+                type="submit"
+                color="primary"
+                variant="contained"
+              >
+                Archive
+              </Button>
+            </DialogActions>
+          </FormControl>
+        </Dialog>
 
         {/* sharesurvey */}
         <Dialog
@@ -701,7 +761,7 @@ const SurveyPart = (props) => {
           </FormControl>
         </Dialog>
         <Dialog
-          open={openSurveyLink}
+          open={openSurveyLinkTest}
           onClose={handleopenSurveyLinkClose}
           aria-labelledby="responsive-dialog-title"
           fullWidth
@@ -1040,6 +1100,7 @@ const SurveyPart = (props) => {
                 <StyledTableCell>Manage </StyledTableCell>
                 <StyledTableCell> Share Survey</StyledTableCell>
                 <StyledTableCell> Test Survey</StyledTableCell>
+                <StyledTableCell>Archive</StyledTableCell>
                 <StyledTableCell>Delete</StyledTableCell>
               </StyledTableRow>
             </TableHead>
@@ -1090,7 +1151,7 @@ const SurveyPart = (props) => {
                     <Button
                       size="small"
                       color="primary"
-                      onClick={() => handleOpenCreateSurveyDialog(survey)}
+                      onClick={() => handleOpenCreateSurveyDialogTest(survey)}
                     >
                       <LinkIcon />
                     </Button>
@@ -1103,6 +1164,15 @@ const SurveyPart = (props) => {
                     >
                       {" "}
                       <SelectAllIcon />
+                    </Button>
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <Button
+                      onClick={() => handleOpenArchivedDialog(survey)}
+                      size="small"
+                      color="primary"
+                    >
+                      <ArchiveIcon />
                     </Button>
                   </StyledTableCell>
                   <StyledTableCell>

@@ -104,7 +104,7 @@ const responsesPort = (props) => {
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
+  const [search, setSearch] = useState("");
   const {
     data: { listSurveyEntriess },
   } = props.listSurveyEntriess;
@@ -128,8 +128,11 @@ const responsesPort = (props) => {
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
-  const linkResponses = questionCount?.filter((user) => user?.testing === null);
-  const [search, setSearch] = useState("");
+  const linkResponses = questionCount?.filter(
+    (user) => user?.testing === null || user?.testing === false
+  );
+
+  console.log("questionCount", questionCount);
 
   const requestSearch = (searched) => {
     setSearch(

@@ -18,6 +18,7 @@ import SelectAllIcon from "@material-ui/icons/SelectAll";
 import PersonIcon from "@material-ui/icons/Person";
 import PinDropIcon from "@material-ui/icons/PinDrop";
 import StarHalfIcon from "@material-ui/icons/StarHalf";
+import ArchiveIcon from "@material-ui/icons/Archive";
 import LanguageIcon from "@material-ui/icons/Language";
 import DeveloperBoardIcon from "@material-ui/icons/DeveloperBoard";
 import PieChartIcon from "@material-ui/icons/PieChart";
@@ -248,6 +249,20 @@ const Admin = (props) => {
           </ListItemIcon>
           <ListItemText primary="Analytic Data" />
         </ListItem>
+
+        <ListItem
+          button
+          selected={selectedIndex === 9}
+          onClick={(event) => handleListItemClick(event, 9)}
+          component={Link}
+          to="/admin/archive"
+        >
+          <ListItemIcon>
+            <ArchiveIcon />
+          </ListItemIcon>
+          <ListItemText primary="Archive" />
+        </ListItem>
+        <Divider />
       </List>
     </div>
   );

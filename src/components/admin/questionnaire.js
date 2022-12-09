@@ -24,6 +24,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import CloseIcon from "@material-ui/icons/Close";
+import ArchiveIcon from "@material-ui/icons/Archive";
 import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
@@ -129,6 +130,10 @@ const QuestionnairePart = (props) => {
   const [initialLoading, setinitialLoading] = useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [questionnairesId, setQuestionnairesId] = useState("");
+  //archived//
+  const [archivedQueModelOpen, setArchivedQueModelOpen] = useState(false);
+  const [archivedQuestionnaire, setArchivedQuestionnaire] = useState("");
+
   const [introMsg, setInstroMsg] = useState(
     "Welcome to StoneMor Suvey. Click continue to attend survey."
   );
@@ -144,9 +149,6 @@ const QuestionnairePart = (props) => {
   const [openUpdateQuestionnaires, setOpenUpdateQuestionnaires] =
     useState(false);
 
-  function handleSnackBarClick() {
-    setOpenSnackBar(true);
-  }
   //search//
 
   const requestSearch = (searched) => {
@@ -159,6 +161,27 @@ const QuestionnairePart = (props) => {
           .includes(searched.toString().toLowerCase())
       )
     );
+  };
+
+  //archived questionarie//
+
+  const handleOpenArchivedQuestionnaireDialog = (questionnaire) => {
+    setArchivedQuestionnaire(questionnaire?.id);
+    setArchivedQueModelOpen(true);
+  };
+  function handleCloseArchiveQuesDialog() {
+    setArchivedQueModelOpen(false);
+  }
+
+  const handleArchiveQuestionnaire = (event) => {
+    event.preventDefault();
+    props.onUpdateQuestionnaire({
+      id: archivedQuestionnaire,
+      archived: true,
+    });
+    setIsCreated(true);
+
+    handleCloseArchiveQuesDialog();
   };
 
   const handleopeningQuestionnaireUpdateDialog = (questionnaire) => {
@@ -221,6 +244,7 @@ const QuestionnairePart = (props) => {
         type: type,
         introMsg: introMsg,
         endMsg: endMsg,
+        archived: false,
       },
       survey
     );
@@ -313,6 +337,39 @@ const QuestionnairePart = (props) => {
         </Breadcrumbs>
       </div>
       <div>
+        <Dialog
+          open={archivedQueModelOpen}
+          onClose={handleCloseArchiveQuesDialog}
+          aria-labelledby="form-dialog-title"
+        >
+          <FormControl>
+            <DialogTitle id="form-dialog-title">
+              Archive this questionnaire
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText color="primary">
+                Are you want to archive this questionnaire?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={handleCloseArchiveQuesDialog}
+                color="secondary"
+                variant="contained"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleArchiveQuestionnaire}
+                type="submit"
+                color="primary"
+                variant="contained"
+              >
+                Archive
+              </Button>
+            </DialogActions>
+          </FormControl>
+        </Dialog>
         <Dialog
           open={openUpdateQuestionnaires}
           onClose={handleClosingQuestionnaireUpdateDialog}
@@ -528,6 +585,7 @@ const QuestionnairePart = (props) => {
                 {/* <StyledTableCell>Type</StyledTableCell> */}
                 <StyledTableCell>Edit Questionaire</StyledTableCell>
                 <StyledTableCell>Manage Questions</StyledTableCell>
+                <StyledTableCell>Archive</StyledTableCell>
                 <StyledTableCell>Delete</StyledTableCell>
               </StyledTableRow>
             </TableHead>
@@ -559,6 +617,17 @@ const QuestionnairePart = (props) => {
                         to={`/admin/question/${questionnaire.id}`}
                       >
                         <VisibilityIcon />
+                      </Button>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <Button
+                        onClick={() =>
+                          handleOpenArchivedQuestionnaireDialog(questionnaire)
+                        }
+                        size="small"
+                        color="primary"
+                      >
+                        <ArchiveIcon />
                       </Button>
                     </StyledTableCell>
                     <StyledTableCell>
