@@ -131,8 +131,16 @@ const responsesPort = (props) => {
   const linkResponses = questionCount?.filter(
     (user) => !user?.testing === true && user?.responses?.items?.length > 0
   );
+  const unarchivedQuest = listQuestionnaires?.items?.filter(
+    (user) => user?.archived !== true
+  );
 
-  console.log("questionCount", linkResponses);
+  console.log("unarchivedSurvey", unarchivedQuest);
+
+  // const finalvalue = unarchivedSurvey.filter((id) =>
+  //   linkResponses.includes(id)
+  // );
+  console.log("unarchivedQuest", unarchivedQuest);
 
   const requestSearch = (searched) => {
     setSearch(

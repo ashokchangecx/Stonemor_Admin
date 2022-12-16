@@ -359,16 +359,15 @@ const archivePort = (props) => {
         scrollButtons="auto"
         aria-label="scrollable auto tabs example"
       >
-        <Tab label="Survey" {...a11yProps(0)} />
+        {/* <Tab label="Survey" {...a11yProps(0)} /> */}
         <Tab label="Questionnaire" {...a11yProps(1)} />
       </Tabs>
-      <TabPanel value={value} index={0}>
+      {/* <TabPanel value={value} index={0}>
         {survey?.length > 0 && (
           <>
             <Box display="flex">
               <Box flexGrow={1} p={1}>
                 {" "}
-                {/* <Typography variant="h5">Test Survey Response </Typography> */}
               </Box>
 
               <Box p={0.5}>
@@ -430,15 +429,6 @@ const archivePort = (props) => {
                           <UnarchiveIcon />
                         </Button>
                       </StyledTableCell>
-                      {/* <StyledTableCell>
-                        <Button
-                          // onClick={() => handleOpenDeleteDialog(survey)}
-                          size="small"
-                          color="secondary"
-                        >
-                          <DeleteIcon />
-                        </Button>
-                      </StyledTableCell> */}
                     </StyledTableRow>
                   ))}
                 </TableBody>
@@ -454,8 +444,8 @@ const archivePort = (props) => {
             </Paper>
           </>
         )}
-      </TabPanel>
-      <TabPanel value={value} index={1}>
+      </TabPanel> */}
+      <TabPanel value={value} index={0}>
         {questionnaire?.length > 0 && (
           <>
             <Box display="flex">
@@ -531,12 +521,12 @@ const archivePort = (props) => {
                             <ArchiveIcon />
                           </Button>
                         </StyledTableCell>
-                        <StyledTableCell>
+                        {/* <StyledTableCell>
                           {" "}
                           <Button size="small" color="secondary">
                             <DeleteIcon />
                           </Button>
-                        </StyledTableCell>
+                        </StyledTableCell> */}
                       </StyledTableRow>
                     )
                   )}

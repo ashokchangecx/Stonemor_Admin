@@ -1167,7 +1167,7 @@ const SurveyPart = (props) => {
                       <SelectAllIcon />
                     </Button>
                   </StyledTableCell>
-                  <StyledTableCell>
+                  {/* <StyledTableCell>
                     <Button
                       onClick={() => handleOpenArchivedDialog(survey)}
                       size="small"
@@ -1175,7 +1175,7 @@ const SurveyPart = (props) => {
                     >
                       <ArchiveIcon />
                     </Button>
-                  </StyledTableCell>
+                  </StyledTableCell> */}
                   <StyledTableCell>
                     <Button
                       onClick={() => handleOpenDeleteDialog(survey)}
