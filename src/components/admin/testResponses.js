@@ -157,7 +157,9 @@ const testResponsesPort = (props) => {
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
 
-  const testLinkRes = questionCount?.filter((user) => user?.testing === true);
+  const testLinkRes = questionCount?.filter(
+    (user) => user?.testing === true && user?.responses?.items?.length > 0
+  );
 
   console.log("testLinkRes", testLinkRes);
 
@@ -204,7 +206,9 @@ const testResponsesPort = (props) => {
         new Date(b?.finishTime).getTime() - new Date(a?.finishTime).getTime()
     );
 
-  const testQrRes = QrResponses?.filter((user) => user?.testing === true);
+  const testQrRes = QrResponses?.filter(
+    (user) => user?.testing === true && user?.responses?.items?.length > 0
+  );
 
   const [searchQr, setSearchQr] = useState("");
 
@@ -294,6 +298,7 @@ const testResponsesPort = (props) => {
                     <StyledTableCell>Questionnaire</StyledTableCell>
                     <StyledTableCell>Start Time</StyledTableCell>
                     <StyledTableCell>Finish Time</StyledTableCell>
+
                     <StyledTableCell>Manage</StyledTableCell>
                   </StyledTableRow>
                 </TableHead>
@@ -322,6 +327,7 @@ const testResponsesPort = (props) => {
                             "DD-MM-YYYY hh:mm A"
                           )}
                         </StyledTableCell>
+
                         <StyledTableCell>
                           <Button
                             size="small"
@@ -386,6 +392,7 @@ const testResponsesPort = (props) => {
                   <StyledTableCell>Questionnaire</StyledTableCell>
                   <StyledTableCell>Start Time</StyledTableCell>
                   <StyledTableCell>Finish Time</StyledTableCell>
+
                   <StyledTableCell>Manage</StyledTableCell>
                 </StyledTableRow>
               </TableHead>
@@ -413,6 +420,7 @@ const testResponsesPort = (props) => {
                       <StyledTableCell>
                         {moment(user?.finishTime).format("DD-MM-YYYY hh:mm A")}
                       </StyledTableCell>
+
                       <StyledTableCell>
                         <Button
                           size="small"

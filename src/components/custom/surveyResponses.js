@@ -113,10 +113,10 @@ const surveyResponsesPart = (props) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const listUserRes = listSurveyEntriess?.items?.filter((r) => r?.id === qid);
-  const listans = listUserRes?.[0]?.responses;
+  const listUserRes = listSurveyEntriess?.items?.find((r) => r?.id === qid);
+  const listans = listUserRes?.responses;
 
-  const questionnairename = listUserRes?.[0]?.questionnaireId;
+  const questionnairename = listUserRes?.questionnaireId;
   //rating//
   const customIcons = {
     1: {

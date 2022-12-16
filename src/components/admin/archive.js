@@ -430,7 +430,7 @@ const archivePort = (props) => {
                           <UnarchiveIcon />
                         </Button>
                       </StyledTableCell>
-                      <StyledTableCell>
+                      {/* <StyledTableCell>
                         <Button
                           // onClick={() => handleOpenDeleteDialog(survey)}
                           size="small"
@@ -438,7 +438,7 @@ const archivePort = (props) => {
                         >
                           <DeleteIcon />
                         </Button>
-                      </StyledTableCell>
+                      </StyledTableCell> */}
                     </StyledTableRow>
                   ))}
                 </TableBody>

@@ -263,6 +263,18 @@ const Admin = (props) => {
           <ListItemText primary="Archive" />
         </ListItem>
         <Divider />
+        <ListItem
+          button
+          selected={selectedIndex === 10}
+          onClick={(event) => handleListItemClick(event, 10)}
+          component={Link}
+          to="/admin/incompletedSurvey"
+        >
+          <ListItemIcon>
+            <DeveloperBoardIcon />
+          </ListItemIcon>
+          <ListItemText primary="Incompleted Survey" />
+        </ListItem>
       </List>
     </div>
   );

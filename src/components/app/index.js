@@ -56,6 +56,8 @@ import SurveyLocation from "../admin/SurveyLocation";
 import Archive from "../admin/archive";
 import RatingQuestion from "../admin/ratingQuestion";
 import RatingResponses from "../admin/ratingResponses";
+import IncompletedResponses from "../admin/incompleted";
+
 import FontTTF from "../../assets/font/Poppins-ExtraBold.ttf";
 
 const Font = {
@@ -312,6 +314,10 @@ function App() {
           />
           <Route path="/admin/qrresponses" component={QrResponses} />
           <Route path="/admin/testresponses" component={TestResponses} />
+          <Route
+            path="/admin/incompletedSurvey"
+            component={IncompletedResponses}
+          />
           {/* <Route path="/admin/ratingResponses" component={RatingResponses} />
           <Route path="/admin/ratingQuestion" component={RatingQuestion} /> */}
           <Route path="/admin/responses" component={responses} />

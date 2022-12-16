@@ -129,10 +129,10 @@ const responsesPort = (props) => {
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
   const linkResponses = questionCount?.filter(
-    (user) => user?.testing === null || user?.testing === false
+    (user) => !user?.testing === true && user?.responses?.items?.length > 0
   );
 
-  console.log("questionCount", questionCount);
+  console.log("questionCount", linkResponses);
 
   const requestSearch = (searched) => {
     setSearch(

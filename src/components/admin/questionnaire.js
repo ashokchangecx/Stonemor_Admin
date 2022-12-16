@@ -141,9 +141,12 @@ const QuestionnairePart = (props) => {
     "Thank you for completing our survey. If you have requested a follow up,someone will be in touch with you soon."
   );
 
-  const questionnaireOrder = listQuestionnaires?.items?.sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
+  const questionnaireOrder = listQuestionnaires?.items
+    ?.filter((user) => user?.archived !== true)
+    ?.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
 
   const [search, setSearch] = useState("");
   const [openUpdateQuestionnaires, setOpenUpdateQuestionnaires] =

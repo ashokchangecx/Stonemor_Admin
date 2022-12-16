@@ -3,12 +3,16 @@ import { graphql, compose, withApollo } from "react-apollo";
 import gql from "graphql-tag";
 import { useLocation } from "react-router-dom";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import { getQuestionnaire } from "../../graphql/queries";
+import { getQuestionnaire, listSurveyEntriess } from "../../graphql/queries";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { v4 as uuid } from "uuid";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import logo1 from "../../assets/MemorialPlanning - Wide - Tag - 4C (2) (1).png";
-import { createResponses, createSurveyEntries } from "../../graphql/mutations";
+import {
+  createResponses,
+  createSurveyEntries,
+  updateSurveyEntries,
+} from "../../graphql/mutations";
 import { ListItemIcon } from "@material-ui/core";
 import SentimentVeryDissatisfiedIcon from "@material-ui/icons/SentimentVeryDissatisfied";
 import SentimentDissatisfiedIcon from "@material-ui/icons/SentimentDissatisfied";
@@ -209,13 +213,15 @@ const SurveyQuestion = (props) => {
   const value = currentQuestion?.order - 1;
 
   const MAX = getQuestionnaire?.question?.items?.length;
-  const normalise = () => ((value - MIN) * 100) / (MAX - MIN);
   const MIN = 0;
+  const normalise = () => ((value - MIN) * 100) / (MAX - MIN);
 
   const surveyCompletedstatus =
     ((currentQuestion?.order - MIN) * 100) / (MAX - MIN);
+  const completedStatus = Math.round(surveyCompletedstatus);
 
   console.log("surveyCompletedstatus", surveyCompletedstatus);
+  console.log("completedStatus", completedStatus);
   //timer//
 
   const handleTotelTime = () => {
@@ -253,9 +259,7 @@ const SurveyQuestion = (props) => {
       : setCheck([...temp]);
   };
 
-  const handleFinish = async (event) => {
-    event.preventDefault();
-    setIsPostingResponse(true);
+  const handlECreateSurveyEntry = async () => {
     await props.onCreateSurveyEntries({
       id: group,
       startTime: startTime,
@@ -264,8 +268,31 @@ const SurveyQuestion = (props) => {
       surveyEntriesById: params?.get("uid"),
       surveyEntriesLocationId: params?.get("uid"),
       testing: true,
-      complete: surveyCompletedstatus,
+      complete: completedStatus,
     });
+  };
+
+  console.log("group", group);
+  const handleUpdateSurveyEntries = () => {
+    props.onUpdateSurveyEntries({
+      id: group,
+      complete: completedStatus,
+    });
+  };
+
+  const handleFinish = async (event) => {
+    event.preventDefault();
+    setIsPostingResponse(true);
+    // await props.onCreateSurveyEntries({
+    //   id: group,
+    //   startTime: startTime,
+    //   finishTime: new Date().toISOString(),
+    //   questionnaireId: getQuestionnaire?.id,
+    //   surveyEntriesById: params?.get("uid"),
+    //   surveyEntriesLocationId: params?.get("uid"),
+    //   testing: true,
+    //   complete: surveyCompletedstatus,
+    // });
     await Promise.all(
       [
         ...ANSLIST,
@@ -296,6 +323,7 @@ const SurveyQuestion = (props) => {
         answer: currentAnswer,
       },
     ]);
+
     if (currentQuestion?.isDependent) {
       const dependentQuestion = currentQuestion?.dependent?.id;
       const ansofDepQuestion = ANSLIST?.find(
@@ -331,6 +359,13 @@ const SurveyQuestion = (props) => {
         (q) => q?.order === currentQuestionOrder + 1
       );
     }
+    if (currentQuestion?.order === 1) {
+      handlECreateSurveyEntry();
+    }
+    if (currentQuestion?.order > 1) {
+      handleUpdateSurveyEntries();
+    }
+
     setCurrentAnswer("");
     setCheck("");
     setCurrentQuestion(tempCurrentQuestion);
@@ -728,7 +763,7 @@ const SurveyQuestion = (props) => {
                   </Button>
                 )}
 
-                {final ? null : (
+                {/* {final ? null : (
                   <div className={classes.fineshBution}>
                     <Button
                       variant="contained"
@@ -737,10 +772,10 @@ const SurveyQuestion = (props) => {
                       onClick={handleFinish}
                     >
                       Finish
-                      {/* <ArrowForwardIcon /> */}
+                  
                     </Button>
                   </div>
-                )}
+                )} */}
               </Box>
             </div>
             {currentQuestion?.order === 1 && (
@@ -829,6 +864,37 @@ const SurveyQuestionarrireQuestion = compose(
         props.mutate({
           variables: {
             input: ip,
+          },
+        });
+      },
+    }),
+  }),
+  graphql(gql(updateSurveyEntries), {
+    props: (props) => ({
+      onUpdateSurveyEntries: (ip) => {
+        props.mutate({
+          variables: {
+            input: ip,
+          },
+          update: (store, { data: { updateSurveyEntries } }) => {
+            const query = gql(listSurveyEntriess);
+
+            const data = store.readQuery({
+              query,
+            });
+            if (data?.listSurveyEntriess?.items?.length > 0) {
+              data.listSurveyEntriess.items = [
+                ...data.listSurveyEntriess.items.filter(
+                  (item) => item?.id !== updateSurveyEntries?.id
+                ),
+                updateSurveyEntries,
+              ];
+            }
+            store.writeQuery({
+              query,
+              data,
+              variables: { filter: null, limit: null, nextToken: null },
+            });
           },
         });
       },

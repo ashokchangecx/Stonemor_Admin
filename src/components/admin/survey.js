@@ -221,6 +221,7 @@ const SurveyPart = (props) => {
   const surveyName = onGettingQuestionById(surveyId);
 
   const surveyOrder = listSurveys?.items
+    ?.filter((user) => user?.archived !== true)
     ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
     .sort(
       (a, b) =>

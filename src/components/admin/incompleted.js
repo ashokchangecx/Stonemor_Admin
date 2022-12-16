@@ -2,14 +2,7 @@
 import React from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import moment from "moment";
-import {
-  listSurveyEntriess,
-  listResponsess,
-  listSurveyUsers,
-  listQuestionnaires,
-} from "../../graphql/queries";
-import { v4 as uuid } from "uuid";
-import SearchIcon from "@material-ui/icons/Search";
+import { listSurveyEntriess, listQuestionnaires } from "../../graphql/queries";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -17,12 +10,22 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
-import { graphql, compose } from "react-apollo";
+import SearchIcon from "@material-ui/icons/Search";
+import { graphql, compose, withApollo } from "react-apollo";
 import gql from "graphql-tag";
+import { listSurveys } from "../../graphql/queries";
+import { createSurvey, deleteSurvey, addGroup } from "../../graphql/mutations";
+
+import AdminMenu from "./index";
 
 import {
   Box,
   Breadcrumbs,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
   IconButton,
   InputBase,
   Paper,
@@ -74,7 +77,6 @@ const useStyles = makeStyles((theme) => ({
     padding: 10,
   },
 }));
-
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.primary.main,
@@ -96,12 +98,13 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const qrCodeResponsesPort = (props) => {
+const incompletedPort = (props) => {
   const classes = useStyles();
   const query = useQuery();
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
+  const [search, setSearch] = useState("");
   const {
     data: { listSurveyEntriess },
   } = props.listSurveyEntriess;
@@ -109,48 +112,39 @@ const qrCodeResponsesPort = (props) => {
   const {
     data: { listQuestionnaires },
   } = props.listQuestionnaires;
-  // console.log("listQuestionnaires", listQuestionnaires);
-  const locationID = query.get("lid");
-  const qrResId = query.get("Qrid");
+
+  const lrResId = query.get("Lrid");
 
   const filterResposnse = () => {
-    if (locationID) {
-      return listSurveyEntriess?.items.filter(
-        (user) => user?.location?.id === locationID
-      );
-    } else if (qrResId) {
-      return listSurveyEntriess?.items.filter(
-        (user) => user?.questionnaireId === qrResId
+    if (lrResId) {
+      return listSurveyEntriess?.items?.filter(
+        (user) => user?.questionnaireId === lrResId
       );
     } else return listSurveyEntriess?.items;
   };
-
   const questionCount = filterResposnse()
-    ?.filter((user) => user?.location?.location)
+    ?.filter((user) => user?.by?.name)
     ?.sort(
       (a, b) =>
-        new Date(b?.finishTime).getTime() - new Date(a?.finishTime).getTime()
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
-
-  const qrResponses = questionCount?.filter(
-    (user) =>
-      (user?.testing === false && user?.complete === 100) ||
-      user?.complete === null
+  const linkResponses = questionCount?.filter(
+    (user) => user?.complete !== 100 && !user?.responses?.items?.length > 0
   );
 
+  console.log("linkResponses", linkResponses);
   console.log("questionCount", questionCount);
-  const [search, setSearch] = useState("");
 
   const requestSearch = (searched) => {
     setSearch(
-      qrResponses?.filter(
+      linkResponses?.filter(
         (item) =>
-          item?.location?.location
+          item?.by?.name
 
             .toString()
             .toLowerCase()
             .includes(searched.toString().toLowerCase()) ||
-          item?.by?.inchargeEmail
+          item?.by?.email
 
             .toString()
             .toLowerCase()
@@ -181,15 +175,12 @@ const qrCodeResponsesPort = (props) => {
       {" "}
       {/* <AdminMenu /> */}
       <div className={classes.Breadcrumbs}>
-        <Breadcrumbs aria-label="breadcrumb">
-          <Typography color="primary">QR Code Response</Typography>
-        </Breadcrumbs>
+        <Breadcrumbs aria-label="breadcrumb"></Breadcrumbs>
       </div>
       <div className={classes.Breadcrumbs}>
         <Box display="flex">
           <Box flexGrow={1} p={1}>
             {" "}
-            <Typography variant="h5">QR Code Response </Typography>
           </Box>
 
           <Box p={0.5}>
@@ -206,80 +197,68 @@ const qrCodeResponsesPort = (props) => {
             </Paper>
           </Box>
         </Box>
-        <Paper className={classes.content} elevation={10}>
-          {qrResponses?.length > 0 && (
-            <Table
-              className={classes.table}
-              stickyHeader
-              aria-label="sticky table"
-            >
-              <TableHead>
-                <StyledTableRow>
-                  <StyledTableCell>S.NO</StyledTableCell>
+        {linkResponses?.length > 0 && (
+          <Paper className={classes.content} elevation={10}>
+            <>
+              <Table
+                className={classes.table}
+                stickyHeader
+                aria-label="sticky table"
+              >
+                <TableHead>
+                  <StyledTableRow>
+                    <StyledTableCell>S.NO</StyledTableCell>
+                    <StyledTableCell>Name</StyledTableCell>
+                    <StyledTableCell>Email</StyledTableCell>
 
-                  <StyledTableCell>Location</StyledTableCell>
-                  <StyledTableCell>Email</StyledTableCell>
-                  <StyledTableCell>Questionnaire</StyledTableCell>
-                  <StyledTableCell>Start Time</StyledTableCell>
-                  <StyledTableCell>Finish Time</StyledTableCell>
-                  <StyledTableCell>Manage</StyledTableCell>
-                </StyledTableRow>
-              </TableHead>
-              <TableBody>
-                {(search?.length > 0 ? search : qrResponses)
-                  ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((user, u) => (
-                    <StyledTableRow key={u}>
-                      <StyledTableCell>{u + 1}</StyledTableCell>
+                    <StyledTableCell>Questionnaire</StyledTableCell>
+                    <StyledTableCell>Start Time</StyledTableCell>
 
-                      <StyledTableCell>
-                        {user?.location?.location}
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        {user?.location?.inchargeEmail}
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        {" "}
-                        {onGettingQuestionnaireById(user?.questionnaireId)}
-                      </StyledTableCell>
+                    <StyledTableCell>completed status</StyledTableCell>
+                  </StyledTableRow>
+                </TableHead>
+                <TableBody>
+                  {(search?.length > 0 ? search : linkResponses)
+                    ?.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                    .map((user, u) => (
+                      <StyledTableRow key={u}>
+                        <StyledTableCell>{u + 1}</StyledTableCell>
+                        <StyledTableCell>{user?.by?.name}</StyledTableCell>
+                        <StyledTableCell>{user?.by?.email}</StyledTableCell>
 
-                      <StyledTableCell>
-                        {moment(user?.startTime).format("DD-MM-YYYY hh:mm A")}
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        {moment(user?.finishTime).format("DD-MM-YYYY hh:mm A")}
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <Button
-                          size="small"
-                          color="primary"
-                          component={Link}
-                          // to={`/surveyResponses/${user?.questionnaireId}?uid=${user?.by?.id}`}
-                          to={`/surveyResponses/${user?.id}`}
-                          // onClick={handleOpenDialog}
-                        >
-                          <VisibilityIcon />
-                        </Button>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          )}
-          <TablePagination
-            component="div"
-            count={search?.length || qrResponses?.length}
-            page={page}
-            onPageChange={handleChangePage}
-            rowsPerPage={rowsPerPage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
+                        <StyledTableCell>
+                          {" "}
+                          {onGettingQuestionnaireById(user?.questionnaireId)}
+                        </StyledTableCell>
+
+                        <StyledTableCell>
+                          {moment(user?.startTime).format("DD-MM-YYYY hh:mm A")}
+                        </StyledTableCell>
+
+                        <StyledTableCell>{user?.complete}%</StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                </TableBody>
+              </Table>
+              <TablePagination
+                component="div"
+                count={search?.length || linkResponses?.length}
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={rowsPerPage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </>
+          </Paper>
+        )}
       </div>
     </div>
   );
 };
-const QrResponses = compose(
+const Responses = compose(
   graphql(gql(listSurveyEntriess), {
     options: (props) => ({
       errorPolicy: "all",
@@ -303,6 +282,6 @@ const QrResponses = compose(
       };
     },
   })
-)(qrCodeResponsesPort);
+)(incompletedPort);
 
-export default QrResponses;
+export default Responses;
