@@ -135,12 +135,10 @@ const responsesPort = (props) => {
     (user) => user?.archived !== true
   );
 
-  console.log("unarchivedSurvey", unarchivedQuest);
-
-  // const finalvalue = unarchivedSurvey.filter((id) =>
-  //   linkResponses.includes(id)
+  // const results = linkResponses?.filter(
+  //   ({ questionnaireId: id1 }) =>
+  //     !unarchivedQuest?.some(({ id: id2 }) => id2 === id1)
   // );
-  console.log("unarchivedQuest", unarchivedQuest);
 
   const requestSearch = (searched) => {
     setSearch(

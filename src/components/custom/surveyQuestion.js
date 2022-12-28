@@ -359,6 +359,10 @@ const SurveyQuestion = (props) => {
         (q) => q?.order === currentQuestionOrder + 1
       );
     }
+    if (currentQuestion?.type === "CHECKBOX" && currentQuestion?.isSelf) {
+      const nextQuestionId = currentQuestion?.listOptions[0].nextQuestion;
+      tempCurrentQuestion = questions.find((q) => q?.id === nextQuestionId);
+    }
     if (currentQuestion?.order === 1) {
       handlECreateSurveyEntry();
     }

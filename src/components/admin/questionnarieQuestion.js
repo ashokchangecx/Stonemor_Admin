@@ -515,6 +515,7 @@ const QuestionnarieQuestionPart = (props) => {
     );
     setInchargeEmail(surveyLoc?.inchargeEmail || " ");
   }, [surveyLocation]);
+
   /* Side effect to open List dialog */
   useEffect(() => {
     if (type && type !== "TEXT" && type && type !== "LIST" && !editQuestion) {
@@ -688,27 +689,28 @@ const QuestionnarieQuestionPart = (props) => {
                 </Select>
               </FormControl>
 
-              {type === "TEXT" && currentMode === "self" && (
-                <FormControl fullWidth>
-                  <InputLabel>Next question</InputLabel>
-                  <Select
-                    margin="dense"
-                    fullWidth
-                    value={nextQuestionForOther}
-                    onChange={(event) =>
-                      setNextQuestionForOther(event.target.value)
-                    }
-                  >
-                    {getQuestionnaire?.question?.items
-                      .sort((a, b) => a?.order - b?.order)
-                      .map((que, q) => (
-                        <MenuItem value={que?.id} key={q}>
-                          {que?.order + "  " + que?.qu}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                </FormControl>
-              )}
+              {(type === "CHECKBOX" && currentMode === "self") ||
+                (type === "TEXT" && currentMode === "self" && (
+                  <FormControl fullWidth>
+                    <InputLabel>Next question</InputLabel>
+                    <Select
+                      margin="dense"
+                      fullWidth
+                      value={nextQuestionForOther}
+                      onChange={(event) =>
+                        setNextQuestionForOther(event.target.value)
+                      }
+                    >
+                      {getQuestionnaire?.question?.items
+                        .sort((a, b) => a?.order - b?.order)
+                        .map((que, q) => (
+                          <MenuItem value={que?.id} key={q}>
+                            {que?.order + "  " + que?.qu}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
+                ))}
 
               {currentMode === "dependent" && (
                 <>

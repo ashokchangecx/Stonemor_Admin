@@ -334,6 +334,7 @@ const SurveyPart = (props) => {
     downloadLink.click();
     document.body.removeChild(downloadLink);
   };
+
   //QR code test //
 
   const downloadQRCodeTest = () => {
@@ -414,6 +415,7 @@ const SurveyPart = (props) => {
       image: image,
       groups: groupName,
       archived: false,
+      delete: false,
     });
     setIsCreated(true);
     setOpen(false);
