@@ -1,64 +1,64 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React, { lazy } from "react";
+import ReactDOM from "react-dom/client";
+import { ApolloProvider } from "@apollo/client";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 import "./index.css";
-import App from "./components/app";
-import * as serviceWorker from "./serviceWorker";
+import App from "./App";
+import client from "./client";
+import ColorModeContextProvider from "./Theme";
+import { Loader } from "./components/common/Loader";
+const DashboardPage = lazy(() => import("./pages/Dashboard"));
+const SurveysPage = lazy(() => import("./pages/Surveys"));
+const AnalyticsPage = lazy(() => import("./pages/Analytics"));
+const QuestionnariesPage = lazy(() => import("./pages/Questionnaries"));
+const UsersPage = lazy(() => import("./pages/Users"));
+const LocationsPage = lazy(() => import("./pages/Locations"));
 
-import { Auth, Analytics } from "aws-amplify";
-import AWSAppSyncClient, {
-  AUTH_TYPE,
-  createAppSyncLink,
-  createLinkWithCache,
-} from "aws-appsync";
-import awsexports from "./aws-exports";
-import { ApolloProvider } from "react-apollo";
-
-import { ApolloLink } from "apollo-link";
-import { withClientState } from "apollo-link-state";
-
-const stateLink = createLinkWithCache((cache) =>
-  withClientState({ cache, resolvers: {} })
+const QuestionnariesQuestionPage = lazy(() =>
+  import("./pages/QuestionnariesQuestion")
 );
-const awsAppSyncLink = createAppSyncLink({
-  url: awsexports.aws_appsync_graphqlEndpoint,
-  region: awsexports.aws_appsync_region,
-  auth: {
-    type: AUTH_TYPE.AMAZON_COGNITO_USER_POOLS,
-    jwtToken: async () =>
-      (await Auth.currentSession()).getIdToken().getJwtToken(),
-  },
-  complexObjectsCredentials: () => Auth.currentCredentials(),
-});
-const link = ApolloLink.from([stateLink, awsAppSyncLink]);
-const client = new AWSAppSyncClient({}, { link });
+const TestResponsesPage = lazy(() => import("./pages/TestResponses"));
+const SurveyResponsesPage = lazy(() => import("./pages/SurveyResponses"));
+const SurveyEntriesPage = lazy(() => import("./pages/SurveyEntries"));
+const ArchivedPage = lazy(() => import("./pages/Archived"));
 
-Analytics.autoTrack("session", {
-  enable: true,
-  provider: "AWSPinpoint",
-});
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<App />}>
+      <Route index element={<DashboardPage />} />
+      <Route path="surveys" element={<SurveysPage />} />
+      <Route path="questionnaries" element={<QuestionnariesPage />} />
+      <Route
+        path="questionnaries/:id"
+        element={<QuestionnariesQuestionPage />}
+      />
+      <Route path="users" element={<UsersPage />} />
+      <Route path="locations" element={<LocationsPage />} />
+      {/* <Route path="qrcoderesponses" element={<QrCodeResponsesPage />} /> */}
+      {/* <Route path="linkresponses" element={<LinkResponsesPage />} /> */}
+      {/* <Route path="testresponses" element={<TestResponsesPage />} /> */}
+      <Route path="surveyEntries/:id" element={<SurveyResponsesPage />} />
+      <Route path="analytics" element={<AnalyticsPage />} />
+      <Route path="surveyEntries" element={<SurveyEntriesPage />} />
+      <Route path="archived" element={<ArchivedPage />} />
+    </Route>
+  )
+);
 
-Analytics.autoTrack("pageView", {
-  enable: true,
-  eventName: "pageView",
-  type: "SPA",
-  provider: "AWSPinpoint",
-  getUrl: () => {
-    return window.location.origin + window.location.pathname;
-  },
-});
-
-Analytics.autoTrack("event", {
-  enable: true,
-  events: ["click"],
-  selectorPrefix: "data-amplify-analytics-",
-  provider: "AWSPinpoint",
-});
-
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
   <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>,
-  document.getElementById("root")
+    <ColorModeContextProvider>
+      <RouterProvider router={router} fallbackElement={<Loader />} />
+    </ColorModeContextProvider>
+  </ApolloProvider>
 );
-
-serviceWorker.register();

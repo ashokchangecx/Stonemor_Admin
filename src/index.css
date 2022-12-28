@@ -1,13 +1,60 @@
+* {
+  padding: 0;
+  box-sizing: border-box;
+}
 body {
-  margin: 0;
+  background-color: #fafbfb;
+  /* max-width: 1600px; */
+  margin: 0 auto;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-y: auto !important;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+[data-amplify-authenticator] {
+  min-height: 100vh;
+}
+.PDF_ICON_CLASS {
+  margin: 4px 6px;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+@media only screen and (min-width: 600px) {
+  .apexcharts-svg {
+    height: 440px;
+  }
+}
+.apexcharts-svg {
+  background: transparent !important;
+}
+.apexcharts-tooltip-title {
+  background: rgba(0, 0, 0, 0.7) !important;
+  border-bottom: 1px solid #333 !important;
+  margin: 0 !important;
+}
+.apexcharts-text {
+  fill: rgb(168, 170, 176) !important;
+}
+.apexcharts-title-text {
+  fill: rgba(116, 116, 116, 0.893) !important;
+}
+.apexcharts-theme-dark .apexcharts-menu-icon svg,
+.apexcharts-theme-dark .apexcharts-pan-icon svg,
+.apexcharts-theme-dark .apexcharts-reset-icon svg,
+.apexcharts-theme-dark .apexcharts-selection-icon svg,
+.apexcharts-theme-dark .apexcharts-toolbar-custom-icon svg,
+.apexcharts-theme-dark .apexcharts-zoom-icon svg,
+.apexcharts-theme-dark .apexcharts-zoomin-icon svg,
+.apexcharts-theme-dark .apexcharts-zoomout-icon svg {
+  fill: rgba(116, 116, 116, 0.893) !important;
+}
+.apexcharts-legend-text {
+  color: rgba(116, 116, 116, 0.893) !important;
+}
+.apexcharts-pie-label {
+  fill: white !important;
 }
