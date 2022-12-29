@@ -20,6 +20,14 @@ const Dashboard = ({
     utils.book_append_sheet(wb, ws, "SurveyEntries");
     writeFileXLSX(wb, "SurveyReports.xlsx");
   };
+
+  const surveyByDateData = surveyEntries
+    ?.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
+    ?.slice(0, 100);
+
   return (
     <Grid container rowGap={2} columns={12} justifyItems="center" py={1}>
       <Grid item xs={12} lg={6} paddingX={1}>
@@ -42,7 +50,10 @@ const Dashboard = ({
         />
       </Grid>
       <Grid item xs={12} lg={6} paddingX={1}>
-        <SurveyByDate data={surveyEntries} setSelectedLocation={() => null} />
+        <SurveyByDate
+          data={surveyByDateData}
+          setSelectedLocation={() => null}
+        />
       </Grid>
     </Grid>
   );

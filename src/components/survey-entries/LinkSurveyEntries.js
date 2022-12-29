@@ -54,27 +54,35 @@ const LinkSurveyEntries = ({ surveyEntries, questionnaries, linkSurvey }) => {
     return que?.name ?? id;
   };
 
-  const LinkSurveyEntriesData = surveyEntries?.filter(
-    (item) =>
-      item?.by?.name
-        .toString()
-        .toLowerCase()
-        .includes(linkSurvey.toString().toLowerCase()) ||
-      item?.by?.email
-        .toString()
-        .toLowerCase()
-        .includes(linkSurvey.toString().toLowerCase()) ||
-      onGettingQuestionnaireById(item?.questionnaireId)
-        .toString()
-        .toLowerCase()
-        .includes(linkSurvey.toString().toLowerCase())
-  );
+  const LinkSurveyEntriesData = surveyEntries
+    ?.filter((data) => data?.by?.name)
+    ?.filter(
+      (item) =>
+        item?.by?.name
+          .toString()
+          .toLowerCase()
+          .includes(linkSurvey.toString().toLowerCase()) ||
+        item?.by?.email
+          .toString()
+          .toLowerCase()
+          .includes(linkSurvey.toString().toLowerCase()) ||
+        onGettingQuestionnaireById(item?.questionnaireId)
+          .toString()
+          .toLowerCase()
+          .includes(linkSurvey.toString().toLowerCase())
+    );
 
   if (!LinkSurveyEntriesData.length)
-    return <p style={{
-      textAlign:"center",
-      marginTop:"20px"
-    }}>No Search Results Found</p>;
+    return (
+      <p
+        style={{
+          textAlign: "center",
+          marginTop: "20px",
+        }}
+      >
+        No Search Results Found
+      </p>
+    );
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));

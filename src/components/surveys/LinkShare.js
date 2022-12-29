@@ -57,7 +57,7 @@ const LinkShare = ({ toggle, surveyId }) => {
           value={usersId}
           onChange={handleSurveyUserChange}
         >
-          {data?.listSurveyUsers?.items.map((user, s) => (
+          {data?.listSurveyUsers?.items?.map((user, s) => (
             <MenuItem key={s} value={user?.id}>
               {user.name}
               {"-"}

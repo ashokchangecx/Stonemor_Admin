@@ -1,6 +1,16 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
-import { Box, Grid, Tab, Tabs, Typography } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Tab,
+  Tabs,
+  Typography,
+} from "@mui/material";
 import { LIST_QUESTIONNARIES_NAME } from "../../graphql/custom/queries";
 import SurveyByLocations from "./chart_report/SurveyByLocations";
 import ResponsiveDateRangePicker from "../reusable/DateRangePicker";
@@ -48,16 +58,19 @@ const Analytics = ({ surveyEntriesData }) => {
   } = useQuery(LIST_QUESTIONNARIES_NAME);
   const [surveyEntries, setSurveyEntries] = useState(surveyEntriesData);
   const [tabValue, setTabValue] = useState(0);
+  const [type, setType] = useState("All");
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedQuestionnarie, setSelectedQuestionnarie] = useState(null);
-
+  const [surveyEntriesType, setSurveyEntriesType] = useState(surveyEntries);
   const [fromDate, setFromDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
-
+  const handleChangeType = (event) => {
+    setType(event.target.value);
+  };
   useEffect(() => {
     let filteredEntries = [];
     if (fromDate && endDate) {
@@ -84,6 +97,22 @@ const Analytics = ({ surveyEntriesData }) => {
     }
     setSurveyEntries(filteredEntries);
   }, [fromDate, endDate]);
+
+  useEffect(() => {
+    let typeFilteredEntries = [];
+    if (type === "Link") {
+      typeFilteredEntries = surveyEntries?.filter((data) => data?.by?.name);
+    } else if (type === "QrCode") {
+      typeFilteredEntries = surveyEntries?.filter(
+        (data) => data?.location?.location
+      );
+    } else if (type === "All") {
+      typeFilteredEntries = surveyEntries;
+    } else {
+      typeFilteredEntries = surveyEntries;
+    }
+    setSurveyEntriesType(typeFilteredEntries);
+  }, [type, fromDate, endDate]);
 
   return (
     <div>
@@ -133,6 +162,30 @@ const Analytics = ({ surveyEntriesData }) => {
               setEndDate={setEndDate}
             />
           </Grid>
+          {tabValue === 2 && (
+            <Grid item xs={4} sm={4}>
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl variant="standard">
+                  <InputLabel id="demo-simple-select-label" color="secondary">
+                    Type Filter
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={type}
+                    name="type"
+                    label="Type Filter"
+                    onChange={handleChangeType}
+                    color="secondary"
+                  >
+                    <MenuItem value="All"> All SurveyEntries</MenuItem>
+                    <MenuItem value="Link"> Link SurveyEntries</MenuItem>
+                    <MenuItem value="QrCode">Qrcode SurveyEntries</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+            </Grid>
+          )}
         </Grid>
       </Box>
       <TabPanel value={tabValue} index={0}>
@@ -205,11 +258,12 @@ const Analytics = ({ surveyEntriesData }) => {
       <TabPanel value={tabValue} index={2}>
         <Grid item xs={12} md={6}>
           <SurveyByDate
-            data={surveyEntries}
+            data={surveyEntriesType}
             loading={loading}
             error={error}
             fromDate={fromDate}
             endDate={endDate}
+            type={type}
           />
         </Grid>
       </TabPanel>
