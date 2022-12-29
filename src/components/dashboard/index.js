@@ -50,7 +50,10 @@ const Dashboard = ({
         />
       </Grid>
       <Grid item xs={12} lg={6} paddingX={1}>
-        <SurveyByDate data={surveyEntries} setSelectedLocation={() => null} />
+        <SurveyByDate
+          data={surveyByDateData}
+          setSelectedLocation={() => null}
+        />
       </Grid>
     </Grid>
   );
