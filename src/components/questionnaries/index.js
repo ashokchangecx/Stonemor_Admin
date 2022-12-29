@@ -1,10 +1,11 @@
-import { Grid, Pagination, Typography } from "@mui/material";
+import { Grid, Pagination } from "@mui/material";
 import { Box } from "@mui/system";
 import { lazy, Suspense, useState } from "react";
 import withSuspense from "../../helpers/hoc/withSuspense";
 import usePagination from "../../helpers/hooks/usePagination";
 import useToggle from "../../helpers/hooks/useToggle";
 import { Loader } from "../common/Loader";
+import BreadCrumbs from "../reusable/BreadCrumbs";
 import CreateCard from "../reusable/CreateCard";
 import DynamicModel from "../reusable/DynamicModel";
 import SearchBar from "../reusable/SearchBar";
@@ -53,7 +54,7 @@ const Questionnaries = ({ questionnaires }) => {
       </DynamicModel>
       <Grid container spacing={2} sx={{ p: "0.5rem" }}>
         <Grid item xs={6}>
-          <Typography variant="h6">Questionnaires</Typography>
+          <BreadCrumbs active="Questionnaires" />
         </Grid>
         <Grid item xs={6}>
           <SearchBar

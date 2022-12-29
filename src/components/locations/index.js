@@ -1,7 +1,5 @@
 import { useQuery, useMutation } from "@apollo/client";
 import {
-  Box,
-  Breadcrumbs,
   Paper,
   Table,
   TableCell,
@@ -9,7 +7,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
   tableCellClasses,
   Button,
   TablePagination,
@@ -26,6 +23,7 @@ import useToggle from "../../helpers/hooks/useToggle";
 import DeleteModel from "../reusable/DeleteModel";
 import SearchBar from "../reusable/SearchBar";
 import { UPDATE_SURVEY_LOCATION } from "../../graphql/custom/mutations";
+import BreadCrumbs from "../reusable/BreadCrumbs";
 
 const UpdateLocation = lazy(() => import("./UpdateLocation"));
 
@@ -170,7 +168,7 @@ const Locations = () => {
       />
       <Grid container spacing={2} sx={{ p: "0.5rem" }}>
         <Grid item xs={6}>
-          <Typography variant="h6">Locations</Typography>
+          <BreadCrumbs active="Locations"/>
         </Grid>
         <Grid item xs={6}>
           <SearchBar searchInput={(e) => locationSearch(e.target.value)} />

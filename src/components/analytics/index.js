@@ -18,6 +18,7 @@ import SimpleLineChart from "../charts/line";
 import { Loader } from "../common/Loader";
 import TestModeSwitch from "../reusable/TestModeSwitch";
 import LocationByQuestionnaire from "./chart_report/LocationByQuestionnaire";
+import BreadCrumbs from "../reusable/BreadCrumbs";
 
 const QuestionnariesByLocation = lazy(() =>
   import("./chart_report/QuestionnariesByLocation")
@@ -117,7 +118,7 @@ const Analytics = ({ surveyEntriesData }) => {
     <div>
       <Grid container spacing={2} sx={{ py: "0.5rem" }}>
         <Grid item xs={6}>
-          <Typography variant="h6">Analytics</Typography>
+          <BreadCrumbs active ="Analytics"/>
         </Grid>
         <Grid item xs={6}></Grid>
       </Grid>

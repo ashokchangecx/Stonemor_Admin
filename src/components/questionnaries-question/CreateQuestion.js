@@ -18,7 +18,7 @@ import { CREATE_QUESTION } from "../../graphql/custom/mutations";
 import { GET_QUESTIONNAIRES } from "../../graphql/custom/queries";
 import { questionQuery } from "../../utils/Question";
 
-const STEPS = ["Create a Question", "Next Question", "Preview"];
+const STEPS = ["Create a Question", "Options", "Preview"];
 
 const initialFormValues = {
   question: "",

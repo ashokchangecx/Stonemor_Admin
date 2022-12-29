@@ -29,11 +29,11 @@ const Dashboard = ({
     ?.slice(0, 100);
 
   return (
-    <Grid container gap={3} columns={13} justifyItems="center" py={1}>
-      <Grid item xs={13} lg={6}>
+    <Grid container rowGap={2} columns={12} justifyItems="center" py={1}>
+      <Grid item xs={12} lg={6} paddingX={1}>
         <WelcomeAdmin onDownload={handleDownloadingReport} />
       </Grid>
-      <Grid item xs={13} lg={6}>
+      <Grid item xs={12} lg={6} paddingX={1}>
         {!overviewReady && (
           <Overview
             surveyCount={surveyCount}
@@ -43,14 +43,14 @@ const Dashboard = ({
           />
         )}
       </Grid>
-      <Grid item xs={13} lg={6}>
+      <Grid item xs={12} lg={6} paddingX={1}>
         <SurveyByLocations
           data={surveyEntries}
           setSelectedLocation={() => null}
         />
       </Grid>
-      <Grid item xs={13} lg={6}>
-        <SurveyByDate data={surveyByDateData} />
+      <Grid item xs={12} lg={6} paddingX={1}>
+        <SurveyByDate data={surveyEntries} setSelectedLocation={() => null} />
       </Grid>
     </Grid>
   );
