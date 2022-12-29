@@ -7,6 +7,7 @@ import {
   CHART_THEME_MODE,
   dowloadChartAsPDF,
 } from "../../../config/ChartConfig";
+import ChartWrapper from "../ChartWrapper";
 
 const SimpleLineChart = ({ data, title, id, seriesName, yAxisTitle }) => {
   const chartData = Object.entries(data)
@@ -38,13 +39,12 @@ const SimpleLineChart = ({ data, title, id, seriesName, yAxisTitle }) => {
       },
       toolbar: {
         tools: {
-          customIcons: [
-            {
-              ...CHART_PDF_DOWNLOAD_ICON,
-              click: async () =>
-                await dowloadChartAsPDF({ ID: id, docName: title }),
-            },
-          ],
+          download: false,
+          selection: true,
+          zoom: true,
+          zoomin: true,
+          zoomout: true,
+          pan: true,
         },
         export: {
           csv: {
@@ -72,10 +72,6 @@ const SimpleLineChart = ({ data, title, id, seriesName, yAxisTitle }) => {
     stroke: {
       curve: "smooth",
     },
-    title: {
-      text: title,
-      align: "left",
-    },
     theme: {
       mode: CHART_THEME_MODE,
     },
@@ -93,15 +89,15 @@ const SimpleLineChart = ({ data, title, id, seriesName, yAxisTitle }) => {
         hideOverlappingLabels: false,
       },
     },
-    yaxis: {
-      title: {
-        text: yAxisTitle,
-      },
-    },
+    // yaxis: {
+    //   title: {
+    //     text: yAxisTitle,
+    //   },
+    // },
   };
 
   return (
-    <Paper variant="elevation" elevation={8} sx={{ p: 0.35, height: "100%" }}>
+    <ChartWrapper title={title} id={id}>
       <Chart
         options={options}
         series={series}
@@ -109,7 +105,7 @@ const SimpleLineChart = ({ data, title, id, seriesName, yAxisTitle }) => {
         width="100%"
         height={CHART_HEIGHT}
       />
-    </Paper>
+    </ChartWrapper>
   );
 };
 
