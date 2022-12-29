@@ -19,7 +19,7 @@ import Step2 from "./steps/Step2";
 import Step3 from "./steps/Step3";
 import { questionQuery } from "../../utils/Question";
 
-const STEPS = ["Edit Question", "Next Question", "Preview"];
+const STEPS = ["Edit Question", "Options", "Preview"];
 
 const UpdateQuestion = ({
   toggle,

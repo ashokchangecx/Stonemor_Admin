@@ -45,11 +45,11 @@ const ViewSurvey = ({ currentSurveyData }) => {
         )}
 
         <Typography gutterBottom variant="body2">
-          created time : {moment(createdAt).format(" Do MMMM  YYYY")}
+          Created Date : {moment(createdAt).format(" Do MMMM  YYYY")}
         </Typography>
 
         {preQuestionnaire?.name && (
-          <Typography gutterBottom variant="button" component="div">
+          <Typography gutterBottom component="div">
             Associated Questionnaire : {preQuestionnaire?.name}
           </Typography>
         )}
