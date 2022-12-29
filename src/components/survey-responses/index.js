@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  Link,
   Paper,
   Rating,
   styled,
@@ -10,6 +11,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Link as MUILink,
 } from "@mui/material";
 import { useQuery } from "@apollo/client";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
@@ -20,12 +22,10 @@ import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfi
 
 import { useParams } from "react-router";
 
-import {
-  GET_SURVEYENTRIES,
-  LIST_QUESTIONNARIES_NAME,
-} from "../../graphql/custom/queries";
+import { GET_SURVEYENTRIES } from "../../graphql/custom/queries";
 import withSuspense from "../../helpers/hoc/withSuspense";
 import { Loader } from "../common/Loader";
+import BreadCrumbs from "../reusable/BreadCrumbs";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -63,7 +63,6 @@ const StyledRating = styled(Rating)({
 const SurveyResponses = () => {
   const params = useParams();
 
-  const { data: questionariesName } = useQuery(LIST_QUESTIONNARIES_NAME);
   const { loading, error, data } = useQuery(GET_SURVEYENTRIES, {
     variables: {
       id: params.id,
@@ -136,6 +135,15 @@ const SurveyResponses = () => {
   }
   return (
     <div>
+      <BreadCrumbs
+        paths={[
+          {
+            name: "Survey Entries",
+            to: "/surveyEntries",
+          },
+        ]}
+        active="Survey Responses"  
+      />
       <Paper>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>

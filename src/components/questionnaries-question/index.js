@@ -10,9 +10,6 @@ import {
   Button,
   TablePagination,
   Grid,
-  Typography,
-  Breadcrumbs,
-  Link,
   styled,
   tableCellClasses,
 } from "@mui/material";
@@ -26,12 +23,9 @@ import { useMutation } from "@apollo/client";
 import { Loader } from "../common/Loader";
 import { lazy } from "react";
 import DeleteModel from "../reusable/DeleteModel";
-import {
-  GET_QUESTIONNAIRES,
-  LIST_QUESTIONNARIES,
-  LIST_QUESTIONS,
-} from "../../graphql/custom/queries";
+import { GET_QUESTIONNAIRES } from "../../graphql/custom/queries";
 import { UPDATE_QUESTION } from "../../graphql/custom/mutations";
+import BreadCrumbs from "../reusable/BreadCrumbs";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -150,15 +144,15 @@ const QuestionnariesQuestion = ({ questions, questionnarieData }) => {
       </DynamicModel>
       <Grid container spacing={2} sx={{ py: "0.5rem" }}>
         <Grid item xs={6}>
-          <Breadcrumbs aria-label="breadcrumb">
-            <Link underline="hover" color="inherit" href="/questionnaries">
-              <Typography variant="h6"> Questionnarie</Typography>
-            </Link>
-
-            <Typography color="text.primary" variant="h6">
-              Question
-            </Typography>
-          </Breadcrumbs>
+          <BreadCrumbs
+            paths={[
+              {
+                name: "Questionnarie",
+                to: "/questionnaries",
+              },
+            ]}
+            active=" Question"
+          />
         </Grid>
         <Grid item xs={6}>
           {/* <SearchBar searchInput={(e) => setSurveySearch(e.target.value)} /> */}

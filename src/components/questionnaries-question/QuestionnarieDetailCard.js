@@ -22,12 +22,12 @@ const QuestionnarieDetailCard = ({ questionnarieData }) => {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
-            bgcolor: "#6aa342",
+            bgcolor: "#c0f29d",
           }}
         >
           <CardContent>
             <Typography
-              sx={{ mb: 1, fontWeight: "bold", color: "white" }}
+              sx={{ mb: 1, fontWeight: "bold"}}
               color="text.primary"
               gutterBottom
               variant="h6"
@@ -38,14 +38,13 @@ const QuestionnarieDetailCard = ({ questionnarieData }) => {
               variant="body2"
               gutterBottom
               color="text.secondary"
-              sx={{ color: "white" }}
             >
               {moment(createdAt).format(" Do MMMM  YYYY ")}
             </Typography>
-            <Grid container spacing={1} sx={{ mt: "1rem", color: "white" }}>
+            <Grid container spacing={1} sx={{ mt: "1rem",}}>
               <Grid item xs={4} md={2}>
                 <Typography
-                  sx={{ mb: 1.5, fontWeight: "bold", color: "white" }}
+                  sx={{ mb: 1.5, fontWeight: "bold"}}
                   color="text.primary"
                   gutterBottom
                   variant="body2"
@@ -55,7 +54,7 @@ const QuestionnarieDetailCard = ({ questionnarieData }) => {
               </Grid>
               <Grid item xs={8} md={10}>
                 <Typography
-                  sx={{ mb: 1.5, color: "white" }}
+                  sx={{ mb: 1.5}}
                   color="text.primary"
                   gutterBottom
                   variant="body2"
@@ -67,7 +66,7 @@ const QuestionnarieDetailCard = ({ questionnarieData }) => {
             <Grid container spacing={2}>
               <Grid item xs={4} md={2}>
                 <Typography
-                  sx={{ mb: 1.5, fontWeight: "bold", color: "white" }}
+                  sx={{ mb: 1.5, fontWeight: "bold"}}
                   color="text.primary"
                   gutterBottom
                   variant="body2"
@@ -77,7 +76,7 @@ const QuestionnarieDetailCard = ({ questionnarieData }) => {
               </Grid>
               <Grid item xs={8} md={10}>
                 <Typography
-                  sx={{ mb: 1.5, color: "white" }}
+                  sx={{ mb: 1.5 }}
                   color="text.primary"
                   gutterBottom
                   variant="body2"
@@ -89,7 +88,7 @@ const QuestionnarieDetailCard = ({ questionnarieData }) => {
             <Grid container spacing={2}>
               <Grid item xs={4} md={2}>
                 <Typography
-                  sx={{ fontWeight: "bold", color: "white" }}
+                  sx={{ fontWeight: "bold" }}
                   color="text.primary"
                   gutterBottom
                   variant="body2"
@@ -99,10 +98,8 @@ const QuestionnarieDetailCard = ({ questionnarieData }) => {
               </Grid>
               <Grid item xs={8} md={10}>
                 <Typography
-                  // color="text.primary"
                   gutterBottom
                   variant="body2"
-                  sx={{ color: "white" }}
                 >
                   <div dangerouslySetInnerHTML={{ __html: linkify() }} />
                 </Typography>
