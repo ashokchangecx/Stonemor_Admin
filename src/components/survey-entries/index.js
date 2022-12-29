@@ -1,19 +1,8 @@
 import {
   Box,
-  Button,
   Grid,
-  Paper,
-  styled,
   Tab,
-  Table,
-  TableBody,
-  TableCell,
-  tableCellClasses,
-  TableHead,
-  TablePagination,
-  TableRow,
   Tabs,
-  Typography,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
 
@@ -24,7 +13,6 @@ import {
   TEST_SURVEY_ENTRIES,
 } from "../../graphql/custom/queries";
 
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import withSuspense from "../../helpers/hoc/withSuspense";
 import LinkSurveyEntries from "./LinkSurveyEntries";
 import QrSurveyEntries from "./QrSurveyEntries";
@@ -32,6 +20,7 @@ import { Loader } from "../common/Loader";
 
 import SearchBar from "../reusable/SearchBar";
 import { lazy } from "react";
+import BreadCrumbs from "../reusable/BreadCrumbs";
 
 const IncompletedLinkSurveyEntries = lazy(() =>
   import("./IncompletedLinkSurveyEntries")
@@ -134,7 +123,7 @@ const SurveyEntries = () => {
       <div sx={{ mt: 2 }}>
         <Grid container spacing={2} sx={{ p: "0.5rem" }}>
           <Grid item xs={6}>
-            <Typography variant="h6">SurveyEntries</Typography>
+            <BreadCrumbs  active=" Survey Entries"/>
           </Grid>
           <Grid item xs={6}>
             <SearchBar searchInput={(e) => setSurveySearched(e.target.value)} />

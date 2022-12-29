@@ -1,5 +1,5 @@
-import { useQuery, useMutation } from "@apollo/client";
-import { Button, Grid, Pagination, Typography } from "@mui/material";
+import { useQuery } from "@apollo/client";
+import {  Grid, Pagination } from "@mui/material";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { LIST_SURVEYS } from "../../graphql/custom/queries";
 import useToggle from "../../helpers/hooks/useToggle";
@@ -12,6 +12,7 @@ import SurveyCard from "./SurveyCard";
 import usePagination from "../../helpers/hooks/usePagination";
 import { Box } from "@mui/system";
 import SearchBar from "../reusable/SearchBar";
+import BreadCrumbs from "../reusable/BreadCrumbs";
 
 const CreateSurvey = lazy(() =>
   import("../../components/surveys/CreateSurvey")
@@ -74,7 +75,7 @@ const Surveys = () => {
       </DynamicModel>
       <Grid container spacing={2} sx={{ py: "0.5rem" }}>
         <Grid item xs={6}>
-          <Typography variant="h6">Surveys</Typography>
+          <BreadCrumbs  active="Surveys"  />
         </Grid>
         <Grid item xs={6}>
           <SearchBar searchInput={(e) => setSurveySearch(e.target.value)} />

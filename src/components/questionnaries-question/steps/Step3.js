@@ -62,7 +62,7 @@ const Step3 = ({ values, getQuestionById }) => {
                 },
               }}
             >
-              <TableCell>Option</TableCell>
+              <TableCell>Options</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
