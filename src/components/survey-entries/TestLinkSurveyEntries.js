@@ -57,7 +57,8 @@ const TestLinkSurveyEntries = ({
 
     return que?.name ?? id;
   };
-  const TestLinkSurveyEntriesData = surveyEntries?.filter(
+  const SurveyEntriesData = surveyEntries?.filter((data) => data?.by?.name);
+  const TestLinkSurveyEntriesData = SurveyEntriesData?.filter(
     (item) =>
       item?.by?.name
         .toString()
