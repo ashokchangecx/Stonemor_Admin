@@ -1,12 +1,10 @@
-import { Paper } from "@mui/material";
 import Chart from "react-apexcharts";
 import {
   CHART_FORECOLOR,
   CHART_HEIGHT,
-  CHART_PDF_DOWNLOAD_ICON,
   CHART_THEME_MODE,
-  dowloadChartAsPDF,
 } from "../../../config/ChartConfig";
+import ChartWrapper from "../ChartWrapper";
 
 const SimpleDonutChart = ({ id, data, title, labels }) => {
   const chartData = Object.entries(data)
@@ -20,20 +18,7 @@ const SimpleDonutChart = ({ id, data, title, labels }) => {
       id,
       foreColor: CHART_FORECOLOR,
       toolbar: {
-        show: true,
-        tools: {
-          customIcons: [
-            {
-              ...CHART_PDF_DOWNLOAD_ICON,
-              click: async () =>
-                await dowloadChartAsPDF({
-                  ID: id,
-                  docName: title,
-                  isCustom: true,
-                }),
-            },
-          ],
-        },
+        show: false,
       },
     },
     series: chartData.map((m) => m?.y),
@@ -75,27 +60,14 @@ const SimpleDonutChart = ({ id, data, title, labels }) => {
         return val + " - " + opts.w.globals.series[opts.seriesIndex];
       },
     },
-    title: {
-      text: title,
-      align: "center",
-    },
+
     theme: {
       mode: CHART_THEME_MODE,
     },
-    // responsive: [
-    //   {
-    //     breakpoint: 1200,
-    //     options: {
-    //       legend: {
-    //         position: "bottom",
-    //       },
-    //     },
-    //   },
-    // ],
   };
 
   return (
-    <Paper variant="elevation" elevation={8} sx={{ p: 0.35, height: "100%" }}>
+    <ChartWrapper title={title} id={id}>
       <Chart
         options={options}
         series={options.series}
@@ -103,7 +75,7 @@ const SimpleDonutChart = ({ id, data, title, labels }) => {
         width="100%"
         height={CHART_HEIGHT}
       />
-    </Paper>
+    </ChartWrapper>
   );
 };
 

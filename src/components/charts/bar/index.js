@@ -1,13 +1,11 @@
-import { Paper } from "@mui/material";
 import { useTheme } from "@mui/system";
 import Chart from "react-apexcharts";
 import {
   CHART_FORECOLOR,
   CHART_HEIGHT,
-  CHART_PDF_DOWNLOAD_ICON,
   CHART_THEME_MODE,
-  dowloadChartAsPDF,
 } from "../../../config/ChartConfig";
+import ChartWrapper from "../ChartWrapper";
 
 const SimpleBarChart = ({
   data,
@@ -19,7 +17,6 @@ const SimpleBarChart = ({
   yAxisTitle,
 }) => {
   const theme = useTheme();
-
   const color = theme.palette.secondary.main;
   const chartData = Object.entries(data)
     ?.map(([name, obj]) => obj)
@@ -32,33 +29,37 @@ const SimpleBarChart = ({
         dataPointSelection: onClick,
       },
       foreColor: CHART_FORECOLOR,
+      // toolbar: {
+      //   // show: false,
+      //   tools: {
+      //     customIcons: [
+      //       {
+      //         ...CHART_PDF_DOWNLOAD_ICON,
+      //         click: async () =>
+      //           await dowloadChartAsPDF({ ID: id, docName: title }),
+      //       },
+      //     ],
+      //   },
+      //   export: {
+      //     csv: {
+      //       filename: title,
+      //       columnDelimiter: ",",
+      //       headerCategory: title,
+      //       headerValue: yAxisTitle,
+      //       dateFormatter(timestamp) {
+      //         return new Date(timestamp).toDateString();
+      //       },
+      //     },
+      //     svg: {
+      //       filename: title,
+      //     },
+      //     png: {
+      //       filename: title,
+      //     },
+      //   },
+      // },
       toolbar: {
-        tools: {
-          customIcons: [
-            {
-              ...CHART_PDF_DOWNLOAD_ICON,
-              click: async () =>
-                await dowloadChartAsPDF({ ID: id, docName: title }),
-            },
-          ],
-        },
-        export: {
-          csv: {
-            filename: title,
-            columnDelimiter: ",",
-            headerCategory: title,
-            headerValue: yAxisTitle,
-            dateFormatter(timestamp) {
-              return new Date(timestamp).toDateString();
-            },
-          },
-          svg: {
-            filename: title,
-          },
-          png: {
-            filename: title,
-          },
-        },
+        show: false,
       },
     },
     xaxis: {
@@ -67,17 +68,18 @@ const SimpleBarChart = ({
         trim: true,
         hideOverlappingLabels: false,
         formatter: xAxisFormatter,
+        rotate: -30,
       },
     },
-    yaxis: {
-      title: {
-        text: yAxisTitle,
-      },
-    },
-    title: {
-      text: title,
-      align: "center",
-    },
+    // yaxis: {
+    //   title: {
+    //     text: yAxisTitle,
+    //   },
+    // },
+    // title: {
+    //   text: title,
+    //   align: "center",
+    // },
     colors: Array(chartData.length).fill(color),
     tooltip: {
       fillSeriesColor: true,
@@ -100,7 +102,7 @@ const SimpleBarChart = ({
   ];
 
   return (
-    <Paper variant="elevation" elevation={8} sx={{ p: 0.35 }}>
+    <ChartWrapper title={title} id={id}>
       <Chart
         options={options}
         series={series}
@@ -108,7 +110,7 @@ const SimpleBarChart = ({
         width="100%"
         height={CHART_HEIGHT}
       />
-    </Paper>
+    </ChartWrapper>
   );
 };
 
