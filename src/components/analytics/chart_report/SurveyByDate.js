@@ -8,7 +8,6 @@ const CHART_ID = "SurveyEntries_by_date";
 const TITLE = "SurveyEntries By Date";
 
 const SurveyByDate = ({ data, loading, error, fromDate, type, endDate }) => {
-  console.log("type", type);
   const [date, setDate] = useState(TITLE);
   const chartData = data?.reduce((chartData, data) => {
     const x =
