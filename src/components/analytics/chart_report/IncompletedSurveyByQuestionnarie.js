@@ -3,15 +3,16 @@ import { bindTitle } from "../../../config/ChartConfig";
 import SimpleDonutChart from "../../charts/donut";
 import { Loader } from "../../common/Loader";
 
-const CHART_ID = "survey_by_questionnaire";
-const TITLE = "Survey By Questionnarie";
-const SurveyByQuestionnarie = ({
+const CHART_ID = "Incompleted survey_by_questionnaire";
+const TITLE = "Incompleted Survey By Questionnarie";
+const IncompletedSurveyByQuestionnarie = ({
   data,
   questionariesName,
   loading,
   error,
   fromDate,
   endDate,
+  type,
 }) => {
   const [date, setDate] = useState(TITLE);
   const chartData = data?.reduce((chartData, { questionnaireId }) => {
@@ -32,9 +33,10 @@ const SurveyByQuestionnarie = ({
       TITLE,
       fromDate,
       endDate,
+      type,
     });
     setDate(fullTitle);
-  }, [fromDate, endDate]);
+  }, [fromDate, endDate, type]);
   return (
     <>
       {loading ? (
@@ -53,4 +55,4 @@ const SurveyByQuestionnarie = ({
   );
 };
 
-export default SurveyByQuestionnarie;
+export default IncompletedSurveyByQuestionnarie;

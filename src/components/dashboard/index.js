@@ -1,4 +1,5 @@
 import { Grid } from "@mui/material";
+import { useEffect, useState } from "react";
 import { utils, writeFileXLSX } from "xlsx";
 import { SurveyEntriesToExcel } from "../../utils/Excel";
 import SurveyByDate from "../analytics/chart_report/SurveyByDate";
@@ -13,20 +14,23 @@ const Dashboard = ({
   surveyLocationsCount,
   surveyUsersCount,
 }) => {
-  const handleDownloadingReport = () => {
-    const modifiedSurveyEntries = SurveyEntriesToExcel(surveyEntries);
-    const ws = utils.json_to_sheet(modifiedSurveyEntries);
-    const wb = utils.book_new();
-    utils.book_append_sheet(wb, ws, "SurveyEntries");
-    writeFileXLSX(wb, "SurveyReports.xlsx");
-  };
-
   const surveyByDateData = surveyEntries
     ?.sort(
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     )
     ?.slice(0, 100);
+  const handleDownloadingReport = () => {
+    const modifiedSurveyEntries = SurveyEntriesToExcel(surveyByDateData);
+    const ws = utils.json_to_sheet(modifiedSurveyEntries);
+    const wb = utils.book_new();
+    utils.book_append_sheet(wb, ws, "SurveyEntries");
+    writeFileXLSX(wb, "SurveyReports.xlsx");
+  };
+
+  // var fromDate = new Date();
+
+  // var endDate = new Date(fromDate.getTime() + 10 * 24 * 60 * 60 * 1000);
 
   return (
     <Grid container rowGap={2} columns={12} justifyItems="center" py={1}>
