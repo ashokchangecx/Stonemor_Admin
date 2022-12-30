@@ -328,6 +328,16 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
       </TabPanel>
       <TabPanel value={tabValue} index={3}>
         <Grid container spacing={2} alignItems="stretch">
+          <Grid item xs={12} md={12}>
+            <IncompletedSurveyByDate
+              data={incompletedSurveyEntriesType}
+              loading={loading}
+              error={error}
+              fromDate={fromDate}
+              endDate={endDate}
+              type={type}
+            />
+          </Grid>
           <Grid item xs={12} md={6}>
             <IncompletedSurveyByQuestionnarie
               data={incompletedSurveyEntriesType}
@@ -350,16 +360,6 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
               />
             </Grid>
           )}
-          <Grid item xs={12} md={6}>
-            <IncompletedSurveyByDate
-              data={incompletedSurveyEntriesType}
-              loading={loading}
-              error={error}
-              fromDate={fromDate}
-              endDate={endDate}
-              type={type}
-            />
-          </Grid>
         </Grid>
       </TabPanel>
     </div>
