@@ -23,6 +23,12 @@ import BreadCrumbs from "../reusable/BreadCrumbs";
 const QuestionnariesByLocation = lazy(() =>
   import("./chart_report/QuestionnariesByLocation")
 );
+const IncompletedSurveyByDate = lazy(() =>
+  import("./chart_report/IncompletedSurveyDate")
+);
+const IncompletedSurveyByQuestionnarie = lazy(() =>
+  import("./chart_report/IncompletedSurveyByQuestionnarie")
+);
 const SurveyByQrCode = lazy(() => import("./chart_report/SurveyByQrCode"));
 const SurveyByQuestionnarie = lazy(() =>
   import("./chart_report/SurveyByQuestionnarie")
@@ -30,9 +36,9 @@ const SurveyByQuestionnarie = lazy(() =>
 const SurveyByLink = lazy(() => import("./chart_report/SurveyByLink"));
 const SurveyByDate = lazy(() => import("./chart_report/SurveyByDate"));
 
-// const SurveyByLocations = lazy(() =>
-//   import("./chart_report/SurveyByLocations")
-// );
+const IncompletedSurveyByLocations = lazy(() =>
+  import("./chart_report/IncompletedSurveyByLocation")
+);
 
 const TabPanel = (props) => {
   const { value, index, children, ...other } = props;
@@ -50,18 +56,23 @@ const TabPanel = (props) => {
   );
 };
 
-const Analytics = ({ surveyEntriesData }) => {
+const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
   const {
     loading,
     data: questionariesName,
     error,
   } = useQuery(LIST_QUESTIONNARIES_NAME);
   const [surveyEntries, setSurveyEntries] = useState(surveyEntriesData);
+  const [incompletedSurveyEntries, setIncompletedSurveyEntries] = useState(
+    incompletedSurveyEntriesData
+  );
   const [tabValue, setTabValue] = useState(0);
   const [type, setType] = useState("All");
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedQuestionnarie, setSelectedQuestionnarie] = useState(null);
   const [surveyEntriesType, setSurveyEntriesType] = useState(surveyEntries);
+  const [incompletedSurveyEntriesType, setIncompletedSurveyEntriesType] =
+    useState(incompletedSurveyEntriesData);
   const [fromDate, setFromDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
@@ -96,7 +107,34 @@ const Analytics = ({ surveyEntriesData }) => {
       filteredEntries = surveyEntriesData;
     }
     setSurveyEntries(filteredEntries);
-  }, [fromDate, endDate]);
+  }, [fromDate, endDate, type]);
+
+  useEffect(() => {
+    let DateFilteredEntries = [];
+    if (fromDate && endDate) {
+      const SD = fromDate.getTime();
+      const ED = endDate.getTime();
+      DateFilteredEntries = incompletedSurveyEntriesData?.filter((entry) => {
+        const CD = new Date(entry.createdAt).getTime();
+        return SD <= CD && CD <= ED;
+      });
+    } else if (fromDate) {
+      const SD = fromDate.getTime();
+      DateFilteredEntries = incompletedSurveyEntriesData?.filter((entry) => {
+        const CD = new Date(entry.createdAt).getTime();
+        return SD <= CD;
+      });
+    } else if (endDate) {
+      const ED = endDate.getTime();
+      DateFilteredEntries = incompletedSurveyEntriesData?.filter((entry) => {
+        const CD = new Date(entry.createdAt).getTime();
+        return CD <= ED;
+      });
+    } else {
+      DateFilteredEntries = incompletedSurveyEntriesData;
+    }
+    setIncompletedSurveyEntries(DateFilteredEntries);
+  }, [fromDate, endDate, type]);
 
   useEffect(() => {
     let typeFilteredEntries = [];
@@ -114,11 +152,29 @@ const Analytics = ({ surveyEntriesData }) => {
     setSurveyEntriesType(typeFilteredEntries);
   }, [type, fromDate, endDate]);
 
+  useEffect(() => {
+    let incompletedTypeFilteredEntries = [];
+    if (type === "Link") {
+      incompletedTypeFilteredEntries = incompletedSurveyEntries?.filter(
+        (data) => data?.by?.name
+      );
+    } else if (type === "QrCode") {
+      incompletedTypeFilteredEntries = incompletedSurveyEntries?.filter(
+        (data) => data?.location?.location
+      );
+    } else if (type === "All") {
+      incompletedTypeFilteredEntries = incompletedSurveyEntries;
+    } else {
+      incompletedTypeFilteredEntries = incompletedSurveyEntries;
+    }
+    setIncompletedSurveyEntriesType(incompletedTypeFilteredEntries);
+  }, [type, fromDate, endDate]);
+
   return (
     <div>
       <Grid container spacing={2} sx={{ py: "0.5rem" }}>
         <Grid item xs={6}>
-          <BreadCrumbs active ="Analytics"/>
+          <BreadCrumbs active="Analytics" />
         </Grid>
         <Grid item xs={6}></Grid>
       </Grid>
@@ -147,6 +203,7 @@ const Analytics = ({ surveyEntriesData }) => {
           <Tab label="Locations" />
           <Tab label="Survey type" />
           <Tab label="Date" />
+          <Tab label="Incompleted SurveyEntries" />
         </Tabs>
         <Grid container spacing={3} mb={2} alignItems="flex-start">
           <Grid item xs={4} sm={2} md={1}>
@@ -162,7 +219,7 @@ const Analytics = ({ surveyEntriesData }) => {
               setEndDate={setEndDate}
             />
           </Grid>
-          {tabValue === 2 && (
+          {tabValue > 1 && (
             <Grid item xs={4} sm={4}>
               <Box sx={{ minWidth: 120 }}>
                 <FormControl variant="standard">
@@ -217,6 +274,8 @@ const Analytics = ({ surveyEntriesData }) => {
               questionariesName={questionariesName}
               loading={loading}
               error={error}
+              fromDate={fromDate}
+              endDate={endDate}
             />
           </Grid>
         </Grid>
@@ -265,6 +324,42 @@ const Analytics = ({ surveyEntriesData }) => {
             endDate={endDate}
             type={type}
           />
+        </Grid>
+      </TabPanel>
+      <TabPanel value={tabValue} index={3}>
+        <Grid container spacing={2} alignItems="stretch">
+          <Grid item xs={12} md={12}>
+            <IncompletedSurveyByDate
+              data={incompletedSurveyEntriesType}
+              loading={loading}
+              error={error}
+              fromDate={fromDate}
+              endDate={endDate}
+              type={type}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <IncompletedSurveyByQuestionnarie
+              data={incompletedSurveyEntriesType}
+              questionariesName={questionariesName}
+              loading={loading}
+              error={error}
+              fromDate={fromDate}
+              endDate={endDate}
+              type={type}
+            />
+          </Grid>
+          {type !== "Link" && (
+            <Grid item xs={12} md={6}>
+              <IncompletedSurveyByLocations
+                data={incompletedSurveyEntriesType}
+                // setSelectedLocation={setSelectedLocation}
+                fromDate={fromDate}
+                endDate={endDate}
+                type={type}
+              />
+            </Grid>
+          )}
         </Grid>
       </TabPanel>
     </div>
