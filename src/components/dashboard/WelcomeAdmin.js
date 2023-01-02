@@ -27,7 +27,7 @@ const WelcomeAdmin = ({ onDownload }) => {
         <Typography variant="h5" gutterBottom zIndex={9} position="relative">
           Hey Admin,
           <br />
-          Dowload Latest Report
+          Download Latest Report
         </Typography>
         <Button
           variant="contained"
