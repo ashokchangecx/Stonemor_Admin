@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import DensityMediumOutlinedIcon from "@mui/icons-material/DensityMediumOutlined";
-import { dowloadChartAsPDF } from "../../config/ChartConfig";
+import { dowloadChartAsPDF } from "../../utils/PDF";
 
 const ChartWrapper = ({ title, id, children }) => {
   const [anchorEl, setAnchorEl] = useState(null);

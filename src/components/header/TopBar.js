@@ -68,6 +68,7 @@ const TopBar = ({ signOut, open, onClick }) => {
             src={LOGO}
             alt="Memorial Planning logo "
             style={{ height: "38px" }}
+            id="memorial_planning_logo"
           />
         </Box>
         <Box

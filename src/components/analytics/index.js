@@ -72,7 +72,7 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
   const [selectedQuestionnarie, setSelectedQuestionnarie] = useState(null);
   const [surveyEntriesType, setSurveyEntriesType] = useState(surveyEntries);
   const [incompletedSurveyEntriesType, setIncompletedSurveyEntriesType] =
-    useState(incompletedSurveyEntriesData);
+    useState(incompletedSurveyEntries);
   const [fromDate, setFromDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 

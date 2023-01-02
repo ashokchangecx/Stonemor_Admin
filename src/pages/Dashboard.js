@@ -7,10 +7,12 @@ import {
   COUNT_SURVEYS,
   COUNT_SURVEY_LOCATIONS,
   COUNT_SURVEY_USERS,
+  LIST_QUESTIONNARIES_NAME,
 } from "../graphql/custom/queries";
 
 const DashboardPage = () => {
   const { loading, surveyEntries } = useSurveyEntries();
+  const { data: questionariesName } = useQuery(LIST_QUESTIONNARIES_NAME);
   const {
     loading: surveyCountLoading,
     error: surveyCountError,
@@ -39,6 +41,7 @@ const DashboardPage = () => {
     <Dashboard
       surveyEntries={surveyEntries}
       overviewReady={overviewReady}
+      questionariesName={questionariesName}
       surveyCount={surveyCountData?.listSurveys?.items?.length || 0}
       surveyLocationsCount={
         surveyLocationCountData?.listSurveyLocations?.items?.length || 0

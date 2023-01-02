@@ -8,8 +8,8 @@ const TITLE = "Survey By Questionnarie";
 const SurveyByQuestionnarie = ({
   data,
   questionariesName,
-  loading,
-  error,
+  loading = false,
+  error = undefined,
   fromDate,
   endDate,
 }) => {
