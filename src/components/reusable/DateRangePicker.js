@@ -1,5 +1,5 @@
 import TextField from "@mui/material/TextField";
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -10,6 +10,11 @@ const ResponsiveDateRangePicker = ({
   endDate,
   setEndDate,
 }) => {
+  const handleDateReset = () => {
+    setFromDate(null);
+    setEndDate(null);
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterMoment}>
       <Grid
@@ -19,7 +24,7 @@ const ResponsiveDateRangePicker = ({
         // textAlign="center"
         // justifyContent="center"
       >
-        <Grid item xs={12} cm={6} maxWidth="350px">
+        <Grid item xs={5} cm={5} maxWidth="350px">
           <DatePicker
             label="From"
             value={fromDate}
@@ -30,7 +35,7 @@ const ResponsiveDateRangePicker = ({
             renderInput={(params) => <TextField {...params} />}
           />
         </Grid>
-        <Grid item xs={12} cm={6} maxWidth="350px">
+        <Grid item xs={5} cm={5} maxWidth="350px">
           <DatePicker
             label="To"
             value={endDate}
@@ -40,6 +45,11 @@ const ResponsiveDateRangePicker = ({
             }}
             renderInput={(params) => <TextField {...params} />}
           />
+        </Grid>
+        <Grid item xs={2} cm={2} display="flex" justifyContent="center" alignItems="center">
+          <Button  variant="contained"
+          size="small"
+          color="secondary" onClick={handleDateReset}>Reset</Button>
         </Grid>
       </Grid>
     </LocalizationProvider>
