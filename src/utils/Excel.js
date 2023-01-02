@@ -20,7 +20,6 @@ export const SurveyEntriesToExcel = (surveyEntries) =>
     const locationName = location?.location || "-";
     const locationInchargeMail = location?.inchargeEmail || "-";
     return {
-      SurveyEntryId: id,
       QuestionnaireId: questionnaireId,
       Date: created,
       duration: duration,
@@ -28,5 +27,6 @@ export const SurveyEntriesToExcel = (surveyEntries) =>
       UserEmail: userEmail,
       LocationName: locationName,
       LocationMail: locationInchargeMail,
+      SurveyEntryId: id,
     };
   });

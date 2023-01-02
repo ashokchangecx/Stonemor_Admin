@@ -1,12 +1,6 @@
 import { Paper } from "@mui/material";
 import Chart from "react-apexcharts";
-import {
-  CHART_FORECOLOR,
-  CHART_HEIGHT,
-  CHART_PDF_DOWNLOAD_ICON,
-  CHART_THEME_MODE,
-  dowloadChartAsPDF,
-} from "../../../config/ChartConfig";
+import { CHART_HEIGHT, CHART_THEME_MODE } from "../../../config/ChartConfig";
 import ChartWrapper from "../ChartWrapper";
 
 const SimpleLineChart = ({ data, title, id, seriesName, yAxisTitle }) => {
