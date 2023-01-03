@@ -26,25 +26,19 @@ export const bindTitle = ({ TITLE, fromDate, endDate, type }) => {
       "  " +
       endDateFormat +
       " - " +
-      type +
-      " " +
-      "SurveyEntries"
+      type
     );
   } else if (fromDate && endDate) {
     const fromDateFormat = moment(fromDate).format("MM/DD/YYYY");
     const endDateFormat = moment(endDate).format("MM/DD/YYYY");
 
-    return TITLE + " - " + fromDateFormat + "  " + "to" + "  " + endDateFormat;
+    return TITLE + " - " + fromDateFormat + " to " + endDateFormat;
   } else if (type && fromDate) {
     const fromDateFormat = moment(fromDate).format("MM/DD/YYYY");
-    return (
-      TITLE + " - from " + fromDateFormat + " - " + type + " " + "SurveyEntries"
-    );
+    return TITLE + " - from " + fromDateFormat + " - " + type;
   } else if (endDate && type) {
     const endDateFormat = moment(endDate).format("MM/DD/YYYY");
-    return (
-      TITLE + " - till " + endDateFormat + " - " + type + " " + "SurveyEntries"
-    );
+    return TITLE + " - till " + endDateFormat + " - " + type;
   } else if (fromDate) {
     const fromDateFormat = moment(fromDate).format("MM/DD/YYYY");
     return TITLE + " - from " + fromDateFormat;
@@ -52,7 +46,7 @@ export const bindTitle = ({ TITLE, fromDate, endDate, type }) => {
     const endDateFormat = moment(endDate).format("MM/DD/YYYY");
     return TITLE + " - till " + endDateFormat;
   } else if (type) {
-    return TITLE + " - " + type + " " + "SurveyEntries";
+    return TITLE + " - " + type;
   } else {
     return TITLE;
   }
