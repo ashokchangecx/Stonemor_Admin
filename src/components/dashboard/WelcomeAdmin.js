@@ -1,5 +1,4 @@
 import {
-  Button,
   CardContent,
   IconButton,
   Paper,
@@ -8,7 +7,9 @@ import {
 } from "@mui/material";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
+import { utils, writeFileXLSX } from "xlsx";
 import { adminDownloadChartsAsPDF } from "../../utils/PDF";
+import { SurveyEntriesToExcel } from "../../utils/Excel";
 
 const CHART_ID1 = "survey_by_locations";
 const CHART_ID2 = "SurveyEntries_by_date";
@@ -19,7 +20,17 @@ const charts = [
   { id: CHART_ID2, name: "Survey by Date" },
   { id: CHART_ID3, name: "Survey by Questionnaire" },
 ];
-const WelcomeAdmin = ({ onDownloadExcel }) => {
+const WelcomeAdmin = ({ surveyEntries, questionariesName = [] }) => {
+  const handleDownloadingReport = () => {
+    const modifiedSurveyEntries = SurveyEntriesToExcel(
+      surveyEntries,
+      questionariesName
+    );
+    const ws = utils.json_to_sheet(modifiedSurveyEntries);
+    const wb = utils.book_new();
+    utils.book_append_sheet(wb, ws, "SurveyEntries");
+    writeFileXLSX(wb, "SurveyReports.xlsx");
+  };
   return (
     <Paper
       variant="elevation"
@@ -54,7 +65,7 @@ const WelcomeAdmin = ({ onDownloadExcel }) => {
             sx={{ my: 2, mx: 1 }}
             size="medium"
             color="secondary"
-            onClick={onDownloadExcel}
+            onClick={handleDownloadingReport}
           >
             <TextSnippetIcon />
           </IconButton>
@@ -65,7 +76,12 @@ const WelcomeAdmin = ({ onDownloadExcel }) => {
             sx={{ my: 2, mx: 1 }}
             size="medium"
             color="secondary"
-            onClick={() => adminDownloadChartsAsPDF(charts)}
+            onClick={() =>
+              adminDownloadChartsAsPDF(
+                charts
+                // SurveyEntriesToExcel(surveyEntries, questionariesName)
+              )
+            }
           >
             <PictureAsPdfIcon />
           </IconButton>

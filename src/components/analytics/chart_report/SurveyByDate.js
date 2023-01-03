@@ -5,36 +5,32 @@ import SimpleLineChart from "../../charts/line";
 import { Loader } from "../../common/Loader";
 
 const CHART_ID = "SurveyEntries_by_date";
-const TITLE = "SurveyEntries By Date";
+const INITIAL_TITLE = "SurveyEntries By Date";
 
 const SurveyByDate = ({ data, loading, error, fromDate, type, endDate }) => {
-  const [date, setDate] = useState(TITLE);
+  const [title, setTitle] = useState(INITIAL_TITLE);
   const chartData = data?.reduce((chartData, data) => {
     const x =
       moment(data?.finishTime).format("YYYY-MM-DD") ||
       "no SurveyEntry on this date";
-
     const y = (chartData[x]?.y || 0) + 1;
     const date = {
       x,
-
       y,
     };
     chartData[x] = date;
-
     return chartData;
   }, {});
 
   useEffect(() => {
     const fullTitle = bindTitle({
-      TITLE,
+      TITLE: INITIAL_TITLE,
       fromDate,
       endDate,
       type,
     });
-    setDate(fullTitle);
+    setTitle(fullTitle);
   }, [fromDate, endDate, type]);
-
   return (
     <>
       {loading ? (
@@ -44,7 +40,7 @@ const SurveyByDate = ({ data, loading, error, fromDate, type, endDate }) => {
           <SimpleLineChart
             data={chartData}
             seriesName="SurveyEntry"
-            title={date}
+            title={title}
             id={CHART_ID}
             yAxisTitle="Count"
           />
