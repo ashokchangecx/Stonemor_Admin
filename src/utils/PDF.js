@@ -1,5 +1,6 @@
 import ApexCharts from "apexcharts";
 import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const logoBase64 = () => {
   const canvas = document.createElement("canvas");
@@ -34,7 +35,10 @@ export const dowloadChartAsPDF = async ({ ID, docName = "chart.pdf" }) => {
   }
 };
 
-export const adminDownloadChartsAsPDF = async (charts = []) => {
+export const adminDownloadChartsAsPDF = async (
+  charts = [],
+  surveyEntries = []
+) => {
   try {
     const name = "Survey Report";
     const doc = new jsPDF("l", "px", [447, 380]);
@@ -62,10 +66,52 @@ export const adminDownloadChartsAsPDF = async (charts = []) => {
         }
       })
     );
+    if (surveyEntries?.length > 0) {
+      doc.addPage();
+      let data = [];
+      const headings = [
+        [
+          "No.",
+          "Questionnaire",
+          "Date",
+          "User Name",
+          // "User Email",
+          "Location Name",
+          // "Location Mail",
+        ],
+      ];
+      const assignData = () =>
+        surveyEntries?.forEach((entry, i) => {
+          const {
+            Questionnaire,
+            Date,
+            UserName,
+            // UserEmail,
+            LocationName,
+            // LocationMail,
+          } = entry;
+          data.push([
+            i + 1,
+            Questionnaire,
+            Date,
+            UserName,
+            // UserEmail,
+            LocationName,
+            // LocationMail,
+          ]);
+        });
+      assignData();
+      autoTable(doc, {
+        head: headings,
+        body: data,
+        margin: { bottom: 30, top: 10, left: 10, right: 10 },
+        theme: "plain",
+        headStyles: { fillColor: [106, 163, 66] },
+      });
+    }
     const totalPages = doc.getNumberOfPages();
     doc.setFontSize(8).setFont(undefined, "normal");
     doc.setTextColor(150);
-
     for (let i = 2; i <= totalPages; i++) {
       doc.setPage(i);
       //Handle appending page number

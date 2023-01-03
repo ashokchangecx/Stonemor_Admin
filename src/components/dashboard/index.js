@@ -1,7 +1,4 @@
 import { Grid } from "@mui/material";
-import { useEffect, useState } from "react";
-import { utils, writeFileXLSX } from "xlsx";
-import { SurveyEntriesToExcel } from "../../utils/Excel";
 import SurveyByDate from "../analytics/chart_report/SurveyByDate";
 import SurveyByLocations from "../analytics/chart_report/SurveyByLocations";
 import SurveyByQuestionnarie from "../analytics/chart_report/SurveyByQuestionnarie";
@@ -22,17 +19,14 @@ const Dashboard = ({
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     )
     ?.slice(0, 100);
-  const handleDownloadingReport = () => {
-    const modifiedSurveyEntries = SurveyEntriesToExcel(surveyEntries);
-    const ws = utils.json_to_sheet(modifiedSurveyEntries);
-    const wb = utils.book_new();
-    utils.book_append_sheet(wb, ws, "SurveyEntries");
-    writeFileXLSX(wb, "SurveyReports.xlsx");
-  };
+
   return (
     <Grid container rowGap={2} columns={12} justifyItems="center" py={1}>
       <Grid item xs={12} lg={6} paddingX={1}>
-        <WelcomeAdmin onDownloadExcel={handleDownloadingReport} />
+        <WelcomeAdmin
+          surveyEntries={surveyEntries}
+          questionariesName={questionariesName?.listQuestionnaires?.items}
+        />
       </Grid>
       <Grid item xs={12} lg={6} paddingX={1}>
         {!overviewReady && (
