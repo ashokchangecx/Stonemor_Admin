@@ -70,9 +70,9 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
   const [type, setType] = useState("All");
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedQuestionnarie, setSelectedQuestionnarie] = useState(null);
-  const [surveyEntriesType, setSurveyEntriesType] = useState(surveyEntries);
+  const [surveyEntriesType, setSurveyEntriesType] = useState(surveyEntriesData);
   const [incompletedSurveyEntriesType, setIncompletedSurveyEntriesType] =
-    useState(incompletedSurveyEntries);
+    useState(incompletedSurveyEntriesData);
   const [fromDate, setFromDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
@@ -82,59 +82,54 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
   const handleChangeType = (event) => {
     setType(event.target.value);
   };
-  useEffect(() => {
-    let filteredEntries = [];
-    if (fromDate && endDate) {
-      const SD = fromDate.getTime();
-      const ED = endDate.getTime();
-      filteredEntries = surveyEntriesData?.filter((entry) => {
-        const CD = new Date(entry.createdAt).getTime();
-        return SD <= CD && CD <= ED;
-      });
-    } else if (fromDate) {
-      const SD = fromDate.getTime();
-      filteredEntries = surveyEntriesData?.filter((entry) => {
-        const CD = new Date(entry.createdAt).getTime();
-        return SD <= CD;
-      });
-    } else if (endDate) {
-      const ED = endDate.getTime();
-      filteredEntries = surveyEntriesData?.filter((entry) => {
-        const CD = new Date(entry.createdAt).getTime();
-        return CD <= ED;
-      });
-    } else {
-      filteredEntries = surveyEntriesData;
-    }
-    setSurveyEntries(filteredEntries);
-  }, [fromDate, endDate, type]);
 
   useEffect(() => {
-    let DateFilteredEntries = [];
+    let filteredEntries = [];
+    let filteredIncompleteEntries = [];
     if (fromDate && endDate) {
       const SD = fromDate.getTime();
       const ED = endDate.getTime();
-      DateFilteredEntries = incompletedSurveyEntriesData?.filter((entry) => {
+      filteredEntries = surveyEntriesData?.filter((entry) => {
         const CD = new Date(entry.createdAt).getTime();
         return SD <= CD && CD <= ED;
       });
+      filteredIncompleteEntries = incompletedSurveyEntriesData?.filter(
+        (entry) => {
+          const CD = new Date(entry.createdAt).getTime();
+          return SD <= CD && CD <= ED;
+        }
+      );
     } else if (fromDate) {
       const SD = fromDate.getTime();
-      DateFilteredEntries = incompletedSurveyEntriesData?.filter((entry) => {
+      filteredEntries = surveyEntriesData?.filter((entry) => {
         const CD = new Date(entry.createdAt).getTime();
         return SD <= CD;
       });
+      filteredIncompleteEntries = incompletedSurveyEntriesData?.filter(
+        (entry) => {
+          const CD = new Date(entry.createdAt).getTime();
+          return SD <= CD;
+        }
+      );
     } else if (endDate) {
       const ED = endDate.getTime();
-      DateFilteredEntries = incompletedSurveyEntriesData?.filter((entry) => {
+      filteredEntries = surveyEntriesData?.filter((entry) => {
         const CD = new Date(entry.createdAt).getTime();
         return CD <= ED;
       });
+      filteredIncompleteEntries = incompletedSurveyEntriesData?.filter(
+        (entry) => {
+          const CD = new Date(entry.createdAt).getTime();
+          return CD <= ED;
+        }
+      );
     } else {
-      DateFilteredEntries = incompletedSurveyEntriesData;
+      filteredEntries = surveyEntriesData;
+      filteredIncompleteEntries = incompletedSurveyEntriesData;
     }
-    setIncompletedSurveyEntries(DateFilteredEntries);
-  }, [fromDate, endDate, type]);
+    setSurveyEntries(filteredEntries);
+    setIncompletedSurveyEntries(filteredIncompleteEntries);
+  }, [fromDate, endDate]);
 
   useEffect(() => {
     let typeFilteredEntries = [];
@@ -150,7 +145,7 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
       typeFilteredEntries = surveyEntries;
     }
     setSurveyEntriesType(typeFilteredEntries);
-  }, [type, fromDate, endDate]);
+  }, [type, surveyEntries]);
 
   useEffect(() => {
     let incompletedTypeFilteredEntries = [];
@@ -168,7 +163,7 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
       incompletedTypeFilteredEntries = incompletedSurveyEntries;
     }
     setIncompletedSurveyEntriesType(incompletedTypeFilteredEntries);
-  }, [type, fromDate, endDate]);
+  }, [type, surveyEntries]);
 
   return (
     <div>
