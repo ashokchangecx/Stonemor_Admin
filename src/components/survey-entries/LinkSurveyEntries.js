@@ -102,8 +102,8 @@ const LinkSurveyEntries = ({ surveyEntries, questionnaries, linkSurvey }) => {
                 <StyledTableCell>Name</StyledTableCell>
                 <StyledTableCell>Email</StyledTableCell>
                 <StyledTableCell>Questionnaire</StyledTableCell>
-                <StyledTableCell>Start Time</StyledTableCell>
-                <StyledTableCell>Finish Time</StyledTableCell>
+                <StyledTableCell>Date</StyledTableCell>
+                <StyledTableCell>Duration</StyledTableCell>
                 <StyledTableCell>View</StyledTableCell>
               </StyledTableRow>
             </TableHead>
@@ -120,11 +120,15 @@ const LinkSurveyEntries = ({ surveyEntries, questionnaries, linkSurvey }) => {
                     {onGettingQuestionnaireById(res?.questionnaireId)}
                   </StyledTableCell>
                   <StyledTableCell>
-                    {moment(res?.startTime).format("DD-MM-YYYY hh:mm A")}
+                    {moment(res?.startTime).format("DD-MM-YYYY")}
                   </StyledTableCell>
                   <StyledTableCell>
                     {" "}
-                    {moment(res?.finishTime).format("DD-MM-YYYY hh:mm A")}
+                    {moment(res?.finishTime).diff(
+                      moment(res?.startTime),
+                      "seconds"
+                    )}{" "}
+                    {"sec"}
                   </StyledTableCell>
                   <StyledTableCell>
                     <Button
