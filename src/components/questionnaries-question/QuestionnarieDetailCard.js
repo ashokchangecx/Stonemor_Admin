@@ -15,49 +15,46 @@ const QuestionnarieDetailCard = ({ questionnarieData }) => {
 
   return (
     <>
-      <Paper elevation={20} sx={{ mb: "1rem", mt: 2 }}>
+      <Paper elevation={10} sx={{ mb: "1rem", mt: 2 }}>
         <Card
           sx={{
             p: 3,
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
-            bgcolor: "#c0f29d",
+            bgcolor: "white",
+            // border: "3px solid #6aa342",
           }}
         >
           <CardContent>
             <Typography
-              sx={{ mb: 1, fontWeight: "bold"}}
+              sx={{ mb: 1, fontWeight: "bold" }}
               color="text.primary"
               gutterBottom
               variant="h6"
             >
               {name}
             </Typography>
-            <Typography
-              variant="body2"
-              gutterBottom
-              color="text.secondary"
-            >
+            <Typography variant="body1" gutterBottom color="text.secondary">
               {moment(createdAt).format(" Do MMMM  YYYY ")}
             </Typography>
-            <Grid container spacing={1} sx={{ mt: "1rem",}}>
+            <Grid container spacing={1} sx={{ mt: "1rem" }}>
               <Grid item xs={4} md={2}>
                 <Typography
-                  sx={{ mb: 1.5, fontWeight: "bold"}}
+                  sx={{ mb: 1.5, fontWeight: "bold" }}
                   color="text.primary"
                   gutterBottom
-                  variant="body2"
+                  variant="body1"
                 >
                   Description
                 </Typography>
               </Grid>
               <Grid item xs={8} md={10}>
                 <Typography
-                  sx={{ mb: 1.5}}
+                  sx={{ mb: 1.5 }}
                   color="text.primary"
                   gutterBottom
-                  variant="body2"
+                  variant="body1"
                 >
                   {description}
                 </Typography>
@@ -66,10 +63,10 @@ const QuestionnarieDetailCard = ({ questionnarieData }) => {
             <Grid container spacing={2}>
               <Grid item xs={4} md={2}>
                 <Typography
-                  sx={{ mb: 1.5, fontWeight: "bold"}}
+                  sx={{ mb: 1.5, fontWeight: "bold" }}
                   color="text.primary"
                   gutterBottom
-                  variant="body2"
+                  variant="body1"
                 >
                   Intro Message
                 </Typography>
@@ -79,7 +76,7 @@ const QuestionnarieDetailCard = ({ questionnarieData }) => {
                   sx={{ mb: 1.5 }}
                   color="text.primary"
                   gutterBottom
-                  variant="body2"
+                  variant="body1"
                 >
                   {introMsg}
                 </Typography>
@@ -91,17 +88,14 @@ const QuestionnarieDetailCard = ({ questionnarieData }) => {
                   sx={{ fontWeight: "bold" }}
                   color="text.primary"
                   gutterBottom
-                  variant="body2"
+                  variant="body1"
                 >
                   ThankYou Message
                 </Typography>
               </Grid>
               <Grid item xs={8} md={10}>
-                <Typography
-                  gutterBottom
-                  variant="body2"
-                >
-                  <div dangerouslySetInnerHTML={{ __html: linkify() }} />
+                <Typography gutterBottom variant="body1">
+                  <a dangerouslySetInnerHTML={{ __html: linkify() }} />
                 </Typography>
               </Grid>
             </Grid>

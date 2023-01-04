@@ -142,7 +142,7 @@ const SurveyResponses = () => {
             to: "/surveyEntries",
           },
         ]}
-        active="Survey Responses"  
+        active="Survey Responses"
       />
       <Paper>
         <Table stickyHeader aria-label="sticky table">
@@ -171,7 +171,7 @@ const SurveyResponses = () => {
                   <StyledTableCell>
                     {" "}
                     <StyledRating
-                      defaultValue={res?.res}
+                      defaultValue={Number(res?.res)}
                       name="read-only"
                       IconContainerComponent={IconContainer}
                       readOnly
