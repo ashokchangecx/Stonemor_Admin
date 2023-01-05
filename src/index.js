@@ -30,6 +30,7 @@ const TestResponsesPage = lazy(() => import("./pages/TestResponses"));
 const SurveyResponsesPage = lazy(() => import("./pages/SurveyResponses"));
 const SurveyEntriesPage = lazy(() => import("./pages/SurveyEntries"));
 const ArchivedPage = lazy(() => import("./pages/Archived"));
+const Profile = lazy(() => import("./components/header/Profile"));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -43,9 +44,7 @@ const router = createBrowserRouter(
       />
       <Route path="users" element={<UsersPage />} />
       <Route path="locations" element={<LocationsPage />} />
-      {/* <Route path="qrcoderesponses" element={<QrCodeResponsesPage />} /> */}
-      {/* <Route path="linkresponses" element={<LinkResponsesPage />} /> */}
-      {/* <Route path="testresponses" element={<TestResponsesPage />} /> */}
+      <Route path="profile" element={<Profile />} />
       <Route path="surveyEntries/:id" element={<SurveyResponsesPage />} />
       <Route path="analytics" element={<AnalyticsPage />} />
       <Route path="surveyEntries" element={<SurveyEntriesPage />} />
