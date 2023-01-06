@@ -14,9 +14,7 @@ import {
 import { LIST_QUESTIONNARIES_NAME } from "../../graphql/custom/queries";
 import SurveyByLocations from "./chart_report/SurveyByLocations";
 import ResponsiveDateRangePicker from "../reusable/DateRangePicker";
-import SimpleLineChart from "../charts/line";
 import { Loader } from "../common/Loader";
-import TestModeSwitch from "../reusable/TestModeSwitch";
 import LocationByQuestionnaire from "./chart_report/LocationByQuestionnaire";
 import BreadCrumbs from "../reusable/BreadCrumbs";
 

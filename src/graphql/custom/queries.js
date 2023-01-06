@@ -31,19 +31,12 @@ export const LIST_SURVEYS = /* GraphQL */ gql(`
 export const LIST_SURVEY_ENTRIES = /* GraphQL */ gql(`
 query ListSurveyEntriess(
   $filter: ModelSurveyEntriesFilterInput = {
-    # or:[
-    #   {
-    #     complete:{eq:100}
-    #   },
-    #   {
-    #     complete:{attributeExists:false}
-    #   }
-    # 
-    # ],
+
     testing:{ne:true},
-    archived:{ne:true}
+    archived:{ne:true},
+    complete:{eq:100}
   }
-  $limit: Int =  1000
+  $limit: Int =  100000
   $nextToken: String
 ) {
   listSurveyEntriess(filter: $filter, limit: $limit, nextToken: $nextToken) {

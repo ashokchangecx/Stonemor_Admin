@@ -125,9 +125,9 @@ const TopBar = ({ signOut, open, onClick }) => {
                 <MenuItem component={Link} to="/profile" onClick={handleClose}>
                   My Profile
                 </MenuItem>
-                <MenuItem component={Link} to="/settings" onClick={handleClose}>
+                {/* <MenuItem component={Link} to="/settings" onClick={handleClose}>
                   Settings
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem onClick={signOut}>Sign Out</MenuItem>
               </Menu>
             </div>
