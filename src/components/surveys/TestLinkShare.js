@@ -7,7 +7,7 @@ import {
   MenuItem,
   Typography,
 } from "@mui/material";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import { useQuery } from "@apollo/client";
 import withSuspense from "../../helpers/hoc/withSuspense";
 import { useState } from "react";
@@ -21,7 +21,7 @@ const TestLinkShare = ({ toggle, surveyId }) => {
   const [userSurveyLink, setUserSurveyLink] = useState("");
   const [alertSuccess, setAlertSuccess] = useState(false);
   const [alertCopySuccess, setAlertCopySuccess] = useState("");
-  const { loading, error, data } = useQuery(LIST_SURVEY_USERS);
+  const { data } = useQuery(LIST_SURVEY_USERS);
 
   const handleSurveyUserChange = (e) => {
     setUsersId(e.target.value);
@@ -38,7 +38,7 @@ const TestLinkShare = ({ toggle, surveyId }) => {
     setAlertSuccess(true);
     setAlertCopySuccess("Survey Link copyed successfully");
   };
-  console.log("usersId", usersId);
+
   return (
     <Box my={2}>
       {" "}

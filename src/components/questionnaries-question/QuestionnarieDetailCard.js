@@ -23,7 +23,7 @@ const QuestionnarieDetailCard = ({ questionnarieData }) => {
             flexDirection: "column",
             justifyContent: "space-between",
             bgcolor: "white",
-            // border: "3px solid #6aa342",
+            border: "1px solid #6aa342",
           }}
         >
           <CardContent>
@@ -36,7 +36,7 @@ const QuestionnarieDetailCard = ({ questionnarieData }) => {
               {name}
             </Typography>
             <Typography variant="body1" gutterBottom color="text.secondary">
-              {moment(createdAt).format(" Do MMMM  YYYY ")}
+              {moment(createdAt).format(" Do MMMM YYYY ")}
             </Typography>
             <Grid container spacing={1} sx={{ mt: "1rem" }}>
               <Grid item xs={4} md={2}>

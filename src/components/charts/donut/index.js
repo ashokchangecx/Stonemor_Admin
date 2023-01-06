@@ -13,6 +13,7 @@ const SimpleDonutChart = ({ id, data, title, labels }) => {
       name: labels?.find((l) => l.id === obj.x)?.name,
     }))
     ?.sort((a, b) => b?.y - a?.y);
+
   const options = {
     chart: {
       id,

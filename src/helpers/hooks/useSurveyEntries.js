@@ -5,7 +5,7 @@ import { LIST_SURVEY_ENTRIES } from "../../graphql/custom/queries";
 const useSurveyEntries = (initialVar = {}) => {
   let variables = {
     ...initialVar,
-    limit: 1000,
+    limit: 100000,
   };
   const {
     loading: listSurveyEntriesLoading,
