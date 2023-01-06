@@ -12,6 +12,9 @@ import { adminDownloadChartsAsPDF } from "../../utils/PDF";
 import {
   LinkSurveyEntriesToExcel,
   QrCodeSurveyEntriesToExcel,
+  SurveyEntriesBydateToExcel,
+  SurveyEntriesByLocationToExcel,
+  SurveyEntriesByQuestionnariesToExcel,
 } from "../../utils/Excel";
 import moment from "moment";
 
@@ -39,31 +42,77 @@ const WelcomeAdmin = ({ surveyEntries, questionariesName = [] }) => {
 
     const ws2 = utils.json_to_sheet(modifiedLinkSurveyEntries);
 
+    const modifiedSurveyEntriesByQuestionnaries =
+      SurveyEntriesByQuestionnariesToExcel(surveyEntries, questionariesName);
+
+    const ws3 = utils.json_to_sheet(modifiedSurveyEntriesByQuestionnaries);
+
+    const modifiedSurveyEntriesByLocation =
+      SurveyEntriesByLocationToExcel(surveyEntries);
+
+    const ws4 = utils.json_to_sheet(modifiedSurveyEntriesByLocation);
+
+    const modifiedSurveyEntriesByDate =
+      SurveyEntriesBydateToExcel(surveyEntries);
+
+    const ws5 = utils.json_to_sheet(modifiedSurveyEntriesByDate);
+
     ws["!cols"] = [];
     ws["!cols"] = [
       { width: 5 }, // width for col A
       { width: 30 }, // width for col B
       { width: 30 }, // width for col c
       { width: 30 }, // width for col d
-      { width: 30 }, // width for col e
+      { width: 20 }, // width for col e
       { width: 10 }, // width for col f
 
       { hidden: true },
     ]; // hidding col g
+
     ws2["!cols"] = [];
     ws2["!cols"] = [
       { width: 5 }, // width for col A
       { width: 30 }, // width for col B
       { width: 30 }, // width for col c
       { width: 30 }, // width for col d
-      { width: 30 }, // width for col e
+      { width: 20 }, // width for col e
       { width: 10 }, // width for col f
 
       { hidden: true },
     ]; // hidding col g
+
+    ws3["!cols"] = [];
+    ws3["!cols"] = [
+      { width: 5 }, // width for col A
+      { width: 30 }, // width for col B
+      { width: 10 }, // width for col c
+
+      { hidden: true },
+    ]; // hidding col d
+    ws4["!cols"] = [];
+    ws4["!cols"] = [
+      { width: 5 }, // width for col A
+      { width: 30 }, // width for col B
+      { width: 10 }, // width for col c
+
+      { hidden: true },
+    ]; // hidding col d
+
+    ws5["!cols"] = [];
+    ws5["!cols"] = [
+      { width: 5 }, // width for col A
+      { width: 20 }, // width for col B
+      { width: 10 }, // width for col c
+
+      { hidden: true },
+    ]; // hidding col d
+
     const wb = utils.book_new();
     utils.book_append_sheet(wb, ws, "Qr Code SurveyEntries");
     utils.book_append_sheet(wb, ws2, "Link SurveyEntries");
+    utils.book_append_sheet(wb, ws3, " Survey By Questionnaries");
+    utils.book_append_sheet(wb, ws4, " Survey By Locations");
+    utils.book_append_sheet(wb, ws5, " Survey By Date");
     writeFileXLSX(wb, `SurveyReports_${moment().format("DD-MM-YYYY")}.xlsx`);
   };
   return (

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  Link,
   Paper,
   Rating,
   styled,
@@ -11,7 +10,6 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Link as MUILink,
 } from "@mui/material";
 import { useQuery } from "@apollo/client";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";

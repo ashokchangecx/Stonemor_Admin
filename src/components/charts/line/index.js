@@ -1,4 +1,3 @@
-import { Paper } from "@mui/material";
 import Chart from "react-apexcharts";
 import { CHART_HEIGHT, CHART_THEME_MODE } from "../../../config/ChartConfig";
 import ChartWrapper from "../ChartWrapper";

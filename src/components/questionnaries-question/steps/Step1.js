@@ -57,7 +57,7 @@ const Step1 = ({ values, handleInputChange, handleRadioButtonChange }) => {
               color="secondary"
             >
               <MenuItem value="TEXT"> Text Area</MenuItem>
-              <MenuItem value="RADIO">Single Options Select</MenuItem>
+              <MenuItem value="RADIO">Single Option Select</MenuItem>
               <MenuItem value="CHECKBOX">Multiple Options Select</MenuItem>
               <MenuItem value="LIST">Rating</MenuItem>
             </Select>

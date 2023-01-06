@@ -19,12 +19,14 @@ const Dashboard = ({
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     )
     ?.slice(0, 100);
-
+  const surveyEntriesCountData = surveyEntries.filter(
+    (data) => data?.complete === 100
+  );
   return (
     <Grid container rowGap={2} columns={12} justifyItems="center" py={1}>
       <Grid item xs={12} lg={6} paddingX={1}>
         <WelcomeAdmin
-          surveyEntries={surveyEntries}
+          surveyEntries={surveyEntriesCountData}
           questionariesName={questionariesName?.listQuestionnaires?.items}
         />
       </Grid>
@@ -33,7 +35,7 @@ const Dashboard = ({
           <Overview
             surveyCount={surveyCount}
             surveyLocationsCount={surveyLocationsCount}
-            surveyEntriesCount={surveyEntries?.length || 0}
+            surveyEntriesCount={surveyEntriesCountData?.length || 0}
             surveyUsersCount={surveyUsersCount}
           />
         )}
