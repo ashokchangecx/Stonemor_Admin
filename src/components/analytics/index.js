@@ -17,6 +17,7 @@ import ResponsiveDateRangePicker from "../reusable/DateRangePicker";
 import { Loader } from "../common/Loader";
 import LocationByQuestionnaire from "./chart_report/LocationByQuestionnaire";
 import BreadCrumbs from "../reusable/BreadCrumbs";
+import moment from "moment";
 
 const QuestionnariesByLocation = lazy(() =>
   import("./chart_report/QuestionnariesByLocation")
@@ -87,10 +88,25 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
     if (fromDate && endDate) {
       const SD = fromDate.getTime();
       const ED = endDate.getTime();
-      filteredEntries = surveyEntriesData?.filter((entry) => {
-        const CD = new Date(entry.createdAt).getTime();
-        return SD <= CD && CD <= ED;
-      });
+
+      if (SD === ED) {
+        const SDF = moment(fromDate).format(" DD MM YYYY");
+
+        filteredEntries = surveyEntriesData?.filter((entry) => {
+          const CD = moment(entry.createdAt).format(" DD MM YYYY") === SDF;
+          return CD;
+        });
+        filteredIncompleteEntries = incompletedSurveyEntriesData?.filter(
+          (entry) => {
+            const CD = new Date(entry.createdAt).getTime() === SD;
+            return CD;
+          }
+        );
+      } else
+        filteredEntries = surveyEntriesData?.filter((entry) => {
+          const CD = new Date(entry.createdAt).getTime();
+          return SD <= CD && CD <= ED;
+        });
       filteredIncompleteEntries = incompletedSurveyEntriesData?.filter(
         (entry) => {
           const CD = new Date(entry.createdAt).getTime();
@@ -128,7 +144,7 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
     setSurveyEntries(filteredEntries);
     setIncompletedSurveyEntries(filteredIncompleteEntries);
   }, [fromDate, endDate]);
-
+  console.log("surveyEntries", surveyEntries);
   useEffect(() => {
     let typeFilteredEntries = [];
     if (type === "Link") {
