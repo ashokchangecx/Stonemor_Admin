@@ -98,21 +98,22 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
         });
         filteredIncompleteEntries = incompletedSurveyEntriesData?.filter(
           (entry) => {
-            const CD = new Date(entry.createdAt).getTime() === SD;
+            const CD = moment(entry.createdAt).format(" DD MM YYYY") === SDF;
             return CD;
           }
         );
-      } else
+      } else {
         filteredEntries = surveyEntriesData?.filter((entry) => {
           const CD = new Date(entry.createdAt).getTime();
           return SD <= CD && CD <= ED;
         });
-      filteredIncompleteEntries = incompletedSurveyEntriesData?.filter(
-        (entry) => {
-          const CD = new Date(entry.createdAt).getTime();
-          return SD <= CD && CD <= ED;
-        }
-      );
+        filteredIncompleteEntries = incompletedSurveyEntriesData?.filter(
+          (entry) => {
+            const CD = new Date(entry.createdAt).getTime();
+            return SD <= CD && CD <= ED;
+          }
+        );
+      }
     } else if (fromDate) {
       const SD = fromDate.getTime();
       filteredEntries = surveyEntriesData?.filter((entry) => {
@@ -144,7 +145,7 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
     setSurveyEntries(filteredEntries);
     setIncompletedSurveyEntries(filteredIncompleteEntries);
   }, [fromDate, endDate]);
-  console.log("surveyEntries", surveyEntries);
+
   useEffect(() => {
     let typeFilteredEntries = [];
     if (type === "Link") {
