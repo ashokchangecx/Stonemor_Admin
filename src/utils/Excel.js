@@ -1,4 +1,4 @@
-import moment from "moment";
+import moment from "moment-timezone";
 
 export const QrCodeSurveyEntriesToExcel = (
   surveyEntries,
@@ -8,6 +8,8 @@ export const QrCodeSurveyEntriesToExcel = (
     const question = questionariesName?.find((q) => q?.id === qid);
     return question ? question?.name : qid;
   };
+
+  let zone = "America/New_York";
   return surveyEntries
     ?.filter((data) => data?.location?.location)
     ?.map((entry, index) => {
@@ -22,7 +24,7 @@ export const QrCodeSurveyEntriesToExcel = (
       const serialNo = index + 1;
       const locationName = location?.location || "-";
       const locationInchargeMail = location?.inchargeEmail || "-";
-      const created = moment(createdAt).format("DD/MM/YYYY");
+      const created = moment.tz(createdAt, zone).format("DD-MM-YYYY hh:mm A");
       const SD = moment(startTime);
       const ED = moment(finishTime);
       const duration = `${ED.diff(SD, "seconds")}  ${"sec"}`;
@@ -42,6 +44,7 @@ export const LinkSurveyEntriesToExcel = (surveyEntries, questionariesName) => {
     const question = questionariesName?.find((q) => q?.id === qid);
     return question ? question?.name : qid;
   };
+  let zone = "America/New_York";
   return surveyEntries
     ?.filter((data) => data?.by?.name)
     ?.map((entry, index) => {
@@ -56,7 +59,7 @@ export const LinkSurveyEntriesToExcel = (surveyEntries, questionariesName) => {
       const serialNo = index + 1;
       const userName = by?.name || "-";
       const userEmail = by?.email || "-";
-      const created = moment(createdAt).format("DD/MM/YYYY");
+      const created = moment.tz(createdAt, zone).format("DD-MM-YYYY hh:mm A");
       const SD = moment(startTime);
       const ED = moment(finishTime);
       const duration = `${ED.diff(SD, "seconds")}  ${"sec"}`;
@@ -80,6 +83,7 @@ export const SurveyEntriesByQuestionnariesToExcel = (
     const question = questionariesName?.find((q) => q?.id === qid);
     return question ? question?.name : qid;
   };
+
   const SurveyEntriesByQuestionnariesData = surveyEntries?.reduce(
     (SurveyEntriesByQuestionnariesData, { questionnaireId }) => {
       if (questionnaireId) {
