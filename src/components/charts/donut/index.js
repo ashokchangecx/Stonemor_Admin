@@ -53,7 +53,7 @@ const SimpleDonutChart = ({ id, data, title, labels }) => {
       enabled: true,
     },
     fill: {
-      type: "gradient",
+      // type: "gradient",
     },
     legend: {
       position: "bottom",

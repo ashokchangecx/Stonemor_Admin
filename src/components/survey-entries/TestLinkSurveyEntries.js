@@ -14,7 +14,7 @@ import { styled } from "@mui/system";
 import React, { useState } from "react";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import withSuspense from "../../helpers/hoc/withSuspense";
-import moment from "moment";
+import moment from "moment-timezone";
 import { Link } from "react-router-dom";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -46,7 +46,7 @@ const TestLinkSurveyEntries = ({
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
+  let zone = "America/New_York";
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -120,7 +120,9 @@ const TestLinkSurveyEntries = ({
                     {onGettingQuestionnaireById(res?.questionnaireId)}
                   </StyledTableCell>
                   <StyledTableCell>
-                    {moment(res?.startTime).format("DD-MM-YYYY")}
+                    {moment
+                      .tz(res?.startTime, zone)
+                      .format("DD-MM-YYYY hh:mm A ")}
                   </StyledTableCell>
                   <StyledTableCell>
                     {" "}

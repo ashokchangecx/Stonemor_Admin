@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import moment from "moment";
+import moment from "moment-timezone";
 import React, { useEffect, useState } from "react";
 import withSuspense from "../../helpers/hoc/withSuspense";
 import { useQuery } from "@apollo/client";
@@ -46,6 +46,8 @@ const IncompletedQrSurveyEntries = ({ incompleteQrSurvey }) => {
     useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  let zone = "America/New_York";
 
   let variables = {
     limit: 10000,
@@ -162,7 +164,9 @@ const IncompletedQrSurveyEntries = ({ incompleteQrSurvey }) => {
                   </StyledTableCell>
 
                   <StyledTableCell>
-                    {moment(user?.startTime).format("DD-MM-YYYY ")}
+                    {moment
+                      .tz(user?.startTime, zone)
+                      .format("DD-MM-YYYY hh:mm A ")}
                   </StyledTableCell>
 
                   <StyledTableCell>{user?.complete}%</StyledTableCell>
