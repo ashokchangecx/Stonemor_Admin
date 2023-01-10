@@ -96,12 +96,12 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
           const CD = moment(entry.createdAt).format(" DD MM YYYY") === SDF;
           return CD;
         });
-        filteredIncompleteEntries = incompletedSurveyEntriesData?.filter(
-          (entry) => {
-            const CD = moment(entry.createdAt).format(" DD MM YYYY") === SDF;
-            return CD;
-          }
-        );
+        // filteredIncompleteEntries = incompletedSurveyEntriesData?.filter(
+        //   (entry) => {
+        //     const CD = moment(entry.createdAt).format(" DD MM YYYY") === SDF;
+        //     return CD;
+        //   }
+        // );
       } else {
         filteredEntries = surveyEntriesData?.filter((entry) => {
           const CD = new Date(entry.createdAt).getTime();
