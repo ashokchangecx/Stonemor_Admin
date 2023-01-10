@@ -48,7 +48,7 @@ const IncompletedLinkSurveyEntries = ({ incompleteLinkSurvey }) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   let zone = "America/New_York";
   let variables = {
-    limit: 10000,
+    limit: 100000,
   };
   const {
     loading: listIncompletedSurveyEntriesLoading,

@@ -53,7 +53,7 @@ export const NavItems = [
   // },
   {
     path: "/surveyEntries",
-    name: "SurveyEntries",
+    name: "Survey Entries",
     icon: InventoryOutlinedIcon,
   },
   {

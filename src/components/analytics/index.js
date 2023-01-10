@@ -89,31 +89,31 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
       const SD = fromDate.getTime();
       const ED = endDate.getTime();
 
-      // if (SD === ED) {
-      //   const SDF = moment(fromDate).format(" DD MM YYYY");
+      if (SD === ED) {
+        const SDF = moment(fromDate).format("DD-MM-YYYY");
 
-      //   filteredEntries = surveyEntriesData?.filter((entry) => {
-      //     const CD = moment(entry.createdAt).format(" DD MM YYYY") === SDF;
-      //     return CD;
-      //   });
-      //   // filteredIncompleteEntries = incompletedSurveyEntriesData?.filter(
-      //   //   (entry) => {
-      //   //     const CD = moment(entry.createdAt).format(" DD MM YYYY") === SDF;
-      //   //     return CD;
-      //   //   }
-      //   // );
-      // } else {
-      filteredEntries = surveyEntriesData?.filter((entry) => {
-        const CD = new Date(entry.createdAt).getTime();
-        return SD <= CD && CD <= ED;
-      });
-      filteredIncompleteEntries = incompletedSurveyEntriesData?.filter(
-        (entry) => {
+        filteredEntries = surveyEntriesData?.filter((entry) => {
+          const CD = moment(entry.createdAt).format("DD-MM-YYYY") === SDF;
+          return CD;
+        });
+        filteredIncompleteEntries = incompletedSurveyEntriesData?.filter(
+          (entry) => {
+            const CD = moment(entry.createdAt).format("DD-MM-YYYY") === SDF;
+            return CD;
+          }
+        );
+      } else {
+        filteredEntries = surveyEntriesData?.filter((entry) => {
           const CD = new Date(entry.createdAt).getTime();
           return SD <= CD && CD <= ED;
-        }
-      );
-      // }
+        });
+        filteredIncompleteEntries = incompletedSurveyEntriesData?.filter(
+          (entry) => {
+            const CD = new Date(entry.createdAt).getTime();
+            return SD <= CD && CD <= ED;
+          }
+        );
+      }
     } else if (fromDate) {
       const SD = fromDate.getTime();
       filteredEntries = surveyEntriesData?.filter((entry) => {

@@ -6,6 +6,26 @@ import {
 } from "../../../config/ChartConfig";
 import ChartWrapper from "../ChartWrapper";
 
+const themeColor = [
+  "#2E93fA",
+  "#006600",
+  "#ff00ff",
+  "#996600",
+  "#0099cc",
+  "#4000ff",
+  "#bfff00",
+  "#9933ff",
+  "#ffcccc",
+  " #1a0a00",
+];
+
+// var themeColor = [];
+// while (themeColor.length < 100) {
+//   do {
+//     var color = Math.floor(Math.random() * 123123 + 1);
+//   } while (themeColor.indexOf(color) >= 0);
+//   themeColor.push("#" + ("123123" + color.toString(16)).slice(-6));
+// }
 const SimpleDonutChart = ({ id, data, title, labels }) => {
   const chartData = Object.entries(data)
     ?.map(([name, obj]) => ({
@@ -38,6 +58,7 @@ const SimpleDonutChart = ({ id, data, title, labels }) => {
               fontFamily: "Helvetica, Arial, sans-serif",
               fontWeight: 600,
               color: "#fcfcfc",
+
               formatter: function (w) {
                 return w.globals.seriesTotals.reduce((a, b) => {
                   return a + b;
@@ -53,10 +74,14 @@ const SimpleDonutChart = ({ id, data, title, labels }) => {
       enabled: true,
     },
     fill: {
-      // type: "gradient",
+      type: "gradient",
+      colors: themeColor,
     },
     legend: {
       position: "bottom",
+      markers: {
+        fillColors: themeColor,
+      },
       formatter: function (val, opts) {
         return val + " - " + opts.w.globals.series[opts.seriesIndex];
       },

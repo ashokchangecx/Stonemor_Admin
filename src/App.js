@@ -65,7 +65,7 @@ const Layout = () => {
                 flexGrow: 1,
                 bgcolor: "background.default",
                 color: "text.primary",
-                p: 1,
+                p: 0.5,
                 width: {
                   md: mobileOpen ? `calc(100% - ${DRAWER_WIDTH}px)` : "100%",
                 },
@@ -80,7 +80,7 @@ const Layout = () => {
                   // display: "flex",
                   width: "100%",
                   borderRadius: 1,
-                  px: 2,
+                  px: 0.5,
                   height: "100%",
                 }}
               >
@@ -97,7 +97,7 @@ const Layout = () => {
             component="main"
             sx={{
               flexGrow: 1,
-              p: 1,
+              p: 0.5,
               width: "100%",
             }}
           >
