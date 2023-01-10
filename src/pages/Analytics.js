@@ -4,6 +4,7 @@ import Analytics from "../components/analytics";
 import { Loader } from "../components/common/Loader";
 import { LIST_INCOMPLETED_SURVEY_ENTRIES } from "../graphql/custom/queries";
 import withSuspense from "../helpers/hoc/withSuspense";
+import useIncompletedSurveyEntries from "../helpers/hooks/userIncompletedSurveyEntries";
 import useSurveyEntries from "../helpers/hooks/useSurveyEntries";
 
 const AnalyticsPage = () => {
@@ -11,31 +12,52 @@ const AnalyticsPage = () => {
   //   filter: { testing: { eq: true } },
   // });
   const { loading, surveyEntries } = useSurveyEntries();
-  const [incompeletedSurveyEntriesData, setIncompletedSurveyEntriesData] =
-    useState([]);
-  let variables = {
-    limit: 10000,
-  };
+  const { incompletedLoading, surveyIncompletedEntries } =
+    useIncompletedSurveyEntries();
 
-  const { data: listIncompletedSurveyEntriesData } = useQuery(
-    LIST_INCOMPLETED_SURVEY_ENTRIES,
-    {
-      variables,
-    }
-  );
-  useEffect(() => {
-    setIncompletedSurveyEntriesData(
-      listIncompletedSurveyEntriesData?.listSurveyEntriess?.items
-    );
-  }, [listIncompletedSurveyEntriesData?.listSurveyEntriess?.items]);
+  // const [incompeletedSurveyEntriesData, setIncompletedSurveyEntriesData] =
+  //   useState([]);
+
+  // let variables = {
+  //   limit: 100000,
+  // };
+
+  // const {
+  //   loading: listIncompletedSurveyEntriesLoading,
+  //   error: listIncompletedSurveyEntriesError,
+  //   data: listIncompletedSurveyEntriesData,
+  // } = useQuery(LIST_INCOMPLETED_SURVEY_ENTRIES, {
+  //   variables,
+  // });
+  // useEffect(() => {
+  //   if (
+  //     !listIncompletedSurveyEntriesLoading &&
+  //     !listIncompletedSurveyEntriesError
+  //   )
+  //     setIncompletedSurveyEntriesData(
+  //       listIncompletedSurveyEntriesData?.listSurveyEntriess?.items
+  //     );
+  // }, [
+  //   listIncompletedSurveyEntriesLoading,
+  //   listIncompletedSurveyEntriesData?.listSurveyEntriess?.items,
+  // ]);
 
   if (loading) {
     return <Loader />;
   }
+  if (incompletedLoading) {
+    return <Loader />;
+  }
+  // if (listIncompletedSurveyEntriesLoading) {
+  //   return <Loader />;
+  // }
+  // if (listIncompletedSurveyEntriesError) {
+  //   return <>error</>;
+  // }
   return (
     <Analytics
       surveyEntriesData={surveyEntries}
-      incompletedSurveyEntriesData={incompeletedSurveyEntriesData}
+      incompletedSurveyEntriesData={surveyIncompletedEntries}
     />
   );
 };

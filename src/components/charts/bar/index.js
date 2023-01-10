@@ -7,6 +7,19 @@ import {
 } from "../../../config/ChartConfig";
 import ChartWrapper from "../ChartWrapper";
 
+const themeColor = [
+  "#2E93fA",
+  "#006600",
+  "#ff00ff",
+  "#996600",
+  "#99cc00",
+  "#0099cc",
+  " #1a0a00",
+  "#4000ff",
+  "#bfff00",
+  "#9933ff",
+  "#ffcccc",
+];
 const SimpleBarChart = ({
   data,
   title,

@@ -89,31 +89,31 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
       const SD = fromDate.getTime();
       const ED = endDate.getTime();
 
-      // if (SD === ED) {
-      //   const SDF = moment(fromDate).format(" DD MM YYYY");
+      if (SD === ED) {
+        const SDF = moment(fromDate).format("DD-MM-YYYY");
 
-      //   filteredEntries = surveyEntriesData?.filter((entry) => {
-      //     const CD = moment(entry.createdAt).format(" DD MM YYYY") === SDF;
-      //     return CD;
-      //   });
-      //   // filteredIncompleteEntries = incompletedSurveyEntriesData?.filter(
-      //   //   (entry) => {
-      //   //     const CD = moment(entry.createdAt).format(" DD MM YYYY") === SDF;
-      //   //     return CD;
-      //   //   }
-      //   // );
-      // } else {
-      filteredEntries = surveyEntriesData?.filter((entry) => {
-        const CD = new Date(entry.createdAt).getTime();
-        return SD <= CD && CD <= ED;
-      });
-      filteredIncompleteEntries = incompletedSurveyEntriesData?.filter(
-        (entry) => {
+        filteredEntries = surveyEntriesData?.filter((entry) => {
+          const CD = moment(entry.createdAt).format("DD-MM-YYYY") === SDF;
+          return CD;
+        });
+        filteredIncompleteEntries = incompletedSurveyEntriesData?.filter(
+          (entry) => {
+            const CD = moment(entry.createdAt).format("DD-MM-YYYY") === SDF;
+            return CD;
+          }
+        );
+      } else {
+        filteredEntries = surveyEntriesData?.filter((entry) => {
           const CD = new Date(entry.createdAt).getTime();
           return SD <= CD && CD <= ED;
-        }
-      );
-      // }
+        });
+        filteredIncompleteEntries = incompletedSurveyEntriesData?.filter(
+          (entry) => {
+            const CD = new Date(entry.createdAt).getTime();
+            return SD <= CD && CD <= ED;
+          }
+        );
+      }
     } else if (fromDate) {
       const SD = fromDate.getTime();
       filteredEntries = surveyEntriesData?.filter((entry) => {
@@ -213,7 +213,7 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
           <Tab label="Locations" />
           <Tab label="Survey type" />
           <Tab label="Date" />
-          <Tab label="Incompleted Survey Entries" />
+          <Tab label="Incompleted SurveyEntries" />
         </Tabs>
         <Grid container spacing={3} mb={2} alignItems="flex-start">
           <Grid item xs={4} sm={2} md={1}>
@@ -245,9 +245,9 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
                     onChange={handleChangeType}
                     color="secondary"
                   >
-                    <MenuItem value="All"> All Survey Entries</MenuItem>
-                    <MenuItem value="Link"> Link Survey Entries</MenuItem>
-                    <MenuItem value="QrCode">Qrcode Survey Entries</MenuItem>
+                    <MenuItem value="All"> All SurveyEntries</MenuItem>
+                    <MenuItem value="Link"> Link SurveyEntries</MenuItem>
+                    <MenuItem value="QrCode">Qrcode SurveyEntries</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
