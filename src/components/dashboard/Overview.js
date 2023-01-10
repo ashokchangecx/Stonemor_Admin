@@ -10,7 +10,7 @@ const Overview = ({
 }) => {
   return (
     <Grid container>
-      <Wrapper title="Total Survey" count={surveyCount} to="/surveys" />
+      <Wrapper title="Total Surveys" count={surveyCount} to="/surveys" />
       <Wrapper
         title="Total Entries"
         count={surveyEntriesCount}
@@ -18,7 +18,7 @@ const Overview = ({
         to="/surveyEntries"
       />
       <Wrapper
-        title="Total Location"
+        title="Total Locations"
         count={surveyLocationsCount}
         to="/locations"
       />

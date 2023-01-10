@@ -4,8 +4,8 @@ import { bindTitle } from "../../../config/ChartConfig";
 import SimpleLineChart from "../../charts/line";
 import { Loader } from "../../common/Loader";
 
-const CHART_ID = "SurveyEntries_by_date";
-const INITIAL_TITLE = "SurveyEntries By Date";
+const CHART_ID = "Survey Entries_by_date";
+const INITIAL_TITLE = "Survey Entries By Date";
 
 const SurveyByDate = ({ data, loading, error, fromDate, type, endDate }) => {
   const [title, setTitle] = useState(INITIAL_TITLE);
@@ -39,7 +39,7 @@ const SurveyByDate = ({ data, loading, error, fromDate, type, endDate }) => {
         !error && (
           <SimpleLineChart
             data={chartData}
-            seriesName="SurveyEntry"
+            seriesName="Survey Entry"
             title={title}
             id={CHART_ID}
             yAxisTitle="Count"

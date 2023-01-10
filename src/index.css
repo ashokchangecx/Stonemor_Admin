@@ -58,3 +58,7 @@ body {
 .apexcharts-pie-label {
   fill: white !important;
 }
+
+[data-amplify-footer]{
+  display: none;
+}

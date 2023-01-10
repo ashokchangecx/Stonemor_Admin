@@ -4,8 +4,8 @@ import { bindTitle } from "../../../config/ChartConfig";
 import SimpleLineChart from "../../charts/line";
 import { Loader } from "../../common/Loader";
 
-const CHART_ID = "Incompleted SurveyEntries_by_date";
-const TITLE = "Incompleted SurveyEntries By Date";
+const CHART_ID = "Incompleted Survey Entries_by_date";
+const TITLE = "Incompleted Survey Entries By Date";
 
 const IncompletedSurveyDate = ({
   data,
@@ -50,7 +50,7 @@ const IncompletedSurveyDate = ({
         !error && (
           <SimpleLineChart
             data={chartData}
-            seriesName="SurveyEntry"
+            seriesName="Survey Entry"
             title={date}
             id={CHART_ID}
             yAxisTitle="Count"
