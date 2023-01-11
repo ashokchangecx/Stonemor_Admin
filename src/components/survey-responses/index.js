@@ -116,7 +116,11 @@ const SurveyResponses = () => {
   // const questionCount = listans?.question?.items.sort(
   //   (a, b) => a?.order - b?.order
   // );
-  const responses = listans?.items
+  const filteredResponses = [
+    ...new Map(listans?.items.map((o) => [o.qu.id, o])).values(),
+  ];
+
+  const responses = filteredResponses
     ?.slice()
     ?.sort((a, b) => a?.qu?.order - b?.qu?.order);
 
