@@ -25,8 +25,8 @@ export const QrCodeSurveyEntriesToExcel = (
       const locationName = location?.location || "-";
       const locationInchargeMail = location?.inchargeEmail || "-";
       const created = moment.tz(createdAt, zone).format("DD-MM-YYYY hh:mm A");
-      const SD = moment(startTime);
-      const ED = moment(finishTime);
+      const SD = moment.tz(startTime, zone);
+      const ED = moment.tz(finishTime, zone);
       const duration = `${ED.diff(SD, "seconds")}  ${"sec"}`;
       return {
         No: serialNo,
@@ -60,8 +60,8 @@ export const LinkSurveyEntriesToExcel = (surveyEntries, questionariesName) => {
       const userName = by?.name || "-";
       const userEmail = by?.email || "-";
       const created = moment.tz(createdAt, zone).format("DD-MM-YYYY hh:mm A");
-      const SD = moment(startTime);
-      const ED = moment(finishTime);
+      const SD = moment.tz(startTime, zone);
+      const ED = moment.tz(finishTime, zone);
       const duration = `${ED.diff(SD, "seconds")}  ${"sec"}`;
 
       return {
@@ -160,11 +160,12 @@ export const SurveyEntriesByLocationToExcel = (surveyEntries) => {
   });
 };
 export const SurveyEntriesBydateToExcel = (surveyEntries) => {
+  let zone = "America/New_York";
   const SurveyEntriesByDateData = surveyEntries?.reduce(
     (SurveyEntriesByDateData, surveyEntries) => {
       const date =
-        moment(surveyEntries?.finishTime).format("YYYY-MM-DD") ||
-        "no SurveyEntry on this date";
+        moment.tz(surveyEntries?.finishTime, zone).format("DD-MM-YYYY") ||
+        "No SurveyEntry on this date";
       const count = (SurveyEntriesByDateData[date]?.count || 0) + 1;
       const entry = {
         date,

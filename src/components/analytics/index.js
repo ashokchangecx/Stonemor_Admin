@@ -17,7 +17,7 @@ import ResponsiveDateRangePicker from "../reusable/DateRangePicker";
 import { Loader } from "../common/Loader";
 import LocationByQuestionnaire from "./chart_report/LocationByQuestionnaire";
 import BreadCrumbs from "../reusable/BreadCrumbs";
-import moment from "moment";
+import moment from "moment-timezone";
 
 const QuestionnariesByLocation = lazy(() =>
   import("./chart_report/QuestionnariesByLocation")
@@ -74,7 +74,7 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
     useState(incompletedSurveyEntriesData);
   const [fromDate, setFromDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-
+  let zone = "America/New_York";
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
@@ -90,15 +90,17 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
       const ED = endDate.getTime();
 
       if (SD === ED) {
-        const SDF = moment(fromDate).format("DD-MM-YYYY");
+        const SDF = moment.tz(fromDate, zone).format("DD-MM-YYYY");
 
         filteredEntries = surveyEntriesData?.filter((entry) => {
-          const CD = moment(entry.createdAt).format("DD-MM-YYYY") === SDF;
+          const CD =
+            moment.tz(entry.createdAt, zone).format("DD-MM-YYYY") === SDF;
           return CD;
         });
         filteredIncompleteEntries = incompletedSurveyEntriesData?.filter(
           (entry) => {
-            const CD = moment(entry.createdAt).format("DD-MM-YYYY") === SDF;
+            const CD =
+              moment.tz(entry.createdAt, zone).format("DD-MM-YYYY") === SDF;
             return CD;
           }
         );
@@ -245,9 +247,9 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
                     onChange={handleChangeType}
                     color="secondary"
                   >
-                    <MenuItem value="All"> All SurveyEntries</MenuItem>
-                    <MenuItem value="Link"> Link SurveyEntries</MenuItem>
-                    <MenuItem value="QrCode">Qrcode SurveyEntries</MenuItem>
+                    <MenuItem value="All"> All Survey Entries</MenuItem>
+                    <MenuItem value="Link"> Link Survey Entries</MenuItem>
+                    <MenuItem value="QrCode">Qrcode Survey Entries</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
