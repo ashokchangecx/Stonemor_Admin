@@ -75,13 +75,13 @@ const SimpleDonutChart = ({ id, data, title, labels }) => {
     },
     fill: {
       type: "gradient",
-      colors: themeColor,
+      // colors: themeColor,
     },
     legend: {
       position: "bottom",
-      markers: {
-        fillColors: themeColor,
-      },
+      // markers: {
+      //   fillColors: themeColor,
+      // },
       formatter: function (val, opts) {
         return val + " - " + opts.w.globals.series[opts.seriesIndex];
       },

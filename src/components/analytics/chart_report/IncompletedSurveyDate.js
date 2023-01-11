@@ -1,4 +1,4 @@
-import moment from "moment";
+import moment from "moment-timezone";
 import React, { useEffect, useState } from "react";
 import { bindTitle } from "../../../config/ChartConfig";
 import SimpleLineChart from "../../charts/line";
@@ -16,9 +16,10 @@ const IncompletedSurveyDate = ({
   endDate,
 }) => {
   const [date, setDate] = useState(TITLE);
+  let zone = "America/New_York";
   const chartData = data?.reduce((chartData, data) => {
     const x =
-      moment(data?.finishTime).format("YYYY-MM-DD") ||
+      moment.tz(data?.finishTime, zone).format("DD-MM-YYYY") ||
       "no SurveyEntry on this date";
 
     const y = (chartData[x]?.y || 0) + 1;

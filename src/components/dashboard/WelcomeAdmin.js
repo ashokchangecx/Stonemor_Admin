@@ -12,15 +12,17 @@ import { adminDownloadChartsAsPDF } from "../../utils/PDF";
 import {
   LinkSurveyEntriesToExcel,
   QrCodeSurveyEntriesToExcel,
+  SurveyEntriesBydateToExcel,
+  SurveyEntriesByLocationToExcel,
+  SurveyEntriesByQuestionnariesToExcel,
 } from "../../utils/Excel";
 import moment from "moment";
-import { Auth } from "aws-amplify";
 import { useEffect, useState } from "react";
+import { Auth } from "aws-amplify";
 
 const CHART_ID1 = "survey_by_locations";
-const CHART_ID2 = "Survey Entries_by_date";
+const CHART_ID2 = "SurveyEntries_by_date";
 const CHART_ID3 = "survey_by_questionnaire";
-
 const charts = [
   { id: CHART_ID1, name: "Survey by Locations" },
   { id: CHART_ID2, name: "Survey by Date" },
@@ -33,7 +35,6 @@ const WelcomeAdmin = ({ surveyEntries, questionariesName = [] }) => {
       questionariesName
     );
     const ws = utils.json_to_sheet(modifiedSurveyEntries);
-
     const modifiedLinkSurveyEntries = LinkSurveyEntriesToExcel(
       surveyEntries,
       questionariesName
@@ -41,36 +42,81 @@ const WelcomeAdmin = ({ surveyEntries, questionariesName = [] }) => {
 
     const ws2 = utils.json_to_sheet(modifiedLinkSurveyEntries);
 
+    const modifiedSurveyEntriesByQuestionnaries =
+      SurveyEntriesByQuestionnariesToExcel(surveyEntries, questionariesName);
+
+    const ws3 = utils.json_to_sheet(modifiedSurveyEntriesByQuestionnaries);
+
+    const modifiedSurveyEntriesByLocation =
+      SurveyEntriesByLocationToExcel(surveyEntries);
+
+    const ws4 = utils.json_to_sheet(modifiedSurveyEntriesByLocation);
+
+    const modifiedSurveyEntriesByDate =
+      SurveyEntriesBydateToExcel(surveyEntries);
+
+    const ws5 = utils.json_to_sheet(modifiedSurveyEntriesByDate);
+
     ws["!cols"] = [];
     ws["!cols"] = [
       { width: 5 }, // width for col A
       { width: 30 }, // width for col B
       { width: 30 }, // width for col c
       { width: 30 }, // width for col d
-      { width: 30 }, // width for col e
+      { width: 20 }, // width for col e
       { width: 10 }, // width for col f
 
       { hidden: true },
     ]; // hidding col g
+
     ws2["!cols"] = [];
     ws2["!cols"] = [
       { width: 5 }, // width for col A
       { width: 30 }, // width for col B
       { width: 30 }, // width for col c
       { width: 30 }, // width for col d
-      { width: 30 }, // width for col e
+      { width: 20 }, // width for col e
       { width: 10 }, // width for col f
 
       { hidden: true },
     ]; // hidding col g
+
+    ws3["!cols"] = [];
+    ws3["!cols"] = [
+      { width: 5 }, // width for col A
+      { width: 30 }, // width for col B
+      { width: 10 }, // width for col c
+
+      { hidden: true },
+    ]; // hidding col d
+    ws4["!cols"] = [];
+    ws4["!cols"] = [
+      { width: 5 }, // width for col A
+      { width: 30 }, // width for col B
+      { width: 10 }, // width for col c
+
+      { hidden: true },
+    ]; // hidding col d
+
+    ws5["!cols"] = [];
+    ws5["!cols"] = [
+      { width: 5 }, // width for col A
+      { width: 20 }, // width for col B
+      { width: 10 }, // width for col c
+
+      { hidden: true },
+    ]; // hidding col d
+
     const wb = utils.book_new();
-    utils.book_append_sheet(wb, ws, "Qr Code Survey Entries");
-    utils.book_append_sheet(wb, ws2, "Link Survey Entries");
+    utils.book_append_sheet(wb, ws, "Qr Code SurveyEntries");
+    utils.book_append_sheet(wb, ws2, "Link SurveyEntries");
+    utils.book_append_sheet(wb, ws3, " Survey By Questionnaries");
+    utils.book_append_sheet(wb, ws4, " Survey By Locations");
+    utils.book_append_sheet(wb, ws5, " Survey By Date");
     writeFileXLSX(wb, `SurveyReports_${moment().format("DD-MM-YYYY")}.xlsx`);
   };
 
   const [profile, setProfile] = useState({});
-
   useEffect(() => {
     Auth.currentUserInfo()
       .then((res) => {
@@ -81,7 +127,6 @@ const WelcomeAdmin = ({ surveyEntries, questionariesName = [] }) => {
         console.error(err);
       });
   }, []);
-
   return (
     <Paper
       variant="elevation"
@@ -152,5 +197,4 @@ const WelcomeAdmin = ({ surveyEntries, questionariesName = [] }) => {
     </Paper>
   );
 };
-
 export default WelcomeAdmin;
