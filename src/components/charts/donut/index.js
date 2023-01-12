@@ -74,8 +74,16 @@ const SimpleDonutChart = ({ id, data, title, labels }) => {
       enabled: true,
     },
     fill: {
-      type: "gradient",
+      // type: "gradient",
       colors: themeColor,
+    },
+    tooltip: {
+      enabled: true,
+      fillSeriesColor: false,
+
+      marker: {
+        show: false,
+      },
     },
     legend: {
       position: "bottom",
