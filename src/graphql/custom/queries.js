@@ -4,6 +4,7 @@ export const LIST_SURVEYS = /* GraphQL */ gql(`
   query ListSurveys(
     $filter: ModelSurveyFilterInput ={
       deleted:{ne:true}
+      archived:{ne:true}
     }
     $limit: Int = 1000
     $nextToken: String
@@ -220,6 +221,7 @@ export const LIST_QUESTIONS = /* GraphQL */ gql(`
   query ListQuestions(
     $filter: ModelQuestionFilterInput={
       deleted:{ne:true}
+      archived:{ne:true}
    
     }
     $limit: Int = 30000

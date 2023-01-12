@@ -1,9 +1,4 @@
-import {
-  Box,
-  Grid,
-  Tab,
-  Tabs,
-} from "@mui/material";
+import { Box, Grid, Tab, Tabs } from "@mui/material";
 import React, { useState, useEffect } from "react";
 
 import { useQuery } from "@apollo/client";
@@ -123,7 +118,7 @@ const SurveyEntries = () => {
       <div sx={{ mt: 2 }}>
         <Grid container spacing={2} sx={{ p: "0.5rem" }}>
           <Grid item xs={6}>
-            <BreadCrumbs  active=" Survey Entries"/>
+            <BreadCrumbs active=" Survey Entries" />
           </Grid>
           <Grid item xs={6}>
             <SearchBar searchInput={(e) => setSurveySearched(e.target.value)} />

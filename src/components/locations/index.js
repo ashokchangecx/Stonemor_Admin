@@ -168,7 +168,7 @@ const Locations = () => {
       />
       <Grid container spacing={2} sx={{ p: "0.5rem" }}>
         <Grid item xs={6}>
-          <BreadCrumbs active="Locations"/>
+          <BreadCrumbs active="Locations" />
         </Grid>
         <Grid item xs={6}>
           <SearchBar searchInput={(e) => locationSearch(e.target.value)} />

@@ -105,6 +105,7 @@ const TestQrSurveyEntries = ({
                 <StyledTableCell>Email</StyledTableCell>
                 <StyledTableCell>Questionnaire</StyledTableCell>
                 <StyledTableCell>Date</StyledTableCell>
+                <StyledTableCell>Time</StyledTableCell>
                 <StyledTableCell>Duration</StyledTableCell>
                 <StyledTableCell>View</StyledTableCell>
               </StyledTableRow>
@@ -124,9 +125,10 @@ const TestQrSurveyEntries = ({
                     {onGettingQuestionnaireById(res?.questionnaireId)}
                   </StyledTableCell>
                   <StyledTableCell>
-                    {moment
-                      .tz(res?.startTime, zone)
-                      .format("DD-MM-YYYY hh:mm A ")}
+                    {moment.tz(res?.startTime, zone).format("MM-DD-YYYY")}
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    {moment.tz(res?.startTime, zone).format("hh:mm a ")}
                   </StyledTableCell>
                   <StyledTableCell>
                     {" "}

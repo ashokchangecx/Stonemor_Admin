@@ -19,7 +19,7 @@ const IncompletedSurveyDate = ({
   let zone = "America/New_York";
   const chartData = data?.reduce((chartData, data) => {
     const x =
-      moment.tz(data?.finishTime, zone).format("DD-MM-YYYY") ||
+      moment.tz(data?.finishTime, zone).format("MM-DD-YYYY") ||
       "no SurveyEntry on this date";
 
     const y = (chartData[x]?.y || 0) + 1;
