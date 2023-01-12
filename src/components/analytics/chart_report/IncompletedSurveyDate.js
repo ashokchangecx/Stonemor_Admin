@@ -4,7 +4,7 @@ import { bindTitle } from "../../../config/ChartConfig";
 import SimpleLineChart from "../../charts/line";
 import { Loader } from "../../common/Loader";
 
-const CHART_ID = "Incompleted Survey Entries_by_date";
+const CHART_ID = "Incompleted Survey_Entries_by_date";
 const TITLE = "Incompleted Survey Entries By Date";
 
 const IncompletedSurveyDate = ({

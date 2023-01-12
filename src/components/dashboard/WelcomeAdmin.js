@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 import { Auth } from "aws-amplify";
 
 const CHART_ID1 = "survey_by_locations";
-const CHART_ID2 = "SurveyEntries_by_date";
+const CHART_ID2 = "Survey_Entries_by_date";
 const CHART_ID3 = "survey_by_questionnaire";
 const charts = [
   { id: CHART_ID1, name: "Survey by Locations" },
