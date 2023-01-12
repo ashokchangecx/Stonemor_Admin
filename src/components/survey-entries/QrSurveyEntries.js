@@ -100,8 +100,9 @@ const QrSurveyEntries = ({ surveyEntries, questionnaries, qrSurvey }) => {
                 <StyledTableCell>Location</StyledTableCell>
                 <StyledTableCell>Email</StyledTableCell>
                 <StyledTableCell>Questionnaire</StyledTableCell>
-                <StyledTableCell>Date</StyledTableCell>
                 <StyledTableCell>Duration</StyledTableCell>
+                <StyledTableCell>Date</StyledTableCell>
+                <StyledTableCell>Time</StyledTableCell>
                 <StyledTableCell>View</StyledTableCell>
               </StyledTableRow>
             </TableHead>
@@ -120,9 +121,10 @@ const QrSurveyEntries = ({ surveyEntries, questionnaries, qrSurvey }) => {
                     {onGettingQuestionnaireById(res?.questionnaireId)}
                   </StyledTableCell>
                   <StyledTableCell>
-                    {moment
-                      .tz(res?.startTime, zone)
-                      .format("DD-MM-YYYY hh:mm A ")}
+                    {moment.tz(res?.startTime, zone).format("MM-DD-YYYY  ")}
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    {moment.tz(res?.startTime, zone).format("hh:mm a ")}
                   </StyledTableCell>
                   <StyledTableCell>
                     {" "}

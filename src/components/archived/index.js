@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from "@apollo/client";
-import { Button, Grid, Pagination} from "@mui/material";
+import { Button, Grid, Pagination } from "@mui/material";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { LIST_SURVEYS } from "../../graphql/custom/queries";
 import useToggle from "../../helpers/hooks/useToggle";

@@ -9,13 +9,13 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import moment from "moment/moment";
+import moment from "moment-timezone";
 import { Link } from "react-router-dom";
 
 const ViewSurvey = ({ currentSurveyData }) => {
   const { image, name, description, preQuestionnaire, createdAt } =
     currentSurveyData;
-
+  let zone = "America/New_York";
   return (
     <Box
       sx={{
@@ -45,7 +45,7 @@ const ViewSurvey = ({ currentSurveyData }) => {
         )}
 
         <Typography gutterBottom variant="body2">
-          Created Date : {moment(createdAt).format(" Do MMMM  YYYY")}
+          Created Date : {moment.tz(createdAt, zone).format(" MMMM Do  YYYY")}
         </Typography>
 
         {preQuestionnaire?.name && (

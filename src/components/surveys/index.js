@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import {  Grid, Pagination } from "@mui/material";
+import { Grid, Pagination } from "@mui/material";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { LIST_SURVEYS } from "../../graphql/custom/queries";
 import useToggle from "../../helpers/hooks/useToggle";
@@ -75,7 +75,7 @@ const Surveys = () => {
       </DynamicModel>
       <Grid container spacing={2} sx={{ py: "0.5rem" }}>
         <Grid item xs={6}>
-          <BreadCrumbs  active="Surveys"  />
+          <BreadCrumbs active="Surveys" />
         </Grid>
         <Grid item xs={6}>
           <SearchBar searchInput={(e) => setSurveySearch(e.target.value)} />

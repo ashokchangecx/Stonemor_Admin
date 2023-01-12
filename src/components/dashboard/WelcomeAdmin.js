@@ -26,9 +26,24 @@ const CHART_ID3 = "survey_by_questionnaire";
 const charts = [
   { id: CHART_ID1, name: "Survey by Locations" },
   { id: CHART_ID2, name: "Survey by Date" },
-  { id: CHART_ID3, name: "Survey by Questionnaire" },
+  { id: CHART_ID3, name: "Number of Completed by Available Surveys" },
 ];
-const WelcomeAdmin = ({ surveyEntries, questionariesName = [] }) => {
+const WelcomeAdmin = ({
+  surveyEntries,
+  questionariesName = [],
+  surveyCount,
+  surveyEntriesCount,
+  surveyUsersCount,
+  surveyLocationsCount,
+}) => {
+  const TotalCountsData = [
+    { title: "Total Surveys", count: surveyCount },
+    { title: "Total Users", count: surveyUsersCount },
+    { title: "Total Survey Entries", count: surveyEntriesCount },
+
+    { title: "Total Locations", count: surveyLocationsCount },
+  ];
+
   const handleDownloadingReport = () => {
     const modifiedSurveyEntries = QrCodeSurveyEntriesToExcel(
       surveyEntries,
@@ -63,7 +78,8 @@ const WelcomeAdmin = ({ surveyEntries, questionariesName = [] }) => {
       { width: 30 }, // width for col B
       { width: 30 }, // width for col c
       { width: 30 }, // width for col d
-      { width: 20 }, // width for col e
+      { width: 15 }, // width for col e
+      { width: 15 }, // width for col e
       { width: 10 }, // width for col f
 
       { hidden: true },
@@ -75,7 +91,8 @@ const WelcomeAdmin = ({ surveyEntries, questionariesName = [] }) => {
       { width: 30 }, // width for col B
       { width: 30 }, // width for col c
       { width: 30 }, // width for col d
-      { width: 20 }, // width for col e
+      { width: 15 }, // width for col e
+      { width: 15 }, // width for col e
       { width: 10 }, // width for col f
 
       { hidden: true },
@@ -113,7 +130,7 @@ const WelcomeAdmin = ({ surveyEntries, questionariesName = [] }) => {
     utils.book_append_sheet(wb, ws3, " Survey By Questionnaries");
     utils.book_append_sheet(wb, ws4, " Survey By Locations");
     utils.book_append_sheet(wb, ws5, " Survey By Date");
-    writeFileXLSX(wb, `SurveyReports_${moment().format("DD-MM-YYYY")}.xlsx`);
+    writeFileXLSX(wb, `SurveyReports_${moment().format("MM-DD-YYYY")}.xlsx`);
   };
 
   const [profile, setProfile] = useState({});
@@ -159,7 +176,7 @@ const WelcomeAdmin = ({ surveyEntries, questionariesName = [] }) => {
             lg: 30,
             md: 25,
             sm: 20,
-            xs: 10,
+            xs: 16,
           }}
         >
           Hello, {profile?.username}
@@ -185,8 +202,9 @@ const WelcomeAdmin = ({ surveyEntries, questionariesName = [] }) => {
             color="secondary"
             onClick={() =>
               adminDownloadChartsAsPDF(
-                charts
-                // SurveyEntriesToExcel(surveyEntries, questionariesName)
+                charts,
+
+                TotalCountsData
               )
             }
           >
