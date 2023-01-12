@@ -1,8 +1,10 @@
 import { Card, CardContent, Grid, Paper, Typography } from "@mui/material";
-import moment from "moment";
+import moment from "moment-timezone";
 
 const QuestionnarieDetailCard = ({ questionnarieData }) => {
   const { endMsg, introMsg, name, createdAt, description } = questionnarieData;
+
+  let zone = "America/New_York";
   const linkify = () => {
     const urlRegex =
       /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi;
@@ -36,7 +38,7 @@ const QuestionnarieDetailCard = ({ questionnarieData }) => {
               {name}
             </Typography>
             <Typography variant="body1" gutterBottom color="text.secondary">
-              {moment(createdAt).format(" Do MMMM YYYY ")}
+              {moment.tz(createdAt, zone).format(" MMMM Do  YYYY")}
             </Typography>
             <Grid container spacing={1} sx={{ mt: "1rem" }}>
               <Grid item xs={4} md={2}>

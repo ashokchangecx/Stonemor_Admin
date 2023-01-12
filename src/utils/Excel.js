@@ -24,7 +24,8 @@ export const QrCodeSurveyEntriesToExcel = (
       const serialNo = index + 1;
       const locationName = location?.location || "-";
       const locationInchargeMail = location?.inchargeEmail || "-";
-      const created = moment.tz(createdAt, zone).format("DD-MM-YYYY hh:mm A");
+      const created = moment.tz(createdAt, zone).format("MM-DD-YYYY ");
+      const time = moment.tz(createdAt, zone).format("hh:mm a");
       const SD = moment.tz(startTime, zone);
       const ED = moment.tz(finishTime, zone);
       const duration = `${ED.diff(SD, "seconds")}  ${"sec"}`;
@@ -34,6 +35,7 @@ export const QrCodeSurveyEntriesToExcel = (
         LocationName: locationName,
         LocationMail: locationInchargeMail,
         Date: created,
+        Time: time,
         Duration: duration,
       };
     });
@@ -59,7 +61,8 @@ export const LinkSurveyEntriesToExcel = (surveyEntries, questionariesName) => {
       const serialNo = index + 1;
       const userName = by?.name || "-";
       const userEmail = by?.email || "-";
-      const created = moment.tz(createdAt, zone).format("DD-MM-YYYY hh:mm A");
+      const created = moment.tz(createdAt, zone).format("MM-DD-YYYY ");
+      const time = moment.tz(createdAt, zone).format("hh:mm a");
       const SD = moment.tz(startTime, zone);
       const ED = moment.tz(finishTime, zone);
       const duration = `${ED.diff(SD, "seconds")}  ${"sec"}`;
@@ -70,6 +73,7 @@ export const LinkSurveyEntriesToExcel = (surveyEntries, questionariesName) => {
         UserName: userName,
         UserEmail: userEmail,
         Date: created,
+        Time: time,
         Duration: duration,
       };
     });
@@ -164,7 +168,7 @@ export const SurveyEntriesBydateToExcel = (surveyEntries) => {
   const SurveyEntriesByDateData = surveyEntries?.reduce(
     (SurveyEntriesByDateData, surveyEntries) => {
       const date =
-        moment.tz(surveyEntries?.finishTime, zone).format("DD-MM-YYYY") ||
+        moment.tz(surveyEntries?.finishTime, zone).format("MM-DD-YYYY") ||
         "No SurveyEntry on this date";
       const count = (SurveyEntriesByDateData[date]?.count || 0) + 1;
       const entry = {

@@ -138,7 +138,7 @@ const IncompletedQrSurveyEntries = ({ incompleteQrSurvey }) => {
 
               <StyledTableCell>Questionnaire</StyledTableCell>
               <StyledTableCell>Date</StyledTableCell>
-
+              <StyledTableCell>Time</StyledTableCell>
               <StyledTableCell>Completed Status</StyledTableCell>
             </StyledTableRow>
           </TableHead>
@@ -164,9 +164,10 @@ const IncompletedQrSurveyEntries = ({ incompleteQrSurvey }) => {
                   </StyledTableCell>
 
                   <StyledTableCell>
-                    {moment
-                      .tz(user?.startTime, zone)
-                      .format("DD-MM-YYYY hh:mm A ")}
+                    {moment.tz(user?.startTime, zone).format("MM-DD-YYYY")}
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    {moment.tz(user?.startTime, zone).format("hh:mm a ")}
                   </StyledTableCell>
 
                   <StyledTableCell>{user?.complete}%</StyledTableCell>
