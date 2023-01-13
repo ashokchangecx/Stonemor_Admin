@@ -125,8 +125,8 @@ const WelcomeAdmin = ({
     ]; // hidding col d
 
     const wb = utils.book_new();
-    utils.book_append_sheet(wb, ws, "Qr Code SurveyEntries");
-    utils.book_append_sheet(wb, ws2, "Link SurveyEntries");
+    utils.book_append_sheet(wb, ws, "Qr Code Survey Entries");
+    utils.book_append_sheet(wb, ws2, "Link Survey Entries");
     utils.book_append_sheet(wb, ws3, " Survey By Questionnaries");
     utils.book_append_sheet(wb, ws4, " Survey By Locations");
     utils.book_append_sheet(wb, ws5, " Survey By Date");
@@ -173,7 +173,7 @@ const WelcomeAdmin = ({
           zIndex={9}
           position="relative"
           fontSize={{
-            lg: 30,
+            lg: 25,
             md: 25,
             sm: 20,
             xs: 16,
