@@ -52,24 +52,12 @@ export const adminDownloadChartsAsPDF = async (
     doc.addImage(Logo, "JPEG", 120, 70, 190, 70);
     doc.setFontSize(14).setFont(undefined, "normal");
     doc.setTextColor(100);
-    await Promise.allSettled(
-      charts?.map(async (chart) => {
-        try {
-          const { imgURI, chartName } = await convertChartToImage({
-            ID: chart?.id,
-            chartName: chart?.name,
-          });
-          doc.addPage();
-          doc.text(chartName, width / 2, 20, { align: "center" });
-          doc.addImage(imgURI, "JPEG", 15, 40, 416, 270);
-        } catch (error) {
-          console.log("adminDownloadChartsAsPDF error : ", error);
-        }
-      })
-    );
-    // if (surveyEntries?.length > 0) {
+    //Cumalative data total counts
     doc.addPage();
     let data = [];
+    const text = "Cumulative Total Counts";
+    doc.setFontSize(14).setFont("helvetica", "bold");
+    doc.text(text, width / 2, 40, { align: "center" });
     const headings = [["NO", "Title", "Counts"]];
     const assignData = () =>
       TotalCountsData?.forEach((entry, i) => {
@@ -80,10 +68,26 @@ export const adminDownloadChartsAsPDF = async (
     autoTable(doc, {
       head: headings,
       body: data,
-      margin: { bottom: 30, top: 10, left: 10, right: 10 },
+      margin: { bottom: 20, top: 60, left: 10, right: 10 },
       theme: "plain",
       headStyles: { fillColor: [106, 163, 66] },
     });
+    await Promise.allSettled(
+      charts?.map(async (chart) => {
+        try {
+          const { imgURI, chartName } = await convertChartToImage({
+            ID: chart?.id,
+            chartName: chart?.name,
+          });
+          doc.addPage();
+          doc.text(chartName, width / 2, 40, { align: "center" });
+          doc.addImage(imgURI, "JPEG", 15, 60, 416, 270);
+        } catch (error) {
+          console.log("adminDownloadChartsAsPDF error : ", error);
+        }
+      })
+    );
+    // if (surveyEntries?.length > 0) {
     // }
     // if (surveyEntries?.length > 0) {
     //   doc.addPage();
@@ -133,6 +137,8 @@ export const adminDownloadChartsAsPDF = async (
     doc.setTextColor(150);
     for (let i = 2; i <= totalPages; i++) {
       doc.setPage(i);
+
+      doc.addImage(Logo,10,10, 60, 30, 90, 30)
       //Handle appending page number
       const currentPage = doc.getCurrentPageInfo().pageNumber;
 

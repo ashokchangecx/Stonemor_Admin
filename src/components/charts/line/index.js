@@ -80,6 +80,10 @@ const SimpleLineChart = ({ data, title, id, seriesName, yAxisTitle }) => {
       labels: {
         trim: true,
         hideOverlappingLabels: false,
+        style: {
+          fontSize: '9px',
+          fontWeight: 500,
+        },
       },
     },
     // yaxis: {
