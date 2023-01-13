@@ -140,11 +140,18 @@ const TestQrCodeShare = ({ toggle, surveyId }) => {
           value={surveyLocation}
           onChange={(event) => setSuveyLocation(event.target.value)}
         >
-          {data?.listSurveyLocations?.items?.map((user, u) => (
-            <MenuItem key={u} value={user?.id}>
-              {user?.location} - {user?.inchargeEmail}
-            </MenuItem>
-          ))}
+          {data?.listSurveyLocations?.items
+            ?.slice()
+            ?.sort(
+              (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+            )
+            ?.map((user, u) => (
+              <MenuItem key={u} value={user?.id}>
+                {user?.location} - {user?.inchargeEmail}
+              </MenuItem>
+            ))}
         </Select>
 
         {/* <TextField
