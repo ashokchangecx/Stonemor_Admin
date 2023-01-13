@@ -33,7 +33,7 @@ export const QrCodeSurveyEntriesToExcel = (
         No: serialNo,
         Questionnaire: getQuestionarieName(questionnaireId),
         LocationName: locationName,
-        LocationMail: locationInchargeMail,
+        LocationEmail: locationInchargeMail,
         Date: created,
         Time: time,
         Duration: duration,

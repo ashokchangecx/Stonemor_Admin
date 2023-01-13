@@ -32,16 +32,26 @@ const WelcomeAdmin = ({
   surveyEntries,
   questionariesName = [],
   surveyCount,
-  surveyEntriesCount,
   surveyUsersCount,
   surveyLocationsCount,
+  surveyEntriesCount,
 }) => {
+  const [profile, setProfile] = useState({});
+  useEffect(() => {
+    Auth.currentUserInfo()
+      .then((res) => {
+        setProfile(res);
+        return res;
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
   const TotalCountsData = [
     { title: "Total Surveys", count: surveyCount },
     { title: "Total Users", count: surveyUsersCount },
-    { title: "Total Survey Entries", count: surveyEntriesCount },
-
     { title: "Total Locations", count: surveyLocationsCount },
+    { title: "Total Survey Entries", count: surveyEntriesCount },
   ];
 
   const handleDownloadingReport = () => {
@@ -133,17 +143,6 @@ const WelcomeAdmin = ({
     writeFileXLSX(wb, `SurveyReports_${moment().format("MM-DD-YYYY")}.xlsx`);
   };
 
-  const [profile, setProfile] = useState({});
-  useEffect(() => {
-    Auth.currentUserInfo()
-      .then((res) => {
-        setProfile(res);
-        return res;
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
   return (
     <Paper
       variant="elevation"
@@ -179,7 +178,7 @@ const WelcomeAdmin = ({
             xs: 16,
           }}
         >
-          Hello, {profile?.username}
+          Hello, {profile?.username ? profile?.username : "Admin"}
           <br />
           Download Latest Report
         </Typography>
