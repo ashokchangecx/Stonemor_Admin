@@ -50,30 +50,32 @@ const Step3 = ({ values, getQuestionById }) => {
         </Grid>
       </Grid>
       <Divider sx={{ my: 1 }} />
-      {currentMode === "normal" && listItemOptions?.length > 0 && (
-        <Table>
-          <TableHead>
-            <TableRow
-              sx={{
-                borderBottom: "2px solid black",
-                "& th": {
-                  fontSize: "1.25rem",
-                  color: "secondary.main",
-                },
-              }}
-            >
-              <TableCell>Options</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {listItemOptions.map((item, i) => (
-              <TableRow key={i}>
-                <TableCell>{item?.listValue}</TableCell>
+      {currentMode === "normal" &&
+        listItemOptions?.length > 0 &&
+        type !== "TEXT" && (
+          <Table>
+            <TableHead>
+              <TableRow
+                sx={{
+                  borderBottom: "2px solid black",
+                  "& th": {
+                    fontSize: "1.25rem",
+                    color: "secondary.main",
+                  },
+                }}
+              >
+                <TableCell>Options</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      )}
+            </TableHead>
+            <TableBody>
+              {listItemOptions.map((item, i) => (
+                <TableRow key={i}>
+                  <TableCell>{item?.listValue}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       {currentMode === "self" && (
         <>
           {(type === "RADIO" || type === "CHECKBOX") && (

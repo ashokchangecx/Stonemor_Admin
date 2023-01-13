@@ -58,13 +58,20 @@ const TestLinkShare = ({ toggle, surveyId }) => {
           value={usersId}
           onChange={handleSurveyUserChange}
         >
-          {data?.listSurveyUsers?.items.map((user, s) => (
-            <MenuItem key={s} value={user?.id}>
-              {user.name}
-              {"-"}
-              {user?.email}
-            </MenuItem>
-          ))}
+          {data?.listSurveyUsers
+            ?.slice()
+            ?.sort(
+              (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+            )
+            ?.items.map((user, s) => (
+              <MenuItem key={s} value={user?.id}>
+                {user.name}
+                {"-"}
+                {user?.email}
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
       {userSurveyLink && (

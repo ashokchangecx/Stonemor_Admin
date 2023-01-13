@@ -57,13 +57,20 @@ const LinkShare = ({ toggle, surveyId }) => {
           value={usersId}
           onChange={handleSurveyUserChange}
         >
-          {data?.listSurveyUsers?.items?.map((user, s) => (
-            <MenuItem key={s} value={user?.id}>
-              {user.name}
-              {"-"}
-              {user?.email}
-            </MenuItem>
-          ))}
+          {data?.listSurveyUsers?.items
+            ?.slice()
+            ?.sort(
+              (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+            )
+            ?.map((user, s) => (
+              <MenuItem key={s} value={user?.id}>
+                {user.name}
+                {"-"}
+                {user?.email}
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
       {userSurveyLink && (
