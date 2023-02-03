@@ -215,7 +215,7 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
           <Tab label="Locations" />
           <Tab label="Survey type" />
           <Tab label="Date" />
-          <Tab label="Incompleted SurveyEntries" />
+          <Tab label="Incomplete Surveys" />
         </Tabs>
         <Grid container spacing={3} mb={2} alignItems="flex-start">
           <Grid item xs={4} sm={2} md={1}>
@@ -249,7 +249,7 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
                   >
                     <MenuItem value="All"> All Survey Entries</MenuItem>
                     <MenuItem value="Link"> Link Survey Entries</MenuItem>
-                    <MenuItem value="QrCode">Qrcode Survey Entries</MenuItem>
+                    <MenuItem value="QrCode">QR Code Survey Entries</MenuItem>
                   </Select>
                 </FormControl>
               </Box>

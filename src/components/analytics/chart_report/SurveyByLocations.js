@@ -3,7 +3,7 @@ import SimpleBarChart from "../../charts/bar";
 import { bindTitle } from "../../../config/ChartConfig";
 
 const CHART_ID = "survey_by_locations";
-const TITLE = "Survey By Locations";
+const TITLE = "Survey Completions By Location";
 
 const SurveyByLocations = ({
   data,
