@@ -3,7 +3,7 @@ import SimpleBarChart from "../../charts/bar";
 import { bindTitle } from "../../../config/ChartConfig";
 
 const CHART_ID = "survey_by_Qr_Code";
-const TITLE = "Survey By Qr Code";
+const TITLE = "Surveys By QR Code";
 
 const SurveyByQrCode = ({
   data,

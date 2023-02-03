@@ -12,7 +12,7 @@ const Overview = ({
     <Grid container>
       <Wrapper title="Total Surveys" count={surveyCount} to="/surveys" />
       <Wrapper
-        title="Total Entries"
+        title="Total Opens"
         count={surveyEntriesCount}
         secondary
         to="/surveyEntries"
@@ -23,7 +23,7 @@ const Overview = ({
         to="/locations"
       />
       <Wrapper
-        title="Total Users"
+        title="Total Completions"
         count={surveyUsersCount}
         secondary
         to="/users"
