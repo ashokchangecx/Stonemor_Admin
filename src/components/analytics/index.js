@@ -259,14 +259,14 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
       </Box>
       <TabPanel value={tabValue} index={0}>
         <Grid container spacing={2} alignItems="stretch">
-          <Grid item xs={12} md={6}>
+          {/* <Grid item xs={12} md={6}>
             <SurveyByLocations
               data={surveyEntries}
               setSelectedLocation={setSelectedLocation}
               fromDate={fromDate}
               endDate={endDate}
             />
-          </Grid>
+          </Grid> */}
           {selectedLocation && (
             <Grid item xs={12} md={6}>
               <Suspense fallback={<Loader />}>

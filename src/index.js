@@ -22,6 +22,7 @@ const AnalyticsPage = lazy(() => import("./pages/Analytics"));
 const QuestionnariesPage = lazy(() => import("./pages/Questionnaries"));
 const UsersPage = lazy(() => import("./pages/Users"));
 const LocationsPage = lazy(() => import("./pages/Locations"));
+// const SMLocationsPage = lazy(() => import("./components/locations/SMLocation"));
 
 const QuestionnariesQuestionPage = lazy(() =>
   import("./pages/QuestionnariesQuestion")
