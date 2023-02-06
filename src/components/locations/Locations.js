@@ -50,7 +50,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const Location = ({locations}) => {
+const Location = ({ locations }) => {
   const {
     open: updateOpen,
     toggleOpen: updateToggleOpen,
@@ -87,7 +87,7 @@ const Location = ({locations}) => {
               new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           )
       );
-  }, [loading, data?.listSurveyLocations?.items]);
+  }, [data?.listSurveyLocations?.items, error, loading]);
 
   if (loading) {
     return <Loader />;
@@ -128,21 +128,17 @@ const Location = ({locations}) => {
     await deleteLocation({ variables: { input: deleteLocationQuery } });
     toggledeleteModelOpen(false);
   };
-  const locationSearch =
-    
-      surveyLocations.filter(
-        (item) =>
-          item?.location
-            .toString()
-            .toLowerCase()
-            .includes(locations.toString().toLowerCase()) ||
-          item?.inchargeEmail
-            .toString()
-            .toLowerCase()
-            .includes(locations.toString().toLowerCase())
-      )
-    
-
+  const locationSearch = surveyLocations.filter(
+    (item) =>
+      item?.location
+        .toString()
+        .toLowerCase()
+        .includes(locations.toString().toLowerCase()) ||
+      item?.inchargeEmail
+        .toString()
+        .toLowerCase()
+        .includes(locations.toString().toLowerCase())
+  );
 
   return (
     <>
@@ -175,7 +171,7 @@ const Location = ({locations}) => {
         </Grid>
       </Grid> */}
 
-      {locationSearch.length > 0 ? (
+      {locationSearch?.length > 0 ? (
         <TableContainer component={Paper} sx={{ mt: 2 }}>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
@@ -188,7 +184,7 @@ const Location = ({locations}) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              { locationSearch
+              {locationSearch
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((loc, i) => (
                   <StyledTableRow key={i}>
@@ -237,6 +233,6 @@ const Location = ({locations}) => {
       )}
     </>
   );
-      }
+};
 
 export default Location;

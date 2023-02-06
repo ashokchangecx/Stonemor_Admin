@@ -24,7 +24,7 @@ import Locations from "../../pages/Locations";
 
 // import axios from "axios";
 
-const SMLocation = ({smLocations}) => {
+const SMLocation = ({ smLocations }) => {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState([]);
   const [page, setPage] = useState(0);
@@ -32,7 +32,7 @@ const SMLocation = ({smLocations}) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const getAllData = async () => {
-    setLoading(true)
+    setLoading(true);
     let url = "https://stonemor-jrni-zudy-mock-api.vercel.app/smlocation";
     let allData = [];
     let offset = 0;
@@ -46,7 +46,7 @@ const SMLocation = ({smLocations}) => {
       allData = [...allData, ...data?.items];
       offset += limit;
     }
-    console.log("allData", allData);
+
     setData(allData);
     setLoading(false);
     // return allData;
@@ -84,23 +84,19 @@ const SMLocation = ({smLocations}) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  const locationsSearch = 
-    data.filter(
-      (item) =>
-        item?.location
-          .toString()
-          .toLowerCase()
-          .includes(smLocations.toString().toLowerCase()) ||
-        item?.internalLocationID?.includes(smLocations) ||
-        item?.locationEmail?.toString()
+  const locationsSearch = data.filter(
+    (item) =>
+      item?.location
+        .toString()
         .toLowerCase()
         .includes(smLocations.toString().toLowerCase()) ||
-        item?.locationPhone?.includes(smLocations)
-       
-    )
-  
-
-
+      item?.internalLocationID?.includes(smLocations) ||
+      item?.locationEmail
+        ?.toString()
+        .toLowerCase()
+        .includes(smLocations.toString().toLowerCase()) ||
+      item?.locationPhone?.includes(smLocations)
+  );
 
   // useEffect(() => {
   //   const url =
@@ -115,9 +111,9 @@ const SMLocation = ({smLocations}) => {
   //   };
   //   fetchLocation();
   // }, []);
-if(loading){
-  return <Loader/>
-}
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div>
       {/* <Grid container spacing={2} sx={{ p: "0.5rem" }}>
@@ -130,50 +126,52 @@ if(loading){
                 />
               </Grid>
             </Grid> */}
-
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>#</StyledTableCell>
-              <StyledTableCell>Location ID</StyledTableCell>
-              <StyledTableCell>Location</StyledTableCell>
-              <StyledTableCell>Email</StyledTableCell>
-              <StyledTableCell>Phone Number</StyledTableCell>
-
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {locationsSearch 
-              ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((location, i) => (
-                <StyledTableRow key={i}>
-                  <StyledTableCell component="th" scope="row">
-                    {i + 1}
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    {location?.internalLocationID}
-                  </StyledTableCell>
-                  <StyledTableCell>{location?.location}</StyledTableCell>
-                  <StyledTableCell>{location?.locationEmail}</StyledTableCell>
-                  <StyledTableCell>{location?.locationPhone}</StyledTableCell>
-                </StyledTableRow>
-              ))}
-          </TableBody>
-        </Table>
-        <TablePagination
-          component="div"
-          count={locationsSearch?.length}
-          page={page}
-          onPageChange={handleChangePage}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        />
-      </TableContainer>
+      {locationsSearch.length > 0 ? (
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>#</StyledTableCell>
+                <StyledTableCell>Location ID</StyledTableCell>
+                <StyledTableCell>Location</StyledTableCell>
+                <StyledTableCell>Email</StyledTableCell>
+                <StyledTableCell>Phone Number</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {locationsSearch
+                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((location, i) => (
+                  <StyledTableRow key={i}>
+                    <StyledTableCell component="th" scope="row">
+                      {i + 1}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {location?.internalLocationID}
+                    </StyledTableCell>
+                    <StyledTableCell>{location?.location}</StyledTableCell>
+                    <StyledTableCell>{location?.locationEmail}</StyledTableCell>
+                    <StyledTableCell>{location?.locationPhone}</StyledTableCell>
+                  </StyledTableRow>
+                ))}
+            </TableBody>
+          </Table>
+          <TablePagination
+            component="div"
+            count={locationsSearch?.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          />
+        </TableContainer>
+      ) : (
+        <p>NO SURVEY LOCATION FOUND !</p>
+      )}
     </div>
   );
 
