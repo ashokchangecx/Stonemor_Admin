@@ -215,7 +215,7 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
           <Tab label="Locations" />
           <Tab label="Survey type" />
           <Tab label="Date" />
-          <Tab label="Incompleted SurveyEntries" />
+          <Tab label="Incomplete Surveys" />
         </Tabs>
         <Grid container spacing={3} mb={2} alignItems="flex-start">
           <Grid item xs={4} sm={2} md={1}>
@@ -249,7 +249,7 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
                   >
                     <MenuItem value="All"> All Survey Entries</MenuItem>
                     <MenuItem value="Link"> Link Survey Entries</MenuItem>
-                    <MenuItem value="QrCode">Qrcode Survey Entries</MenuItem>
+                    <MenuItem value="QrCode">QR Code Survey Entries</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
@@ -259,14 +259,14 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
       </Box>
       <TabPanel value={tabValue} index={0}>
         <Grid container spacing={2} alignItems="stretch">
-          <Grid item xs={12} md={6}>
+          {/* <Grid item xs={12} md={6}>
             <SurveyByLocations
               data={surveyEntries}
               setSelectedLocation={setSelectedLocation}
               fromDate={fromDate}
               endDate={endDate}
             />
-          </Grid>
+          </Grid> */}
           {selectedLocation && (
             <Grid item xs={12} md={6}>
               <Suspense fallback={<Loader />}>
