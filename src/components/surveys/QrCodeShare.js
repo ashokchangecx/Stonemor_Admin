@@ -23,11 +23,13 @@ import validator from "validator";
 import axios from "axios";
 import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
 import DownloadForOfflineOutlinedIcon from "@mui/icons-material/DownloadForOfflineOutlined";
+import LocationData from "../../helpers/LocationData.js";
 
 const QrCodeShare = ({ toggle, surveyId }) => {
   const { loading, error, data } = useQuery(LIST_SURVEY_LOCATIONS);
   const { data: questionariesName } = useQuery(LIST_QUESTIONNARIES_NAME);
   const [surveyLocation, setSuveyLocation] = useState("");
+  const [locationID, setLocationID] = useState("");
   const [inchargeEmail, setInchargeEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [emailSuccess, setEmailSuccess] = useState("");
@@ -119,6 +121,8 @@ const QrCodeShare = ({ toggle, surveyId }) => {
     );
     setInchargeEmail(surveyLoc?.inchargeEmail || " ");
   }, [surveyLocation]);
+
+
   return (
     <Box my={2}>
       <Box my={2}>
@@ -129,7 +133,7 @@ const QrCodeShare = ({ toggle, surveyId }) => {
         )}
         {alertFail ? <Alert severity="error">{alertContentFail}</Alert> : ""}
       </Box>
-      <FormControl fullWidth>
+    <FormControl sx={{my:2}} fullWidth>
         <InputLabel id="demo-simple-select-label">Select Location</InputLabel>
         <Select
           margin="dense"
@@ -153,7 +157,40 @@ const QrCodeShare = ({ toggle, surveyId }) => {
               </MenuItem>
             ))}
         </Select>
-
+        {/* <TextField
+          margin="dense"
+          id="InchargeEmail"
+          label="Email"
+          value={inchargeEmail}
+          onChange={(e) => handleEmail(e)}
+          fullWidth
+          type="email"
+        /> */}
+      </FormControl>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Select SMLocation</InputLabel>
+        <Select
+          margin="dense"
+          fullWidth
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          label="Select Location"
+          value={locationID}
+          onChange={(event) => setLocationID(event.target.value)}
+        >
+          {LocationData?.items
+            ?.slice()
+            ?.sort(
+              (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+            )
+            ?.map((user, u) => (
+              <MenuItem key={u} value={user?.locationID}>
+                {user?.location} - {user?.inchargeEmail}
+              </MenuItem>
+            ))}
+        </Select>
         {/* <TextField
           margin="dense"
           id="InchargeEmail"
