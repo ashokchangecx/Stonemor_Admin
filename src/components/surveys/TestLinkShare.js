@@ -58,14 +58,14 @@ const TestLinkShare = ({ toggle, surveyId }) => {
           value={usersId}
           onChange={handleSurveyUserChange}
         >
-          {data?.listSurveyUsers
+          {data?.listSurveyUsers?.items
             ?.slice()
             ?.sort(
               (a, b) =>
                 new Date(b.createdAt).getTime() -
                 new Date(a.createdAt).getTime()
             )
-            ?.items.map((user, s) => (
+            ?.map((user, s) => (
               <MenuItem key={s} value={user?.id}>
                 {user.name}
                 {"-"}
