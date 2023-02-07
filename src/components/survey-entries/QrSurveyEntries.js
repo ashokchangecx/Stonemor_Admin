@@ -54,23 +54,24 @@ const QrSurveyEntries = ({ surveyEntries, questionnaries, qrSurvey }) => {
     );
     return que?.name ?? id;
   };
-  const LinkSurveyEntriesData = surveyEntries
-    ?.filter((data) => data?.location?.location)
-    ?.filter(
-      (item) =>
-        item?.location?.location
-          .toString()
-          .toLowerCase()
-          .includes(qrSurvey.toString().toLowerCase()) ||
-        item?.location?.inchargeEmail
-          .toString()
-          .toLowerCase()
-          .includes(qrSurvey.toString().toLowerCase()) ||
-        onGettingQuestionnaireById(item?.questionnaireId)
-          .toString()
-          .toLowerCase()
-          .includes(qrSurvey.toString().toLowerCase())
-    );
+  const LinkSurveyEntriesData = surveyEntries?.filter(
+    (data) => data?.by === null
+  );
+  // ?.filter(
+  //   (item) =>
+  //     item?.location?.location
+  //       .toString()
+  //       .toLowerCase()
+  //       .includes(qrSurvey.toString().toLowerCase()) ||
+  //     item?.location?.inchargeEmail
+  //       .toString()
+  //       .toLowerCase()
+  //       .includes(qrSurvey.toString().toLowerCase()) ||
+  //     onGettingQuestionnaireById(item?.questionnaireId)
+  //       .toString()
+  //       .toLowerCase()
+  //       .includes(qrSurvey.toString().toLowerCase())
+  // );
   if (!LinkSurveyEntriesData.length)
     return (
       <p
@@ -87,6 +88,7 @@ const QrSurveyEntries = ({ surveyEntries, questionnaries, qrSurvey }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
   return (
     <>
       {" "}
