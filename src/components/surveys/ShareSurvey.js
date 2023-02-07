@@ -1,6 +1,6 @@
 import { Button, Grid } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import useToggle from "../../helpers/hooks/useToggle";
 import DynamicModel from "../reusable/DynamicModel";
 import { Loader } from "../common/Loader";
@@ -11,6 +11,9 @@ const QrShare = lazy(() => import("./QrCodeShare"));
 const TestQrCodeShare = lazy(() => import("./TestQrCodeShare"));
 
 const ShareSurvey = ({ toggle, currentSurveyData }) => {
+  const [smLocations, setSmLocations] = useState([]);
+  const [loadingLocation, setLoadingLocation] = useState(true);
+
   const {
     open: linkShareOpen,
     toggleOpen: linkShareToggleOpen,
@@ -63,6 +66,31 @@ const ShareSurvey = ({ toggle, currentSurveyData }) => {
   const handleTestQrToggleOpen = () => {
     TestQrShareToggleOpen();
   };
+
+  const getAllLocationData = async () => {
+    setLoadingLocation(true);
+    let url = "https://stonemor-jrni-zudy-mock-api.vercel.app/smlocation";
+    let allData = [];
+    let offset = 0;
+    let limit = 100;
+    while (true) {
+      const response = await fetch(`${url}?$offset=${offset}&$limit=${limit}`);
+      const data = await response.json();
+      if (data?.items?.length === 0) {
+        break;
+      }
+      allData = [...allData, ...data?.items];
+      offset += limit;
+    }
+
+    setSmLocations(allData);
+    setLoadingLocation(false);
+    // return allData;
+  };
+  useEffect(() => {
+    getAllLocationData();
+  }, []);
+
   return (
     <>
       <DynamicModel
@@ -92,6 +120,7 @@ const ShareSurvey = ({ toggle, currentSurveyData }) => {
           <QrShare
             toggle={handleQrToggleOpen}
             surveyId={currentSurveyData?.id}
+            locationData={smLocations}
           />
         </Suspense>
       </DynamicModel>

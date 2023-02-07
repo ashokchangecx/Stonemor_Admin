@@ -176,7 +176,7 @@ const SurveyEntries = () => {
       <TabPanel value={tabValue} index={1}>
         <QrSurveyEntries
           surveyEntries={surveyEntriesList
-            ?.filter((user) => user?.location?.location)
+            ?.filter((user) => user?.by === null)
             ?.sort(
               (a, b) =>
                 new Date(b.createdAt).getTime() -

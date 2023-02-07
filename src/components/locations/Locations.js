@@ -50,7 +50,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const Location = ({ locations }) => {
+const Location = ({ locations, locationsData }) => {
   const {
     open: updateOpen,
     toggleOpen: updateToggleOpen,
@@ -61,12 +61,11 @@ const Location = ({ locations }) => {
     setOpen: setDeleteModelOpen,
     toggleOpen: toggledeleteModelOpen,
   } = useToggle(false);
-  const { loading, error, data } = useQuery(LIST_SURVEY_LOCATIONS);
-  const [surveyLocations, setSurveyLocations] = useState([]);
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentLocation, setCurrentLocation] = useState({});
-  const [search, setSearch] = useState({});
+
   const openUpdateDialog = Boolean(updateOpen) && Boolean(currentLocation?.id);
 
   const [deleteLocation] = useMutation(UPDATE_SURVEY_LOCATION, {
@@ -77,24 +76,6 @@ const Location = ({ locations }) => {
     ],
   });
 
-  useEffect(() => {
-    if (!loading && !error)
-      setSurveyLocations(
-        data?.listSurveyLocations?.items
-          ?.slice()
-          ?.sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          )
-      );
-  }, [data?.listSurveyLocations?.items, error, loading]);
-
-  if (loading) {
-    return <Loader />;
-  }
-  if (error) {
-    return <>error</>;
-  }
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -128,7 +109,7 @@ const Location = ({ locations }) => {
     await deleteLocation({ variables: { input: deleteLocationQuery } });
     toggledeleteModelOpen(false);
   };
-  const locationSearch = surveyLocations.filter(
+  const locationSearch = locationsData.filter(
     (item) =>
       item?.location
         .toString()
@@ -139,6 +120,18 @@ const Location = ({ locations }) => {
         .toLowerCase()
         .includes(locations.toString().toLowerCase())
   );
+
+  if (!locationSearch.length)
+    return (
+      <p
+        style={{
+          textAlign: "center",
+          marginTop: "20px",
+        }}
+      >
+        No Search Results Found
+      </p>
+    );
 
   return (
     <>
@@ -170,8 +163,7 @@ const Location = ({ locations }) => {
           <SearchBar searchInput={(e) => locationSearch(e.target.value)} />
         </Grid>
       </Grid> */}
-
-      {locationSearch?.length > 0 ? (
+      {locationSearch?.length > 0 && (
         <TableContainer component={Paper} sx={{ mt: 2 }}>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
@@ -217,7 +209,7 @@ const Location = ({ locations }) => {
           </Table>
           <TablePagination
             component="div"
-            count={surveyLocations?.length || search?.length}
+            count={locationSearch?.length}
             page={page}
             onPageChange={handleChangePage}
             rowsPerPage={rowsPerPage}
@@ -228,8 +220,6 @@ const Location = ({ locations }) => {
             }}
           />
         </TableContainer>
-      ) : (
-        <p>NO SURVEY LOCATION FOUND !</p>
       )}
     </>
   );
