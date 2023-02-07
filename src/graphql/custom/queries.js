@@ -46,6 +46,7 @@ query ListSurveyEntriess(
       startTime
       finishTime
       questionnaireId
+      LocationId
       deleted
       archived
       testing
@@ -440,6 +441,7 @@ query GetSurveyEntries($id: ID!) {
     startTime
     finishTime
     questionnaireId
+    LocationId
     deleted
     archived
   
@@ -485,6 +487,7 @@ query ListSurveyEntriess(
       startTime
       finishTime
       questionnaireId
+      LocationId
       deleted
       archived
       testing
@@ -560,6 +563,7 @@ query ListSurveyEntriess(
       startTime
       finishTime
       questionnaireId
+      LocationId
       deleted
       archived
       testing
