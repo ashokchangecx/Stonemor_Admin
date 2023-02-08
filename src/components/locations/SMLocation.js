@@ -14,46 +14,15 @@ import {
   Tabs,
 } from "@mui/material";
 import React, { Suspense, useEffect, useState } from "react";
-import { Loader } from "../common/Loader";
-import CreateLocation from "./CreateLocation";
-import BreadCrumbs from "../reusable/BreadCrumbs";
-import DynamicModel from "../reusable/DynamicModel";
-import SearchBar from "../reusable/SearchBar";
 import withSuspense from "../../helpers/hoc/withSuspense";
-import Locations from "../../pages/Locations";
 
 // import axios from "axios";
 
-const SMLocation = ({ smLocations }) => {
-  const [data, setData] = useState([]);
-  const [search, setSearch] = useState([]);
+const SMLocation = ({ smLocations, locationData }) => {
   const [page, setPage] = useState(0);
-  const [loading, setLoading] = useState(true);
+
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const getAllData = async () => {
-    setLoading(true);
-    let url = "https://stonemor-jrni-zudy-mock-api.vercel.app/smlocation";
-    let allData = [];
-    let offset = 0;
-    let limit = 100;
-    while (true) {
-      const response = await fetch(`${url}?$offset=${offset}&$limit=${limit}`);
-      const data = await response.json();
-      if (data?.items?.length === 0) {
-        break;
-      }
-      allData = [...allData, ...data?.items];
-      offset += limit;
-    }
-
-    setData(allData);
-    setLoading(false);
-    // return allData;
-  };
-  useEffect(() => {
-    getAllData();
-  }, []);
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.primary.main,
@@ -84,7 +53,7 @@ const SMLocation = ({ smLocations }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  const locationsSearch = data.filter(
+  const locationsSearch = locationData.filter(
     (item) =>
       item?.location
         .toString()
@@ -111,9 +80,18 @@ const SMLocation = ({ smLocations }) => {
   //   };
   //   fetchLocation();
   // }, []);
-  if (loading) {
-    return <Loader />;
-  }
+
+  if (!locationsSearch.length)
+    return (
+      <p
+        style={{
+          textAlign: "center",
+          marginTop: "20px",
+        }}
+      >
+        No Search Results Found
+      </p>
+    );
   return (
     <div>
       {/* <Grid container spacing={2} sx={{ p: "0.5rem" }}>
@@ -126,7 +104,7 @@ const SMLocation = ({ smLocations }) => {
                 />
               </Grid>
             </Grid> */}
-      {locationsSearch.length > 0 ? (
+      {locationsSearch?.length > 0 && (
         <TableContainer>
           <Table>
             <TableHead>
@@ -169,8 +147,6 @@ const SMLocation = ({ smLocations }) => {
             }}
           />
         </TableContainer>
-      ) : (
-        <p>NO SURVEY LOCATION FOUND !</p>
       )}
     </div>
   );
