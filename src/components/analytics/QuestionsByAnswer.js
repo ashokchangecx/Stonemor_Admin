@@ -27,11 +27,11 @@ const QuestionsByAnswer = ({ questionariesName }) => {
   const [loadingQuestion, setLoadingQuestion] = useState(true);
 
   const Rating = {
-    1: "Very Dissatisfied",
-    2: "Dissatisfied",
-    3: "Neutral",
-    4: "Satisfied",
-    5: "Very Satisfied",
+    1: "😟 - Very Dissatisfied",
+    2: "🙁 - Dissatisfied",
+    3: "😐 - neutral",
+    4: "🙂 - Satisfied ",
+    5: "😊 - Very Satisfied",
   };
 
   const options = useMemo(
