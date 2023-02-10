@@ -12,9 +12,9 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 import React, { useState } from "react";
-import { useQuery } from "@apollo/client";
+
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import { LIST_QUESTIONNARIES_NAME } from "../../graphql/custom/queries";
+
 import withSuspense from "../../helpers/hoc/withSuspense";
 import moment from "moment-timezone";
 import { Link } from "react-router-dom";
@@ -68,10 +68,6 @@ const QrSurveyEntries = ({
     ?.filter((data) => data?.LocationId)
     ?.filter(
       (item) =>
-        // item?.location?.location
-        //   .toString()
-        //   .toLowerCase()
-        //   .includes(qrSurvey.toString().toLowerCase()) ||
         onGettingLocationById(item?.LocationId)
           ?.toString()
           .toLowerCase()

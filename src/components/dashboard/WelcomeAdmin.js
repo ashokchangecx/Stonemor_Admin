@@ -35,6 +35,7 @@ const WelcomeAdmin = ({
   surveyUsersCount,
   surveyLocationsCount,
   surveyEntriesCount,
+  locationData,
 }) => {
   const [profile, setProfile] = useState({});
   useEffect(() => {
@@ -57,12 +58,14 @@ const WelcomeAdmin = ({
   const handleDownloadingReport = () => {
     const modifiedSurveyEntries = QrCodeSurveyEntriesToExcel(
       surveyEntries,
-      questionariesName
+      questionariesName,
+      locationData
     );
     const ws = utils.json_to_sheet(modifiedSurveyEntries);
     const modifiedLinkSurveyEntries = LinkSurveyEntriesToExcel(
       surveyEntries,
-      questionariesName
+      questionariesName,
+      locationData
     );
 
     const ws2 = utils.json_to_sheet(modifiedLinkSurveyEntries);
@@ -72,8 +75,10 @@ const WelcomeAdmin = ({
 
     const ws3 = utils.json_to_sheet(modifiedSurveyEntriesByQuestionnaries);
 
-    const modifiedSurveyEntriesByLocation =
-      SurveyEntriesByLocationToExcel(surveyEntries);
+    const modifiedSurveyEntriesByLocation = SurveyEntriesByLocationToExcel(
+      surveyEntries,
+      locationData
+    );
 
     const ws4 = utils.json_to_sheet(modifiedSurveyEntriesByLocation);
 
