@@ -40,7 +40,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-const QrSurveyEntries = ({ surveyEntries, questionnaries, qrSurvey }) => {
+const QrSurveyEntries = ({
+  surveyEntries,
+  questionnaries,
+  locationData,
+  qrSurvey,
+}) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -54,16 +59,21 @@ const QrSurveyEntries = ({ surveyEntries, questionnaries, qrSurvey }) => {
     );
     return que?.name ?? id;
   };
+
+  const onGettingLocationById = (id) => {
+    const loc = locationData?.find((q) => q?.locationID === id);
+    return loc?.location ?? id;
+  };
   const LinkSurveyEntriesData = surveyEntries
-    ?.filter((data) => data?.location?.location)
+    ?.filter((data) => data?.LocationId)
     ?.filter(
       (item) =>
-        item?.location?.location
-          .toString()
-          .toLowerCase()
-          .includes(qrSurvey.toString().toLowerCase()) ||
-        item?.location?.inchargeEmail
-          .toString()
+        // item?.location?.location
+        //   .toString()
+        //   .toLowerCase()
+        //   .includes(qrSurvey.toString().toLowerCase()) ||
+        onGettingLocationById(item?.LocationId)
+          ?.toString()
           .toLowerCase()
           .includes(qrSurvey.toString().toLowerCase()) ||
         onGettingQuestionnaireById(item?.questionnaireId)
@@ -87,6 +97,7 @@ const QrSurveyEntries = ({ surveyEntries, questionnaries, qrSurvey }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
   return (
     <>
       {" "}
@@ -113,10 +124,11 @@ const QrSurveyEntries = ({ surveyEntries, questionnaries, qrSurvey }) => {
               )?.map((res, u) => (
                 <StyledTableRow key={u}>
                   <StyledTableCell>{u + 1}</StyledTableCell>
-                  <StyledTableCell>{res?.location?.location}</StyledTableCell>
+                  {/* <StyledTableCell>{res?.location?.location}</StyledTableCell> */}
                   <StyledTableCell>
-                    {res?.location?.inchargeEmail}
+                    {onGettingLocationById(res?.LocationId)}
                   </StyledTableCell>
+                  <StyledTableCell>{res?.locationEmail}</StyledTableCell>
                   <StyledTableCell>
                     {onGettingQuestionnaireById(res?.questionnaireId)}
                   </StyledTableCell>

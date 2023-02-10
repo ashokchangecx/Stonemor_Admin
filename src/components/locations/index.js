@@ -1,19 +1,49 @@
-import { Grid, Tab, Tabs } from '@mui/material'
-import { Box } from '@mui/system'
-import React, { useState } from 'react'
-import BreadCrumbs from '../reusable/BreadCrumbs'
-import SearchBar from '../reusable/SearchBar'
-import Location from './Locations'
-import SMLocation from './SMLocation'
+import { Grid, Tab, Tabs } from "@mui/material";
+import { Box } from "@mui/system";
+import React, { useEffect, useState } from "react";
+import BreadCrumbs from "../reusable/BreadCrumbs";
+import SearchBar from "../reusable/SearchBar";
+import Location from "./Locations";
+import SMLocation from "./SMLocation";
+import { useQuery } from "@apollo/client";
+import { LIST_SURVEY_LOCATIONS } from "../../graphql/custom/queries";
+import withSuspense from "../../helpers/hoc/withSuspense";
+import { Loader } from "../common/Loader";
+import useSmLocationData from "../../helpers/hooks/useSmLocationData";
 
 const Locations = () => {
   const [tabValue, setTabValue] = useState(0);
   const [locationSearch, setLocationSearch] = useState("");
+  const [Locationdata, setLocationData] = useState([]);
+  const { loadingLocation, smLocations } = useSmLocationData();
 
+  const {
+    loading: listLocationLoading,
+    error: listLocationError,
+    data: listLocationdata,
+  } = useQuery(LIST_SURVEY_LOCATIONS);
+  const handleSetLocations = (locationsData) => {
+    const {
+      listSurveyLocations: { items },
+    } = locationsData;
+    if (items?.length > 0) setLocationData(items);
+  };
 
+  const locationsList = smLocations.filter(
+    (user) => user?.responses?.items?.length !== 0
+  );
+
+  useEffect(() => {
+    if (!listLocationLoading && !listLocationError)
+      handleSetLocations(listLocationdata);
+  }, [listLocationLoading]);
+
+  if (listLocationLoading || loadingLocation) {
+    return <Loader />;
+  }
   const TabPanel = (props) => {
     const { value, index, items, children, ...other } = props;
-  
+
     return (
       <div
         role="tabpanel"
@@ -53,14 +83,12 @@ const Locations = () => {
           </Grid>
         </Grid>
       </div>
-      <Box
+      {/* <Box
         sx={{
           width: "100%",
           bgcolor: "background.paper",
           mt: 2,
-          // display: "flex",
-          // justifyContent: "flex-start",
-          // alignItems: "center",
+         
         }}
       >
         <Tabs
@@ -80,21 +108,28 @@ const Locations = () => {
           }}
         >
           <Tab label=" Location  " />
-          <Tab label=" SM Location " />
-         
+          <Tab label=" Stonemor Location " />
         </Tabs>
+       
       </Box>
       <TabPanel value={tabValue} index={0}>
-      
-        <Location locations={locationSearch}/>
+        <Location
+          locations={locationSearch}
+          locationsData={locationsList
+            ?.slice()
+            ?.sort(
+              (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+            )}
+        />
       </TabPanel>
 
-      <TabPanel value={tabValue} index={1}>
-      
-        <SMLocation smLocations={locationSearch}/>
-      </TabPanel>
+      <TabPanel value={tabValue} index={1}> */}
+      <SMLocation smLocations={locationSearch} locationData={smLocations} />
+      {/* </TabPanel> */}
     </div>
-  )
-}
+  );
+};
 
-export default Locations
+export default withSuspense(Locations);

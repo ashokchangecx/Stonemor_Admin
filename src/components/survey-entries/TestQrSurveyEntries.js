@@ -43,6 +43,7 @@ const TestQrSurveyEntries = ({
   surveyEntries,
   questionnaries,
   testQrSurvey,
+  locationData,
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -58,23 +59,27 @@ const TestQrSurveyEntries = ({
 
     return que?.name ?? id;
   };
-  const TestQrSurveyEntriesData = surveyEntries
-    ?.filter((data) => data?.location?.location)
-    ?.filter(
-      (item) =>
-        item?.location?.location
-          .toString()
-          .toLowerCase()
-          .includes(testQrSurvey.toString().toLowerCase()) ||
-        item?.location?.inchargeEmail
-          .toString()
-          .toLowerCase()
-          .includes(testQrSurvey.toString().toLowerCase()) ||
-        onGettingQuestionnaireById(item?.questionnaireId)
-          .toString()
-          .toLowerCase()
-          .includes(testQrSurvey.toString().toLowerCase())
-    );
+
+  const onGettingLocationById = (id) => {
+    const loc = locationData?.find((q) => q?.locationID === id);
+    return loc?.location ?? id;
+  };
+
+  const TestQrSurveyEntriesData = surveyEntries?.filter(
+    (item) =>
+      onGettingLocationById(item?.LocationId)
+        ?.toString()
+        .toLowerCase()
+        .includes(testQrSurvey.toString().toLowerCase()) ||
+      // item?.location?.inchargeEmail
+      //   .toString()
+      //   .toLowerCase()
+      //   .includes(testQrSurvey.toString().toLowerCase()) ||
+      onGettingQuestionnaireById(item?.questionnaireId)
+        .toString()
+        .toLowerCase()
+        .includes(testQrSurvey.toString().toLowerCase())
+  );
   if (!TestQrSurveyEntriesData.length)
     return (
       <p
@@ -117,7 +122,9 @@ const TestQrSurveyEntries = ({
               )?.map((res, u) => (
                 <StyledTableRow key={u}>
                   <StyledTableCell>{u + 1}</StyledTableCell>
-                  <StyledTableCell>{res?.location?.location}</StyledTableCell>
+                  <StyledTableCell>
+                    {onGettingLocationById(res?.LocationId)}
+                  </StyledTableCell>
                   <StyledTableCell>
                     {res?.location?.inchargeEmail}
                   </StyledTableCell>

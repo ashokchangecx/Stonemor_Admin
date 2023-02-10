@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import {
+  Autocomplete,
   Box,
   FormControl,
   Grid,
@@ -9,6 +10,7 @@ import {
   Select,
   Tab,
   Tabs,
+  TextField,
   Typography,
 } from "@mui/material";
 import {
@@ -59,7 +61,13 @@ const TabPanel = (props) => {
   );
 };
 
-const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
+const Analytics = ({
+  surveyEntriesData,
+  incompletedSurveyEntriesData,
+  locationData,
+
+  loadingLocations,
+}) => {
   const {
     loading,
     data: questionariesName,
@@ -86,6 +94,9 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
   const [surveyEntriesType, setSurveyEntriesType] = useState(surveyEntriesData);
   const [incompletedSurveyEntriesType, setIncompletedSurveyEntriesType] =
     useState(incompletedSurveyEntriesData);
+
+  const [surveyLocation, setSuveyLocation] = useState(null);
+
   const [fromDate, setFromDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   let zone = "America/New_York";
@@ -96,10 +107,56 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
     setType(event.target.value);
   };
 
+  const filterdSurveyLocations = locationData.filter((item1) => {
+    const item2 = surveyEntriesData.find(
+      (item) => item.LocationId === item1.locationID
+    );
+    return item2 !== undefined;
+  });
+
+  // const surveyEntryData = surveyEntries?.filter(
+  //   (data) => data?.LocationId === surveyLocation?.locationID
+  // );
+
   useEffect(() => {
     let filteredEntries = [];
     let filteredIncompleteEntries = [];
-    if (fromDate && endDate) {
+    if (fromDate && endDate && surveyLocation) {
+      const SD = fromDate.getTime();
+      const ED = endDate.getTime();
+
+      if (SD === ED && surveyLocation) {
+        const SDF = moment.tz(fromDate, zone).format("DD-MM-YYYY");
+
+        filteredEntries = surveyEntriesData
+          ?.filter((data) => data?.LocationId === surveyLocation?.locationID)
+          ?.filter((entry) => {
+            const CD =
+              moment.tz(entry.createdAt, zone).format("DD-MM-YYYY") === SDF;
+            return CD;
+          });
+        filteredIncompleteEntries = incompletedSurveyEntriesData
+          // ?.filter((data) => data?.LocationId === surveyLocation?.locationID)
+          ?.filter((entry) => {
+            const CD =
+              moment.tz(entry.createdAt, zone).format("DD-MM-YYYY") === SDF;
+            return CD;
+          });
+      } else if (SD !== ED && surveyLocation) {
+        filteredEntries = surveyEntriesData
+          ?.filter((data) => data?.LocationId === surveyLocation?.locationID)
+          ?.filter((entry) => {
+            const CD = new Date(entry.createdAt).getTime();
+            return SD <= CD && CD <= ED;
+          });
+        filteredIncompleteEntries = incompletedSurveyEntriesData
+          // ?.filter((data) => data?.LocationId === surveyLocation?.locationID)
+          ?.filter((entry) => {
+            const CD = new Date(entry.createdAt).getTime();
+            return SD <= CD && CD <= ED;
+          });
+      }
+    } else if (fromDate && endDate) {
       const SD = fromDate.getTime();
       const ED = endDate.getTime();
 
@@ -130,6 +187,20 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
           }
         );
       }
+    } else if (fromDate && surveyLocation) {
+      const SD = fromDate.getTime();
+      filteredEntries = surveyEntriesData
+        ?.filter((data) => data?.LocationId === surveyLocation?.locationID)
+        ?.filter((entry) => {
+          const CD = new Date(entry.createdAt).getTime();
+          return SD <= CD;
+        });
+      filteredIncompleteEntries = incompletedSurveyEntriesData
+        // ?.filter((data) => data?.LocationId === surveyLocation?.locationID)
+        ?.filter((entry) => {
+          const CD = new Date(entry.createdAt).getTime();
+          return SD <= CD;
+        });
     } else if (fromDate) {
       const SD = fromDate.getTime();
       filteredEntries = surveyEntriesData?.filter((entry) => {
@@ -142,6 +213,20 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
           return SD <= CD;
         }
       );
+    } else if (endDate && surveyLocation) {
+      const ED = endDate.getTime();
+      filteredEntries = surveyEntriesData
+        ?.filter((data) => data?.LocationId === surveyLocation?.locationID)
+        ?.filter((entry) => {
+          const CD = new Date(entry.createdAt).getTime();
+          return CD <= ED;
+        });
+      filteredIncompleteEntries = incompletedSurveyEntriesData
+        // ?.filter((data) => data?.LocationId === surveyLocation?.locationID)
+        ?.filter((entry) => {
+          const CD = new Date(entry.createdAt).getTime();
+          return CD <= ED;
+        });
     } else if (endDate) {
       const ED = endDate.getTime();
       filteredEntries = surveyEntriesData?.filter((entry) => {
@@ -154,26 +239,36 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
           return CD <= ED;
         }
       );
+    } else if (surveyLocation) {
+      filteredEntries = surveyEntriesData?.filter(
+        (data) => data?.LocationId === surveyLocation?.locationID
+      );
+      filteredIncompleteEntries = incompletedSurveyEntriesData;
+      // ?.filter(
+      //   (data) => data?.LocationId === surveyLocation?.locationID
+      // );
     } else {
       filteredEntries = surveyEntriesData;
       filteredIncompleteEntries = incompletedSurveyEntriesData;
     }
     setSurveyEntries(filteredEntries);
     setIncompletedSurveyEntries(filteredIncompleteEntries);
-  }, [fromDate, endDate]);
+  }, [fromDate, endDate, surveyLocation]);
 
   useEffect(() => {
     let typeFilteredEntries = [];
     if (type === "Link") {
       typeFilteredEntries = surveyEntries?.filter((data) => data?.by?.name);
     } else if (type === "QrCode") {
-      typeFilteredEntries = surveyEntries?.filter(
-        (data) => data?.location?.location
-      );
+      typeFilteredEntries = surveyEntries?.filter((data) => data?.LocationId);
     } else if (type === "All") {
-      typeFilteredEntries = surveyEntries;
+      typeFilteredEntries = surveyEntries?.filter(
+        (data) => data?.by?.name || data?.LocationId
+      );
     } else {
-      typeFilteredEntries = surveyEntries;
+      typeFilteredEntries = surveyEntries?.filter(
+        (data) => data?.by?.name || data?.LocationId
+      );
     }
     setSurveyEntriesType(typeFilteredEntries);
   }, [type, surveyEntries]);
@@ -186,15 +281,23 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
       );
     } else if (type === "QrCode") {
       incompletedTypeFilteredEntries = incompletedSurveyEntries?.filter(
-        (data) => data?.location?.location
+        (data) => data?.LocationId
       );
     } else if (type === "All") {
-      incompletedTypeFilteredEntries = incompletedSurveyEntries;
+      incompletedTypeFilteredEntries = incompletedSurveyEntries?.filter(
+        (data) => data?.by?.name || data?.LocationId
+      );
     } else {
-      incompletedTypeFilteredEntries = incompletedSurveyEntries;
+      incompletedTypeFilteredEntries = incompletedSurveyEntries?.filter(
+        (data) => data?.by?.name || data?.LocationId
+      );
     }
     setIncompletedSurveyEntriesType(incompletedTypeFilteredEntries);
   }, [type, surveyEntries]);
+
+  if (loadingLocations) {
+    return <Loader />;
+  }
 
   return (
     <div>
@@ -232,22 +335,83 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
           <Tab label="Incomplete Surveys" />
           <Tab label="Response" />
         </Tabs>
-        {tabValue !== 4 && (
-          <Grid container spacing={3} mb={2} alignItems="flex-start">
-            <Grid item xs={4} sm={2} md={1}>
-              <Typography variant="button" color="primary">
-                Filters
-              </Typography>
-            </Grid>
-
-            <Grid item xs={10} sm={8} md={6}>
-              <ResponsiveDateRangePicker
-                fromDate={fromDate}
-                setFromDate={setFromDate}
-                endDate={endDate}
-                setEndDate={setEndDate}
+        <Grid container spacing={3} mb={2} alignItems="flex-start">
+          <Grid item xs={4} sm={2} md={1}>
+            <Typography variant="button" color="primary">
+              Filters
+            </Typography>
+          </Grid>
+          <Grid item xs={10} sm={8} md={6}>
+            <ResponsiveDateRangePicker
+              fromDate={fromDate}
+              setFromDate={setFromDate}
+              endDate={endDate}
+              setEndDate={setEndDate}
+            />
+          </Grid>
+          {tabValue !== 3 && (
+            <Grid item xs={10} sm={8} md={2}>
+              <Autocomplete
+                id="location-select-demo"
+                sx={{ width: "100%", marginTop: "2px" }}
+                options={filterdSurveyLocations}
+                autoHighlight
+                getOptionLabel={(option) => option?.location}
+                onChange={(event, newValue) => setSuveyLocation(newValue)}
+                value={surveyLocation}
+                renderOption={(props, option) => (
+                  <Box
+                    component="li"
+                    sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                    {...props}
+                  >
+                    {option?.location}
+                  </Box>
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Choose a Location"
+                    inputProps={{
+                      ...params.inputProps,
+                      autoComplete: "new-password", // disable autocomplete and autofill
+                    }}
+                  />
+                )}
               />
             </Grid>
+          )}
+          {tabValue > 1 && (
+            <><Grid item xs={4} sm={4} md={2}>
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl variant="standard">
+                  <InputLabel id="demo-simple-select-label" color="secondary">
+                    Type Filter
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={type}
+                    name="type"
+                    label="Type Filter"
+                    onChange={handleChangeType}
+                    color="secondary"
+                  >
+                    <MenuItem value="All"> All Survey Entries</MenuItem>
+                    <MenuItem value="Link"> Link Survey Entries</MenuItem>
+                    <MenuItem value="QrCode">QR Code Survey Entries</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+            </Grid><Grid item xs={10} sm={8} md={6}>
+                <ResponsiveDateRangePicker
+                  fromDate={fromDate}
+                  setFromDate={setFromDate}
+                  endDate={endDate}
+                  setEndDate={setEndDate} />
+              </Grid></>
+        )}
+
             {tabValue === 3 && (
               <Grid item xs={4} sm={4}>
                 <Box sx={{ minWidth: 120 }}>
@@ -273,7 +437,6 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
               </Grid>
             )}
           </Grid>
-        )}
       </Box>
       <TabPanel value={tabValue} index={0}>
         <Grid container spacing={2} alignItems="stretch">
@@ -283,6 +446,8 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
               setSelectedLocation={setSelectedLocation}
               fromDate={fromDate}
               endDate={endDate}
+              locationData={locationData}
+              loadingLocations={loadingLocations}
             />
           </Grid>
           {selectedLocation && (
@@ -294,20 +459,11 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
                   loading={loading}
                   error={error}
                   selectedLocation={selectedLocation}
+                  locationData={locationData}
                 />
               </Suspense>
             </Grid>
           )}
-          <Grid item xs={12} md={6}>
-            <SurveyByQuestionnarie
-              data={surveyEntries}
-              questionariesName={questionariesName}
-              loading={loading}
-              error={error}
-              fromDate={fromDate}
-              endDate={endDate}
-            />
-          </Grid>
         </Grid>
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
@@ -319,6 +475,7 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
               setSelectedQuestionnarie={setSelectedQuestionnarie}
               fromDate={fromDate}
               endDate={endDate}
+              locationData={locationData}
             />
           </Grid>
           {selectedQuestionnarie && (
@@ -330,6 +487,7 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
                   loading={loading}
                   error={error}
                   selectedQuestionnarie={selectedQuestionnarie}
+                  locationData={locationData}
                 />
               </Suspense>
             </Grid>
@@ -338,6 +496,16 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
             <SurveyByLink
               data={surveyEntries}
               questionariesName={questionariesName}
+              fromDate={fromDate}
+              endDate={endDate}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <SurveyByQuestionnarie
+              data={surveyEntries}
+              questionariesName={questionariesName}
+              loading={loading}
+              error={error}
               fromDate={fromDate}
               endDate={endDate}
             />
@@ -387,6 +555,7 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
                 fromDate={fromDate}
                 endDate={endDate}
                 type={type}
+                locationData={locationData}
               />
             </Grid>
           )}

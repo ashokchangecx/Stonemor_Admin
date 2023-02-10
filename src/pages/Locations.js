@@ -27,7 +27,7 @@ const LocationsPage = () => {
         </Suspense>
       </DynamicModel>
       <Locations />
-      <CreateButton onClick={toggleOpen} />
+      {/* <CreateButton onClick={toggleOpen} /> */}
     </>
   );
 };

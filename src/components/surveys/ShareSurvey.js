@@ -1,16 +1,19 @@
 import { Button, Grid } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import useToggle from "../../helpers/hooks/useToggle";
 import DynamicModel from "../reusable/DynamicModel";
 import { Loader } from "../common/Loader";
 import withSuspense from "../../helpers/hoc/withSuspense";
+import useSmLocationData from "../../helpers/hooks/useSmLocationData";
 const LinkShare = lazy(() => import("./LinkShare"));
 const TestLinkShare = lazy(() => import("./TestLinkShare"));
 const QrShare = lazy(() => import("./QrCodeShare"));
 const TestQrCodeShare = lazy(() => import("./TestQrCodeShare"));
 
 const ShareSurvey = ({ toggle, currentSurveyData }) => {
+  const { loadingLocation, smLocations } = useSmLocationData();
+
   const {
     open: linkShareOpen,
     toggleOpen: linkShareToggleOpen,
@@ -63,6 +66,7 @@ const ShareSurvey = ({ toggle, currentSurveyData }) => {
   const handleTestQrToggleOpen = () => {
     TestQrShareToggleOpen();
   };
+
   return (
     <>
       <DynamicModel
@@ -92,6 +96,7 @@ const ShareSurvey = ({ toggle, currentSurveyData }) => {
           <QrShare
             toggle={handleQrToggleOpen}
             surveyId={currentSurveyData?.id}
+            locationData={smLocations}
           />
         </Suspense>
       </DynamicModel>
@@ -122,6 +127,7 @@ const ShareSurvey = ({ toggle, currentSurveyData }) => {
           <TestQrCodeShare
             toggle={handleTestQrToggleOpen}
             surveyId={currentSurveyData?.id}
+            locationData={smLocations}
           />
         </Suspense>
       </DynamicModel>

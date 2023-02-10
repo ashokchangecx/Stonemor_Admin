@@ -16,6 +16,7 @@ import { Loader } from "../common/Loader";
 import SearchBar from "../reusable/SearchBar";
 import { lazy } from "react";
 import BreadCrumbs from "../reusable/BreadCrumbs";
+import useSmLocationData from "../../helpers/hooks/useSmLocationData";
 
 const IncompletedLinkSurveyEntries = lazy(() =>
   import("./IncompletedLinkSurveyEntries")
@@ -58,6 +59,7 @@ const SurveyEntries = () => {
   const [surveyEntriesData, setSurveyEntriesData] = useState([]);
   const [TestSurveyEntries, setTestSurveyEntries] = useState([]);
   const [surveySearched, setSurveySearched] = useState("");
+  const { loadingLocation, smLocations } = useSmLocationData();
 
   let variables = { limit: 10000 };
   const {
@@ -109,7 +111,7 @@ const SurveyEntries = () => {
       handleSetTestResponses(TestSurveyEntriesData);
   }, [TestSurveyEntriesLoading]);
 
-  if (listSurveyEntriesLoading || TestSurveyEntriesLoading) {
+  if (listSurveyEntriesLoading || TestSurveyEntriesLoading || loadingLocation) {
     return <Loader />;
   }
 
@@ -176,7 +178,7 @@ const SurveyEntries = () => {
       <TabPanel value={tabValue} index={1}>
         <QrSurveyEntries
           surveyEntries={surveyEntriesList
-            ?.filter((user) => user?.location?.location)
+            ?.filter((user) => user?.LocationId)
             ?.sort(
               (a, b) =>
                 new Date(b.createdAt).getTime() -
@@ -184,6 +186,7 @@ const SurveyEntries = () => {
             )}
           questionnaries={questionariesName}
           qrSurvey={surveySearched}
+          locationData={smLocations}
         />
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
@@ -196,6 +199,7 @@ const SurveyEntries = () => {
         <IncompletedQrSurveyEntries
           questionnaries={questionariesName}
           incompleteQrSurvey={surveySearched}
+          locationData={smLocations}
         />
       </TabPanel>
       <TabPanel value={tabValue} index={4}>
@@ -213,13 +217,14 @@ const SurveyEntries = () => {
       <TabPanel value={tabValue} index={5}>
         <TestQrSurveyEntries
           surveyEntries={TestSurveyEntriesList?.filter(
-            (user) => user?.location?.location
+            (user) => user?.LocationId
           )?.sort(
             (a, b) =>
               new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           )}
           questionnaries={questionariesName}
           testQrSurvey={surveySearched}
+          locationData={smLocations}
         />
       </TabPanel>
     </div>
