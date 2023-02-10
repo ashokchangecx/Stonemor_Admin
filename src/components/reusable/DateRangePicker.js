@@ -26,6 +26,7 @@ const ResponsiveDateRangePicker = ({
       >
         <Grid item xs={5} cm={5} maxWidth="350px">
           <DatePicker
+            timezone="America/New_York"
             label="From"
             value={fromDate}
             maxDate={endDate ? endDate : undefined}
@@ -37,6 +38,7 @@ const ResponsiveDateRangePicker = ({
         </Grid>
         <Grid item xs={5} cm={5} maxWidth="350px">
           <DatePicker
+            timezone="America/New_York"
             label="To"
             value={endDate}
             minDate={fromDate ? fromDate : undefined}
@@ -46,10 +48,22 @@ const ResponsiveDateRangePicker = ({
             renderInput={(params) => <TextField {...params} />}
           />
         </Grid>
-        <Grid item xs={2} cm={2} display="flex" justifyContent="center" alignItems="center">
-          <Button  variant="contained"
-          size="small"
-          color="secondary" onClick={handleDateReset}>Reset</Button>
+        <Grid
+          item
+          xs={2}
+          cm={2}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Button
+            variant="contained"
+            size="small"
+            color="secondary"
+            onClick={handleDateReset}
+          >
+            Reset
+          </Button>
         </Grid>
       </Grid>
     </LocalizationProvider>
