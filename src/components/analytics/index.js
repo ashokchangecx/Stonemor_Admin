@@ -122,24 +122,22 @@ const Analytics = ({
     let filteredEntries = [];
     let filteredIncompleteEntries = [];
     if (fromDate && endDate && surveyLocation) {
-      const SD = fromDate.getTime();
+      const SD = moment(fromDate).format("DD-MM-YYYY");
       const ED = endDate.getTime();
 
       if (SD === ED && surveyLocation) {
-        const SDF = moment.tz(fromDate, zone).format("DD-MM-YYYY");
+        const SDF = moment(fromDate).format("DD-MM-YYYY");
 
         filteredEntries = surveyEntriesData
           ?.filter((data) => data?.LocationId === surveyLocation?.locationID)
           ?.filter((entry) => {
-            const CD =
-              moment.tz(entry.createdAt, zone).format("DD-MM-YYYY") === SDF;
+            const CD = moment(entry.createdAt).format("DD-MM-YYYY") === SDF;
             return CD;
           });
         filteredIncompleteEntries = incompletedSurveyEntriesData
           // ?.filter((data) => data?.LocationId === surveyLocation?.locationID)
           ?.filter((entry) => {
-            const CD =
-              moment.tz(entry.createdAt, zone).format("DD-MM-YYYY") === SDF;
+            const CD = moment.tz(entry.createdAt).format("DD-MM-YYYY") === SDF;
             return CD;
           });
       } else if (SD !== ED && surveyLocation) {
@@ -161,17 +159,15 @@ const Analytics = ({
       const ED = endDate.getTime();
 
       if (SD === ED) {
-        const SDF = moment.tz(fromDate, zone).format("DD-MM-YYYY");
+        const SDF = moment(fromDate).format("DD-MM-YYYY");
 
         filteredEntries = surveyEntriesData?.filter((entry) => {
-          const CD =
-            moment.tz(entry.createdAt, zone).format("DD-MM-YYYY") === SDF;
+          const CD = moment(entry.createdAt).format("DD-MM-YYYY") === SDF;
           return CD;
         });
         filteredIncompleteEntries = incompletedSurveyEntriesData?.filter(
           (entry) => {
-            const CD =
-              moment.tz(entry.createdAt, zone).format("DD-MM-YYYY") === SDF;
+            const CD = moment(entry.createdAt).format("DD-MM-YYYY") === SDF;
             return CD;
           }
         );
