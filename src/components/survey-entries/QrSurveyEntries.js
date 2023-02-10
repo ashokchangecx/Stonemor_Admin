@@ -40,7 +40,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-const QrSurveyEntries = ({ surveyEntries, questionnaries, qrSurvey }) => {
+const QrSurveyEntries = ({
+  surveyEntries,
+  questionnaries,
+  locationData,
+  qrSurvey,
+}) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -54,24 +59,28 @@ const QrSurveyEntries = ({ surveyEntries, questionnaries, qrSurvey }) => {
     );
     return que?.name ?? id;
   };
-  const LinkSurveyEntriesData = surveyEntries?.filter(
-    (data) => data?.by === null
-  );
-  // ?.filter(
-  //   (item) =>
-  //     item?.location?.location
-  //       .toString()
-  //       .toLowerCase()
-  //       .includes(qrSurvey.toString().toLowerCase()) ||
-  //     item?.location?.inchargeEmail
-  //       .toString()
-  //       .toLowerCase()
-  //       .includes(qrSurvey.toString().toLowerCase()) ||
-  //     onGettingQuestionnaireById(item?.questionnaireId)
-  //       .toString()
-  //       .toLowerCase()
-  //       .includes(qrSurvey.toString().toLowerCase())
-  // );
+
+  const onGettingLocationById = (id) => {
+    const loc = locationData?.find((q) => q?.locationID === id);
+    return loc?.location ?? id;
+  };
+  const LinkSurveyEntriesData = surveyEntries
+    ?.filter((data) => data?.LocationId)
+    ?.filter(
+      (item) =>
+        // item?.location?.location
+        //   .toString()
+        //   .toLowerCase()
+        //   .includes(qrSurvey.toString().toLowerCase()) ||
+        onGettingLocationById(item?.LocationId)
+          ?.toString()
+          .toLowerCase()
+          .includes(qrSurvey.toString().toLowerCase()) ||
+        onGettingQuestionnaireById(item?.questionnaireId)
+          .toString()
+          .toLowerCase()
+          .includes(qrSurvey.toString().toLowerCase())
+    );
   if (!LinkSurveyEntriesData.length)
     return (
       <p
@@ -102,9 +111,9 @@ const QrSurveyEntries = ({ surveyEntries, questionnaries, qrSurvey }) => {
                 <StyledTableCell>Location</StyledTableCell>
                 <StyledTableCell>Email</StyledTableCell>
                 <StyledTableCell>Questionnaire</StyledTableCell>
-                <StyledTableCell>Duration</StyledTableCell>
                 <StyledTableCell>Date</StyledTableCell>
                 <StyledTableCell>Time</StyledTableCell>
+                <StyledTableCell>Duration</StyledTableCell>
                 <StyledTableCell>View</StyledTableCell>
               </StyledTableRow>
             </TableHead>
@@ -115,10 +124,11 @@ const QrSurveyEntries = ({ surveyEntries, questionnaries, qrSurvey }) => {
               )?.map((res, u) => (
                 <StyledTableRow key={u}>
                   <StyledTableCell>{u + 1}</StyledTableCell>
-                  <StyledTableCell>{res?.location?.location}</StyledTableCell>
+                  {/* <StyledTableCell>{res?.location?.location}</StyledTableCell> */}
                   <StyledTableCell>
-                    {res?.location?.inchargeEmail}
+                    {onGettingLocationById(res?.LocationId)}
                   </StyledTableCell>
+                  <StyledTableCell>{res?.locationEmail}</StyledTableCell>
                   <StyledTableCell>
                     {onGettingQuestionnaireById(res?.questionnaireId)}
                   </StyledTableCell>

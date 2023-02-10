@@ -14,18 +14,20 @@ const SurveyByQuestionnarie = ({
   endDate,
 }) => {
   const [date, setDate] = useState(TITLE);
-  const chartData = data?.reduce((chartData, { questionnaireId }) => {
-    if (questionnaireId) {
-      const x = questionnaireId || "no-questionnarie";
-      const y = (chartData[x]?.y || 0) + 1;
-      const loc = {
-        x,
-        y,
-      };
-      chartData[x] = loc;
-    }
-    return chartData;
-  }, {});
+  const chartData = data
+    ?.filter((data) => data?.by?.name || data?.LocationId)
+    ?.reduce((chartData, { questionnaireId }) => {
+      if (questionnaireId) {
+        const x = questionnaireId || "no-questionnarie";
+        const y = (chartData[x]?.y || 0) + 1;
+        const loc = {
+          x,
+          y,
+        };
+        chartData[x] = loc;
+      }
+      return chartData;
+    }, {});
 
   useEffect(() => {
     const fullTitle = bindTitle({

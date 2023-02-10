@@ -11,11 +11,18 @@ const IcompletedSurveyByLocation = ({
   fromDate,
   type,
   endDate,
+  locationData,
 }) => {
   const [date, setDate] = useState(TITLE);
-  const chartData = data?.reduce((chartData, { location }) => {
-    if (location?.id) {
-      const x = location?.id || "no-loc";
+
+  const onGettingLocationById = (id) => {
+    const loc = locationData?.find((q) => q?.locationID === id);
+    return loc?.location ?? id;
+  };
+
+  const chartData = data?.reduce((chartData, { LocationId }) => {
+    if (LocationId) {
+      const x = LocationId || "no-loc";
       const y = (chartData[x]?.y || 0) + 1;
       const loc = {
         x,
@@ -31,8 +38,7 @@ const IcompletedSurveyByLocation = ({
     setSelectedLocation(locationId);
   };
   const xAxisFormatter = (value) => {
-    const label =
-      data.find((d) => d?.location?.id === value)?.location?.location || value;
+    const label = onGettingLocationById(value);
     return label;
   };
   useEffect(() => {

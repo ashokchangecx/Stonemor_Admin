@@ -46,6 +46,7 @@ query ListSurveyEntriess(
       startTime
       finishTime
       questionnaireId
+      LocationId
       deleted
       archived
       testing
@@ -55,6 +56,7 @@ query ListSurveyEntriess(
       responses {
         items {
           id
+          res
         }
         nextToken
       }
@@ -164,6 +166,7 @@ export const LIST_QUESTIONNARIES = /* GraphQL */ gql(`
       }
       nextToken
     }
+    
   }
 `);
 
@@ -243,6 +246,18 @@ export const LIST_QUESTIONS = /* GraphQL */ gql(`
         deleted
         archived
         order
+        responses {
+          items {
+            id
+            res
+            deleted
+            archived
+            createdAt
+            updatedAt
+           
+          }
+          nextToken
+        }
         dependent {
           id
         }
@@ -264,6 +279,8 @@ export const LIST_QUESTIONS = /* GraphQL */ gql(`
       }
       nextToken
     }
+   
+
   }
 `);
 export const LIST_RESPONSESS = /* GraphQL */ gql(`
@@ -289,6 +306,12 @@ export const LIST_RESPONSESS = /* GraphQL */ gql(`
           type
           isSelf
           isDependent
+          listOptions {
+        listValue
+        nextQuestion
+        isText
+        isMultiple
+      }
           deleted
           archived
           order
@@ -407,6 +430,7 @@ export const GET_QUESTIONNAIRES = /* GraphQL */ gql(`
         }
         nextToken
       }
+    
     }
   }
 `);
@@ -440,6 +464,7 @@ query GetSurveyEntries($id: ID!) {
     startTime
     finishTime
     questionnaireId
+    LocationId
     deleted
     archived
   
@@ -485,6 +510,7 @@ query ListSurveyEntriess(
       startTime
       finishTime
       questionnaireId
+      LocationId
       deleted
       archived
       testing
@@ -530,6 +556,18 @@ export const GET_QUESTION = /* GraphQL */ gql(`
       deleted
       archived
       order
+      responses {
+        items {
+          id
+          res
+          deleted
+          archived
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+
       dependent {
         id
         options {
@@ -537,10 +575,13 @@ export const GET_QUESTION = /* GraphQL */ gql(`
           nextQuestion
         }
       }
+  
       createdAt
       updatedAt
      
     }
+    
+
   }
 `);
 
@@ -560,6 +601,7 @@ query ListSurveyEntriess(
       startTime
       finishTime
       questionnaireId
+      LocationId
       deleted
       archived
       testing

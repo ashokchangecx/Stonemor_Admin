@@ -30,7 +30,7 @@ const QrCodeShare = ({ toggle, surveyId, locationData }) => {
   const { data: questionariesName } = useQuery(LIST_QUESTIONNARIES_NAME);
   const [surveyLocation, setSuveyLocation] = useState(null);
 
-  const [inchargeEmail, setInchargeEmail] = useState(null);
+  const [inchargeEmail, setInchargeEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [emailSuccess, setEmailSuccess] = useState("");
   const [alertSuccessEmail, setAlertSuccessEmail] = useState(false);
@@ -42,7 +42,7 @@ const QrCodeShare = ({ toggle, surveyId, locationData }) => {
   const emailUrl =
     "https://stonemor.netlify.app/.netlify/functions/server/send";
   const baseUrl = "https://main.d3d8mcg1fsym22.amplifyapp.com";
-  const surveyQrcodeTest = `${baseUrl}/surveyquestions/${surveyId}?uid=${surveyLocation?.locationID}`;
+  const surveyQrcodeTest = `${baseUrl}/surveyquestions/${surveyId}?lid=${surveyLocation?.locationID}`;
 
   /* Get quetion by questionID */
   const onGettingQuestionById = (id) => {
@@ -123,8 +123,6 @@ const QrCodeShare = ({ toggle, surveyId, locationData }) => {
     setInchargeEmail(surveyLoc?.inchargeEmail || " ");
   }, [surveyLocation]);
 
-  console.log("surveyLocation", surveyLocation);
-
   return (
     <Box my={2}>
       <Box my={2}>
@@ -192,38 +190,13 @@ const QrCodeShare = ({ toggle, surveyId, locationData }) => {
         margin="dense"
         id="InchargeEmail"
         label="Email"
-        placeholder="Enter your email address to send Qr Code to email"
+        placeholder="Enter Email Address to  receive Qr Code"
         value={inchargeEmail}
         onChange={(e) => handleEmail(e)}
         fullWidth
         type="Email"
       />
-      {/* <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Select SMLocation</InputLabel>
-        <Select
-          margin="dense"
-          fullWidth
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          label="Select Location"
-          value={locationID}
-          onChange={(event) => setLocationID(event.target.value)}
-        >
-          {LocationData?.items
-            ?.slice()
-            ?.sort(
-              (a, b) =>
-                new Date(b.createdAt).getTime() -
-                new Date(a.createdAt).getTime()
-            )
-            ?.map((user, u) => (
-              <MenuItem key={u} value={user?.locationID}>
-                {user?.location} - {user?.inchargeEmail}
-              </MenuItem>
-            ))}
-        </Select>
-       
-      </FormControl> */}
+     
       {alertSuccessEmail ? (
         <Alert severity="success">{emailSuccess}</Alert>
       ) : (
@@ -281,7 +254,7 @@ const QrCodeShare = ({ toggle, surveyId, locationData }) => {
           </Grid>
         )}
       </Box>
-    </Box>
+    // </Box>
   );
 };
 

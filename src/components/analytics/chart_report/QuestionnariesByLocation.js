@@ -11,12 +11,15 @@ const QuestionnariesByLocation = ({
   loading,
   error,
   selectedLocation,
+  locationData,
 }) => {
-  const locationName =
-    data?.find((d) => d?.location?.id === selectedLocation)?.location
-      ?.location || "";
+  const onGettingLocationById = (id) => {
+    const loc = locationData?.find((q) => q?.locationID === id);
+    return loc?.location ?? id;
+  };
+  const locationName = onGettingLocationById(selectedLocation);
   const chartData = data
-    ?.filter((d) => d?.location?.id === selectedLocation)
+    ?.filter((d) => d?.LocationId === selectedLocation)
     ?.reduce((chartData, { questionnaireId }) => {
       if (questionnaireId) {
         const x = questionnaireId || "no-questionnarie";
