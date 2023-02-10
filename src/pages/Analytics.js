@@ -6,6 +6,7 @@ import { LIST_INCOMPLETED_SURVEY_ENTRIES } from "../graphql/custom/queries";
 import withSuspense from "../helpers/hoc/withSuspense";
 import useIncompletedSurveyEntries from "../helpers/hooks/userIncompletedSurveyEntries";
 import useSurveyEntries from "../helpers/hooks/useSurveyEntries";
+import useSmLocationData from "../helpers/hooks/useSmLocationData";
 
 const AnalyticsPage = () => {
   // const { loading, surveyEntries } = useSurveyEntries({
@@ -14,7 +15,7 @@ const AnalyticsPage = () => {
   const { loading, surveyEntries } = useSurveyEntries();
   const { incompletedLoading, surveyIncompletedEntries } =
     useIncompletedSurveyEntries();
-
+  const { loadingLocations, smLocations } = useSmLocationData();
   // const [incompeletedSurveyEntriesData, setIncompletedSurveyEntriesData] =
   //   useState([]);
 
@@ -48,6 +49,9 @@ const AnalyticsPage = () => {
   if (incompletedLoading) {
     return <Loader />;
   }
+  if (loadingLocations) {
+    return <Loader />;
+  }
   // if (listIncompletedSurveyEntriesLoading) {
   //   return <Loader />;
   // }
@@ -58,6 +62,8 @@ const AnalyticsPage = () => {
     <Analytics
       surveyEntriesData={surveyEntries}
       incompletedSurveyEntriesData={surveyIncompletedEntries}
+      locationData={smLocations}
+      loadingLocations={loadingLocations}
     />
   );
 };

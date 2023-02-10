@@ -1,5 +1,6 @@
 import {
   Alert,
+  Autocomplete,
   Button,
   FormControl,
   Grid,
@@ -24,10 +25,10 @@ import axios from "axios";
 import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
 import DownloadForOfflineOutlinedIcon from "@mui/icons-material/DownloadForOfflineOutlined";
 
-const TestQrCodeShare = ({ toggle, surveyId }) => {
+const TestQrCodeShare = ({ toggle, surveyId, locationData }) => {
   const { loading, error, data } = useQuery(LIST_SURVEY_LOCATIONS);
   const { data: questionariesName } = useQuery(LIST_QUESTIONNARIES_NAME);
-  const [surveyLocation, setSuveyLocation] = useState("");
+  const [surveyLocation, setSuveyLocation] = useState(null);
   const [inchargeEmail, setInchargeEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [emailSuccess, setEmailSuccess] = useState("");
@@ -40,7 +41,7 @@ const TestQrCodeShare = ({ toggle, surveyId }) => {
   const emailUrl =
     "https://stonemor.netlify.app/.netlify/functions/server/send";
   const baseUrl = "https://main.d3d8mcg1fsym22.amplifyapp.com";
-  const surveyQrcodeTest = `${baseUrl}/surveyquestionstest/${surveyId}?uid=${surveyLocation}`;
+  const surveyQrcodeTest = `${baseUrl}/surveyquestionstest/${surveyId}?lid=${surveyLocation?.locationID}`;
 
   /* Get quetion by questionID */
   const onGettingQuestionById = (id) => {
@@ -51,9 +52,8 @@ const TestQrCodeShare = ({ toggle, surveyId }) => {
     return que?.name ?? id;
   };
 
-  const surveyLoc = data?.listSurveyLocations?.items?.find(
-    (loc) => loc?.id === surveyLocation
-  );
+  const surveyLoc = surveyLocation;
+
   const surveyName = onGettingQuestionById(surveyId);
 
   //mailSent//
@@ -129,7 +129,7 @@ const TestQrCodeShare = ({ toggle, surveyId }) => {
         )}
         {alertFail ? <Alert severity="error">{alertContentFail}</Alert> : ""}
       </Box>
-      <FormControl fullWidth>
+      {/* <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Select Location</InputLabel>
         <Select
           margin="dense"
@@ -154,16 +154,46 @@ const TestQrCodeShare = ({ toggle, surveyId }) => {
             ))}
         </Select>
 
-        {/* <TextField
-          margin="dense"
-          id="InchargeEmail"
-          label="Email"
-          value={inchargeEmail}
-          onChange={(e) => handleEmail(e)}
-          fullWidth
-          type="email"
-        /> */}
-      </FormControl>
+   
+      </FormControl> */}
+      <Autocomplete
+        id="location-select-demo"
+        sx={{ width: "100%", marginTop: "2px" }}
+        options={locationData}
+        autoHighlight
+        getOptionLabel={(option) => option?.location}
+        onChange={(event, newValue) => setSuveyLocation(newValue)}
+        value={surveyLocation}
+        renderOption={(props, option) => (
+          <Box
+            component="li"
+            sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+            {...props}
+          >
+            {option?.location}
+          </Box>
+        )}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Choose a Location"
+            inputProps={{
+              ...params.inputProps,
+              autoComplete: "new-password", // disable autocomplete and autofill
+            }}
+          />
+        )}
+      />
+      <TextField
+        margin="dense"
+        id="InchargeEmail"
+        label="Email"
+        placeholder="Enter Email Address to  receive Qr Code"
+        value={inchargeEmail}
+        onChange={(e) => handleEmail(e)}
+        fullWidth
+        type="Email"
+      />
       {alertSuccessEmail ? (
         <Alert severity="success">{emailSuccess}</Alert>
       ) : (
@@ -212,6 +242,7 @@ const TestQrCodeShare = ({ toggle, surveyId }) => {
                 color="error"
                 aria-label="mailsend"
                 onClick={handleSendEmail}
+                disabled={!alertSuccessEmail}
               >
                 <ForwardToInboxOutlinedIcon fontSize="large" />
               </IconButton>

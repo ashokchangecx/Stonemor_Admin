@@ -12,6 +12,7 @@ const LocationByQuestionnaire = ({
   loading,
   error,
   selectedQuestionnarie,
+  locationData,
 }) => {
   const onGettingQuestionnaireByname = (name) => {
     const que = questionariesName?.listQuestionnaires?.items?.find(
@@ -21,21 +22,26 @@ const LocationByQuestionnaire = ({
     return que?.id ?? name;
   };
 
+  const onGettingLocationById = (id) => {
+    const loc = locationData?.find((q) => q?.locationID === id);
+    return loc?.location ?? id;
+  };
+
   const questionarieName =
     questionariesName?.listQuestionnaires?.items?.find(
       (q) => q?.id === onGettingQuestionnaireByname(selectedQuestionnarie)
     ) || "";
 
   const chartData = data
-    ?.filter((data) => data?.location?.location)
+    ?.filter((data) => data?.LocationId)
     ?.filter(
       (d) =>
         d?.questionnaireId ===
         onGettingQuestionnaireByname(selectedQuestionnarie)
     )
-    ?.reduce((chartData, { location }) => {
-      if (location?.id) {
-        const x = location?.location || "no-loc";
+    ?.reduce((chartData, { LocationId }) => {
+      if (LocationId) {
+        const x = onGettingLocationById(LocationId) || "no-loc";
 
         const y = (chartData[x]?.y || 0) + 1;
 

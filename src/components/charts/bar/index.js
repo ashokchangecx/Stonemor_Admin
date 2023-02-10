@@ -5,6 +5,7 @@ import {
   CHART_HEIGHT,
   CHART_THEME_MODE,
 } from "../../../config/ChartConfig";
+import { Loader } from "../../common/Loader";
 import ChartWrapper from "../ChartWrapper";
 
 const themeColor = [
@@ -35,7 +36,32 @@ const SimpleBarChart = ({
     ?.map(([name, obj]) => obj)
     ?.sort((a, b) => b?.y - a?.y);
 
+  const series = [
+    {
+      name: seriesName,
+      data: chartData,
+    },
+  ];
+  const seriesLength = series[0]?.data?.length;
+  console.log(seriesLength);
+  console.log(series);
+
+  if (seriesLength < 3) {
+    const seriesLength = series[0]?.data?.length;
+
+    var optimalColumnWidthPercent =
+      10 + 40 / (1 + 30 * Math.exp(-seriesLength / 3));
+  } else {
+    optimalColumnWidthPercent = 70;
+  }
   const options = {
+    plotOptions: {
+      bar: {
+        // distributed: true,
+        // barHeight: "20%",
+        columnWidth: optimalColumnWidthPercent + "%",
+      },
+    },
     chart: {
       id,
       events: {
@@ -106,13 +132,6 @@ const SimpleBarChart = ({
       mode: CHART_THEME_MODE,
     },
   };
-
-  const series = [
-    {
-      name: seriesName,
-      data: chartData,
-    },
-  ];
 
   return (
     <ChartWrapper title={title} id={id}>

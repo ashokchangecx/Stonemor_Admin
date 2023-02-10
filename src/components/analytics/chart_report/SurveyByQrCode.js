@@ -21,7 +21,7 @@ const SurveyByQrCode = ({
     return que?.name ?? id;
   };
   const chartData = data
-    ?.filter((data) => data?.location?.location)
+    ?.filter((data) => data?.LocationId)
     ?.reduce((chartData, { questionnaireId }) => {
       if (questionnaireId) {
         const x =
