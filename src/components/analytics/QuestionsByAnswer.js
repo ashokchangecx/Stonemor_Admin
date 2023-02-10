@@ -25,6 +25,15 @@ const QuestionsByAnswer = ({ questionariesName }) => {
   const [questionariesValue, setQuestionariesValue] = useState(null);
   const [questionValue, setQuestionValue] = useState(null);
   const [loadingQuestion, setLoadingQuestion] = useState(true);
+
+  const Rating = {
+    1: "Very Dissatisfied",
+    2: "Dissatisfied",
+    3: "Neutral",
+    4: "Satisfied",
+    5: "Very Satisfied",
+  };
+
   const options = useMemo(
     () =>
       questionariesName?.listQuestionnaires?.items?.map((question) => ({
@@ -40,6 +49,7 @@ const QuestionsByAnswer = ({ questionariesName }) => {
       id: question?.id,
       label: question?.qu,
       listOptions: question?.listOptions,
+      type: question?.type,
     }));
 
   const questionAnswers = responsess?.listResponsess?.items;
@@ -119,34 +129,40 @@ const QuestionsByAnswer = ({ questionariesName }) => {
           )}
           {questionValue?.id && (
             <Box pl={2}>
-              {Object.entries(chartData).map(([key, value], i) => (
-                <div key={i}>
-                  {" "}
-                  {total > 0 ? (
-                    <div key={key}>
-                      <Grid pl={2}>
-                        {" "}
-                        <ul>
-                          <li
-                            style={{
-                              fontWeight: "bold",
-                            }}
-                          >
-                            {key}
-                          </li>
-                        </ul>
-                        <Progress_bar
-                          bgcolor="green"
-                          progress={calculatePercentage(value).toFixed(2)}
-                          height={30}
-                        />
-                      </Grid>
-                    </div>
-                  ) : (
-                    <p>kk</p>
-                  )}{" "}
-                </div>
-              ))}
+              <>
+                {Object.entries(chartData).map(([key, value], i) => (
+                  <div key={i}>
+                    {" "}
+                    {total > 0 ? (
+                      <div key={key}>
+                        <Grid pl={2}>
+                          {" "}
+                          <ul>
+                            <li
+                              style={{
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {questionValue.type === "LIST" ? (
+                                <> {Rating[key]}</>
+                              ) : (
+                                <>{key}</>
+                              )}
+                            </li>
+                          </ul>
+                          <Progress_bar
+                            bgcolor="green"
+                            progress={calculatePercentage(value).toFixed(2)}
+                            height={30}
+                          />
+                        </Grid>
+                      </div>
+                    ) : (
+                      <p>kk</p>
+                    )}{" "}
+                  </div>
+                ))}
+              </>
             </Box>
           )}
         </>

@@ -43,8 +43,7 @@ const SimpleBarChart = ({
     },
   ];
   const seriesLength = series[0]?.data?.length;
-  console.log(seriesLength);
-  console.log(series);
+
 
   if (seriesLength < 3) {
     const seriesLength = series[0]?.data?.length;
