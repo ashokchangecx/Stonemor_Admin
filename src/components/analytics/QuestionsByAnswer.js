@@ -9,6 +9,7 @@ import {
 import { Box } from "@mui/system";
 import { Loader } from "../common/Loader";
 import Progress_bar from "../charts/load";
+import { QuestionAnswerOutlined } from "@mui/icons-material";
 
 const QuestionsByAnswer = ({ questionariesName }) => {
   const [get_questionnarie, { called, loading, data: currentQuestionnarie }] =
@@ -29,7 +30,7 @@ const QuestionsByAnswer = ({ questionariesName }) => {
   const Rating = {
     1: "😟 - Very Dissatisfied",
     2: "🙁 - Dissatisfied",
-    3: "😐 - neutral",
+    3: "😐 - Neutral",
     4: "🙂 - Satisfied ",
     5: "😊 - Very Satisfied",
   };
