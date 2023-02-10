@@ -196,32 +196,7 @@ const QrCodeShare = ({ toggle, surveyId, locationData }) => {
         fullWidth
         type="Email"
       />
-      {/* <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Select SMLocation</InputLabel>
-        <Select
-          margin="dense"
-          fullWidth
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          label="Select Location"
-          value={locationID}
-          onChange={(event) => setLocationID(event.target.value)}
-        >
-          {/* {LocationData?.items
-            ?.slice()
-            ?.sort(
-              (a, b) =>
-                new Date(b.createdAt).getTime() -
-                new Date(a.createdAt).getTime()
-            )
-            ?.map((user, u) => (
-              <MenuItem key={u} value={user?.locationID}>
-                {user?.location} - {user?.inchargeEmail}
-              </MenuItem>
-            ))} */}
-        </Select>
-       
-      </FormControl> */}
+     
       {alertSuccessEmail ? (
         <Alert severity="success">{emailSuccess}</Alert>
       ) : (
@@ -279,7 +254,7 @@ const QrCodeShare = ({ toggle, surveyId, locationData }) => {
           </Grid>
         )}
       </Box>
-    </Box>
+    // </Box>
   );
 };
 

@@ -1,17 +1,9 @@
 import {
   Grid,
-  LinearProgress,
-  ListItem,
-  Table,
-  TableContainer,
-  TableHead,
-  TableRow,
   Typography,
-  useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import AutoCompleteSelect from "../reusable/AutoComplete";
-import SurveyByQuestionnarie from "./chart_report/SurveyByQuestionnarie";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import {
   GET_QUESTIONNAIRES,
@@ -20,12 +12,11 @@ import {
 import { Box } from "@mui/system";
 import { Loader } from "../common/Loader";
 import Progress_bar from "../charts/load";
-// import Load from "../charts/load";
 
 const QuestionsByAnswer = ({ questionariesName }) => {
   const [
     get_questionnarie,
-    { called, loading, data: currentQuestionnarie, error },
+    { called, loading, data: currentQuestionnarie },
   ] = useLazyQuery(GET_QUESTIONNAIRES);
   const { data: responsess, loading: listResponsessLoading } = useQuery(
     LIST_RESPONSESS,
@@ -39,7 +30,6 @@ const QuestionsByAnswer = ({ questionariesName }) => {
   const [questionariesValue, setQuestionariesValue] = useState(null);
   const [questionValue, setQuestionValue] = useState(null);
   const [loadingQuestion, setLoadingQuestion] = useState(true);
-  const [click, setClick] = useState(true);
   const options = useMemo(
     () =>
       questionariesName?.listQuestionnaires?.items?.map((question) => ({
@@ -122,9 +112,7 @@ const QuestionsByAnswer = ({ questionariesName }) => {
           )}
         </Grid>
       </Grid>
-      {listResponsessLoading ? (
-        <Loader />
-      ) : (
+     
         <>
           {" "}
           {questionValue?.id && (
@@ -165,7 +153,7 @@ const QuestionsByAnswer = ({ questionariesName }) => {
             </Box>
           )}
         </>
-      )}
+      
     </Box>
   );
 };
