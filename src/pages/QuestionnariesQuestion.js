@@ -6,6 +6,7 @@ import QuestionnariesQuestion from "../components/questionnaries-question";
 import CreateButton from "../components/reusable/CreateButton";
 import DynamicModel from "../components/reusable/DynamicModel";
 import { GET_QUESTIONNAIRES } from "../graphql/custom/queries";
+import { LIST_QUESTIONS } from "../graphql/custom/queries";
 import withSuspense from "../helpers/hoc/withSuspense";
 import useToggle from "../helpers/hooks/useToggle";
 
@@ -16,11 +17,19 @@ const CreateQuestion = lazy(() =>
 const QuestionnariesQuestionPage = () => {
   const params = useParams();
   const questionQuestionnaireId = params.id;
+  const qid = "c5580d13-9061-418a-90bc-78b05da6e680";
   const { loading, error, data } = useQuery(GET_QUESTIONNAIRES, {
     variables: {
       id: questionQuestionnaireId,
     },
   });
+  const { data: questionnaries } = useQuery(LIST_QUESTIONS, {
+    variables: {
+      id: qid,
+    },
+  });
+
+
   const { open, toggleOpen } = useToggle();
   const [questions, setQuestions] = useState([]);
   const [questionnarieData, setQuestionnarieData] = useState({});

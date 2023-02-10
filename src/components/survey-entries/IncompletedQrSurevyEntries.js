@@ -41,7 +41,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-const IncompletedQrSurveyEntries = ({ incompleteQrSurvey }) => {
+const IncompletedQrSurveyEntries = ({ incompleteQrSurvey, locationData }) => {
   const [incompeletedSurveyEntriesData, setIncompletedSurveyEntriesData] =
     useState([]);
   const [page, setPage] = useState(0);
@@ -68,18 +68,24 @@ const IncompletedQrSurveyEntries = ({ incompleteQrSurvey }) => {
 
     return que?.name ?? id;
   };
+
+  const onGettingLocationById = (id) => {
+    const loc = locationData?.find((q) => q?.locationID === id);
+    return loc?.location ?? id;
+  };
   const incompleteQrEntries = incompeletedSurveyEntriesData
-    ?.filter((data) => data?.location?.location)
+    ?.filter((data) => data?.LocationId)
     ?.filter(
       (item) =>
-        item?.location?.location
+        onGettingLocationById(item?.LocationId)
           .toString()
           .toLowerCase()
           .includes(incompleteQrSurvey.toString().toLowerCase()) ||
-        item?.location?.inchargeEmail
-          .toString()
-          .toLowerCase()
-          .includes(incompleteQrSurvey.toString().toLowerCase()) ||
+        //    ||
+        // item?.location?.inchargeEmail
+        //   .toString()
+        //   .toLowerCase()
+        //   .includes(incompleteQrSurvey.toString().toLowerCase())
         onGettingQuestionnaireById(item?.questionnaireId)
           .toString()
           .toLowerCase()
@@ -153,7 +159,10 @@ const IncompletedQrSurveyEntries = ({ incompleteQrSurvey }) => {
               .map((user, u) => (
                 <StyledTableRow key={u}>
                   <StyledTableCell>{u + 1}</StyledTableCell>
-                  <StyledTableCell>{user?.location?.location}</StyledTableCell>
+                  <StyledTableCell>
+                    {" "}
+                    {onGettingLocationById(user?.LocationId)}
+                  </StyledTableCell>
                   <StyledTableCell>
                     {user?.location?.inchargeEmail}
                   </StyledTableCell>
