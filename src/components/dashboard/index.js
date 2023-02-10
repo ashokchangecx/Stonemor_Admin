@@ -14,8 +14,8 @@ const Dashboard = ({
   surveyLocationsCount,
   surveyUsersCount,
   questionariesName,
+  locationData,
 }) => {
-  const { loadingLocations, smLocations } = useSmLocationData();
   const surveyByDateData = surveyEntries
     ?.sort(
       (a, b) =>
@@ -26,9 +26,6 @@ const Dashboard = ({
     (data) => data?.complete === 100
   );
 
-  if (loadingLocations) {
-    return <Loader />;
-  }
   return (
     <Grid
       container
@@ -46,6 +43,7 @@ const Dashboard = ({
           surveyLocationsCount={surveyLocationsCount}
           surveyEntriesCount={surveyEntriesCountData?.length || 0}
           surveyUsersCount={surveyUsersCount}
+          locationData={locationData}
         />
       </Grid>
       <Grid item xs={12} lg={6}>
@@ -62,7 +60,7 @@ const Dashboard = ({
         <SurveyByLocations
           data={surveyEntries}
           setSelectedLocation={() => null}
-          locationData={smLocations}
+          locationData={locationData}
         />
       </Grid>
       <Grid item xs={12} lg={6}>

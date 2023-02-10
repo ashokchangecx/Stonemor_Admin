@@ -24,9 +24,9 @@ const CHART_ID1 = "survey_by_locations";
 const CHART_ID2 = "Survey_Entries_by_date";
 const CHART_ID3 = "survey_by_questionnaire";
 const charts = [
-  { id: CHART_ID1, name: "Survey by Locations" },
-  { id: CHART_ID2, name: "Survey by Date" },
-  { id: CHART_ID3, name: "Number of Completed by Available Surveys" },
+  { id: CHART_ID1, name: "Survey Completions By Location" },
+  { id: CHART_ID2, name: "Completed Surveys By Date" },
+  { id: CHART_ID3, name: "Completed by Surveys" },
 ];
 const WelcomeAdmin = ({
   surveyEntries,
@@ -35,6 +35,7 @@ const WelcomeAdmin = ({
   surveyUsersCount,
   surveyLocationsCount,
   surveyEntriesCount,
+  locationData,
 }) => {
   const [profile, setProfile] = useState({});
   useEffect(() => {
@@ -57,12 +58,14 @@ const WelcomeAdmin = ({
   const handleDownloadingReport = () => {
     const modifiedSurveyEntries = QrCodeSurveyEntriesToExcel(
       surveyEntries,
-      questionariesName
+      questionariesName,
+      locationData
     );
     const ws = utils.json_to_sheet(modifiedSurveyEntries);
     const modifiedLinkSurveyEntries = LinkSurveyEntriesToExcel(
       surveyEntries,
-      questionariesName
+      questionariesName,
+      locationData
     );
 
     const ws2 = utils.json_to_sheet(modifiedLinkSurveyEntries);
@@ -72,8 +75,10 @@ const WelcomeAdmin = ({
 
     const ws3 = utils.json_to_sheet(modifiedSurveyEntriesByQuestionnaries);
 
-    const modifiedSurveyEntriesByLocation =
-      SurveyEntriesByLocationToExcel(surveyEntries);
+    const modifiedSurveyEntriesByLocation = SurveyEntriesByLocationToExcel(
+      surveyEntries,
+      locationData
+    );
 
     const ws4 = utils.json_to_sheet(modifiedSurveyEntriesByLocation);
 

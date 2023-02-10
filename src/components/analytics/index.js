@@ -13,10 +13,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import {
-  LIST_QUESTIONNARIES_NAME,
-  LIST_RESPONSESS,
-} from "../../graphql/custom/queries";
+import { LIST_QUESTIONNARIES_NAME } from "../../graphql/custom/queries";
 import SurveyByLocations from "./chart_report/SurveyByLocations";
 import ResponsiveDateRangePicker from "../reusable/DateRangePicker";
 import { Loader } from "../common/Loader";
@@ -73,16 +70,7 @@ const Analytics = ({
     data: questionariesName,
     error,
   } = useQuery(LIST_QUESTIONNARIES_NAME);
-  const { data: RP } = useQuery(LIST_RESPONSESS, {
-    variables: {
-      filter: {
-        deleted: { ne: true },
-        qu: {
-          id: "df418d17-18d6-4280-a687-7349a52f8d0d",
-        },
-      },
-    },
-  });
+
   const [surveyEntries, setSurveyEntries] = useState(surveyEntriesData);
   const [incompletedSurveyEntries, setIncompletedSurveyEntries] = useState(
     incompletedSurveyEntriesData
@@ -255,7 +243,7 @@ const Analytics = ({
     let typeFilteredEntries = [];
     if (type === "Link") {
       typeFilteredEntries = surveyEntries?.filter((data) => data?.by?.name);
-    } else if (type === "QrCode") {
+    } else if (type === "QR Code") {
       typeFilteredEntries = surveyEntries?.filter((data) => data?.LocationId);
     } else if (type === "All") {
       typeFilteredEntries = surveyEntries?.filter(
@@ -275,7 +263,7 @@ const Analytics = ({
       incompletedTypeFilteredEntries = incompletedSurveyEntries?.filter(
         (data) => data?.by?.name
       );
-    } else if (type === "QrCode") {
+    } else if (type === "QR Code") {
       incompletedTypeFilteredEntries = incompletedSurveyEntries?.filter(
         (data) => data?.LocationId
       );
@@ -331,14 +319,14 @@ const Analytics = ({
           <Tab label="Survey type" />
           <Tab label="Incomplete Surveys" />
         </Tabs>
-        {tabValue != 1 && (
-          <Grid container spacing={3} mb={2} alignItems="flex-start">
+        {tabValue !== 1 && (
+          <Grid container spacing={2} mb={2} alignItems="flex-start">
             <Grid item xs={4} sm={2} md={1}>
               <Typography variant="button" color="primary">
                 Filters
               </Typography>
             </Grid>
-            <Grid item xs={10} sm={8} md={6}>
+            <Grid item xs={10} sm={8} md={5}>
               <ResponsiveDateRangePicker
                 fromDate={fromDate}
                 setFromDate={setFromDate}
@@ -347,7 +335,7 @@ const Analytics = ({
               />
             </Grid>
             {tabValue !== 4 && (
-              <Grid item xs={10} sm={8} md={2}>
+              <Grid item xs={10} sm={8} md={4}>
                 <Autocomplete
                   id="location-select-demo"
                   sx={{ width: "100%", marginTop: "2px" }}
@@ -378,7 +366,7 @@ const Analytics = ({
                 />
               </Grid>
             )}
-            { (tabValue === 2 || tabValue === 4)  && (
+            {(tabValue === 2 || tabValue === 4) && (
               <>
                 <Grid item xs={4} sm={4} md={2}>
                   <Box sx={{ minWidth: 120 }}>
@@ -400,7 +388,7 @@ const Analytics = ({
                       >
                         <MenuItem value="All"> All Survey Entries</MenuItem>
                         <MenuItem value="Link"> Link Survey Entries</MenuItem>
-                        <MenuItem value="QrCode">
+                        <MenuItem value="QR Code">
                           QR Code Survey Entries
                         </MenuItem>
                       </Select>
@@ -485,14 +473,16 @@ const Analytics = ({
               </Suspense>
             </Grid>
           )}
-          <Grid item xs={12} md={6}>
-            <SurveyByLink
-              data={surveyEntries}
-              questionariesName={questionariesName}
-              fromDate={fromDate}
-              endDate={endDate}
-            />
-          </Grid>
+          {!surveyLocation && (
+            <Grid item xs={12} md={6}>
+              <SurveyByLink
+                data={surveyEntries}
+                questionariesName={questionariesName}
+                fromDate={fromDate}
+                endDate={endDate}
+              />
+            </Grid>
+          )}
           <Grid item xs={12} md={6}>
             <SurveyByQuestionnarie
               data={surveyEntries}
