@@ -16,6 +16,7 @@ const AnalyticsPage = () => {
   const { incompletedLoading, surveyIncompletedEntries } =
     useIncompletedSurveyEntries();
   const { loadingLocations, smLocations } = useSmLocationData();
+
   // const [incompeletedSurveyEntriesData, setIncompletedSurveyEntriesData] =
   //   useState([]);
 

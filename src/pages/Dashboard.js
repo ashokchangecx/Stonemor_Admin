@@ -9,10 +9,12 @@ import {
   COUNT_SURVEY_USERS,
   LIST_QUESTIONNARIES_NAME,
 } from "../graphql/custom/queries";
+import useSmLocationData from "../helpers/hooks/useSmLocationData";
 
 const DashboardPage = () => {
   const { loading, surveyEntries } = useSurveyEntries();
   const { data: questionariesName } = useQuery(LIST_QUESTIONNARIES_NAME);
+  const { loadingLocations, smLocations } = useSmLocationData();
   const {
     loading: surveyCountLoading,
     error: surveyCountError,
@@ -34,7 +36,7 @@ const DashboardPage = () => {
     Boolean(surveyLocationCountLoading) ||
     Boolean(surveyLocationCountError);
   Boolean(surveyUsersCountLoading) || Boolean(surveyUsersCountError);
-  if (loading) {
+  if (loading || loadingLocations) {
     return <Loader />;
   }
   return (
@@ -49,6 +51,7 @@ const DashboardPage = () => {
       surveyUsersCount={
         surveyUsersCountData?.listSurveyUsers?.items?.length || 0
       }
+      locationData={smLocations}
     />
   );
 };

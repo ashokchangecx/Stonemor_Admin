@@ -1,6 +1,6 @@
 import { Box, Grid, Tab, Tabs } from "@mui/material";
 import React, { useState, useEffect } from "react";
-
+import moment from "moment-timezone";
 import { useQuery } from "@apollo/client";
 import {
   LIST_QUESTIONNARIES_NAME,
@@ -17,6 +17,8 @@ import SearchBar from "../reusable/SearchBar";
 import { lazy } from "react";
 import BreadCrumbs from "../reusable/BreadCrumbs";
 import useSmLocationData from "../../helpers/hooks/useSmLocationData";
+import ResponsiveDateRangePicker from "../reusable/DateRangePicker";
+import useSurveyEntries from "../../helpers/hooks/useSurveyEntries";
 
 const IncompletedLinkSurveyEntries = lazy(() =>
   import("./IncompletedLinkSurveyEntries")
@@ -56,19 +58,18 @@ const TabPanel = (props) => {
 };
 const SurveyEntries = () => {
   const [tabValue, setTabValue] = useState(0);
-  const [surveyEntriesData, setSurveyEntriesData] = useState([]);
+
   const [TestSurveyEntries, setTestSurveyEntries] = useState([]);
   const [surveySearched, setSurveySearched] = useState("");
   const { loadingLocation, smLocations } = useSmLocationData();
+  const { loading, surveyEntries: surveyEntriesData } = useSurveyEntries();
+  const [fromDate, setFromDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  // const [surveyEntriesData, setSurveyEntriesData] = useState([]);
+  const [surveyEntries, setSurveyEntries] = useState(surveyEntriesData);
 
   let variables = { limit: 10000 };
-  const {
-    loading: listSurveyEntriesLoading,
-    error: listSurveyEntriesError,
-    data: listSurveyEntriesData,
-  } = useQuery(LIST_SURVEY_ENTRIES, {
-    variables,
-  });
+
   const {
     loading: TestSurveyEntriesLoading,
     error: TestSurveyEntriesError,
@@ -77,12 +78,7 @@ const SurveyEntries = () => {
     variables,
   });
   const { data: questionariesName } = useQuery(LIST_QUESTIONNARIES_NAME);
-  const handleSetResponses = (SurveyEntriesData) => {
-    const {
-      listSurveyEntriess: { items },
-    } = SurveyEntriesData;
-    if (items?.length > 0) setSurveyEntriesData(items);
-  };
+
   const handleSetTestResponses = (TestSurveyEntriesData) => {
     const {
       listSurveyEntriess: { items },
@@ -90,10 +86,10 @@ const SurveyEntries = () => {
     if (items?.length > 0) setTestSurveyEntries(items);
   };
 
-  const surveyEntriesList = surveyEntriesData.filter(
+  const surveyEntriesList = surveyEntries?.filter(
     (user) => user?.responses?.items?.length !== 0
   );
-  const TestSurveyEntriesList = TestSurveyEntries.filter(
+  const TestSurveyEntriesList = TestSurveyEntries?.filter(
     (user) => user?.responses?.items?.length !== 0
   );
 
@@ -102,16 +98,49 @@ const SurveyEntries = () => {
   };
 
   useEffect(() => {
-    if (!listSurveyEntriesLoading && !listSurveyEntriesError)
-      handleSetResponses(listSurveyEntriesData);
-  }, [listSurveyEntriesLoading]);
-
-  useEffect(() => {
     if (!TestSurveyEntriesLoading && !TestSurveyEntriesError)
       handleSetTestResponses(TestSurveyEntriesData);
   }, [TestSurveyEntriesLoading]);
 
-  if (listSurveyEntriesLoading || TestSurveyEntriesLoading || loadingLocation) {
+  useEffect(() => {
+    let filteredEntries = [];
+
+    if (fromDate && endDate) {
+      const SD = fromDate.getTime();
+      const ED = endDate.getTime();
+
+      if (SD === ED) {
+        const SDF = moment(fromDate).format("DD-MM-YYYY");
+
+        filteredEntries = surveyEntriesData?.filter((entry) => {
+          const CD = moment(entry.createdAt).format("DD-MM-YYYY") === SDF;
+          return CD;
+        });
+      } else {
+        filteredEntries = surveyEntriesData?.filter((entry) => {
+          const CD = new Date(entry.createdAt).getTime();
+          return SD <= CD && CD <= ED;
+        });
+      }
+    } else if (fromDate) {
+      const SD = fromDate.getTime();
+      filteredEntries = surveyEntriesData?.filter((entry) => {
+        const CD = new Date(entry.createdAt).getTime();
+        return SD <= CD;
+      });
+    } else if (endDate) {
+      const ED = endDate.getTime();
+      filteredEntries = surveyEntriesData?.filter((entry) => {
+        const CD = new Date(entry.createdAt).getTime();
+        return CD <= ED;
+      });
+    } else {
+      filteredEntries = surveyEntriesData;
+    }
+    setSurveyEntries(filteredEntries);
+  }, [fromDate, endDate, surveyEntriesData]);
+
+  if (TestSurveyEntriesLoading || loadingLocation) {
     return <Loader />;
   }
 
@@ -119,10 +148,18 @@ const SurveyEntries = () => {
     <div>
       <div sx={{ mt: 2 }}>
         <Grid container spacing={2} sx={{ p: "0.5rem" }}>
-          <Grid item xs={6}>
+          <Grid item xs={6} md={3}>
             <BreadCrumbs active=" Survey Entries" />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={10} sm={8} md={6}>
+            <ResponsiveDateRangePicker
+              fromDate={fromDate}
+              setFromDate={setFromDate}
+              endDate={endDate}
+              setEndDate={setEndDate}
+            />
+          </Grid>
+          <Grid item xs={6} md={3}>
             <SearchBar searchInput={(e) => setSurveySearched(e.target.value)} />
           </Grid>
         </Grid>

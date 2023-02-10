@@ -2,28 +2,35 @@ import moment from "moment-timezone";
 
 export const QrCodeSurveyEntriesToExcel = (
   surveyEntries,
-  questionariesName
+  questionariesName,
+  locationData
 ) => {
   const getQuestionarieName = (qid) => {
     const question = questionariesName?.find((q) => q?.id === qid);
     return question ? question?.name : qid;
   };
 
+  const onGettingLocationById = (id) => {
+    const loc = locationData?.find((q) => q?.locationID === id);
+    return loc?.location ?? id;
+  };
+
   let zone = "America/New_York";
   return surveyEntries
-    ?.filter((data) => data?.location?.location)
+    ?.filter((data) => data?.LocationId)
     ?.map((entry, index) => {
       const {
         questionnaireId,
         finishTime,
         startTime,
-
+        LocationId,
         location,
         createdAt,
       } = entry;
+
       const serialNo = index + 1;
-      const locationName = location?.location || "-";
-      const locationInchargeMail = location?.inchargeEmail || "-";
+      const locationName = onGettingLocationById(LocationId) || "-";
+      const locationInchargeMail = location?.locationEmail || "-";
       const created = moment.tz(createdAt, zone).format("MM-DD-YYYY ");
       const time = moment.tz(createdAt, zone).format("hh:mm a");
       const SD = moment.tz(startTime, zone);
@@ -88,8 +95,9 @@ export const SurveyEntriesByQuestionnariesToExcel = (
     return question ? question?.name : qid;
   };
 
-  const SurveyEntriesByQuestionnariesData = surveyEntries?.reduce(
-    (SurveyEntriesByQuestionnariesData, { questionnaireId }) => {
+  const SurveyEntriesByQuestionnariesData = surveyEntries
+    ?.filter((data) => data?.by?.name || data?.LocationId)
+    ?.reduce((SurveyEntriesByQuestionnariesData, { questionnaireId }) => {
       if (questionnaireId) {
         const questionnaire = questionnaireId || "no-questionnarie";
         const count =
@@ -101,9 +109,7 @@ export const SurveyEntriesByQuestionnariesToExcel = (
         SurveyEntriesByQuestionnariesData[questionnaire] = loc;
       }
       return SurveyEntriesByQuestionnariesData;
-    },
-    {}
-  );
+    }, {});
 
   const Data = Object.entries(SurveyEntriesByQuestionnariesData)?.map(
     ([name, obj]) => ({
@@ -125,11 +131,18 @@ export const SurveyEntriesByQuestionnariesToExcel = (
     };
   });
 };
-export const SurveyEntriesByLocationToExcel = (surveyEntries) => {
-  const SurveyEntriesByLocationData = surveyEntries?.reduce(
-    (SurveyEntriesByLocationData, { location }) => {
-      if (location?.id) {
-        const locationName = location?.location || "no-questionnarie";
+export const SurveyEntriesByLocationToExcel = (surveyEntries, locationData) => {
+  const onGettingLocationById = (id) => {
+    const loc = locationData?.find((q) => q?.locationID === id);
+    return loc?.location ?? id;
+  };
+
+  const SurveyEntriesByLocationData = surveyEntries
+    ?.filter((data) => data?.LocationId)
+    ?.reduce((SurveyEntriesByLocationData, { LocationId }) => {
+      if (LocationId) {
+        const locationName =
+          onGettingLocationById(LocationId) || "no-questionnarie";
         const count =
           (SurveyEntriesByLocationData[locationName]?.count || 0) + 1;
         const loc = {
@@ -139,9 +152,7 @@ export const SurveyEntriesByLocationToExcel = (surveyEntries) => {
         SurveyEntriesByLocationData[locationName] = loc;
       }
       return SurveyEntriesByLocationData;
-    },
-    {}
-  );
+    }, {});
 
   const Data = Object.entries(SurveyEntriesByLocationData)?.map(
     ([name, obj]) => ({
@@ -165,8 +176,9 @@ export const SurveyEntriesByLocationToExcel = (surveyEntries) => {
 };
 export const SurveyEntriesBydateToExcel = (surveyEntries) => {
   let zone = "America/New_York";
-  const SurveyEntriesByDateData = surveyEntries?.reduce(
-    (SurveyEntriesByDateData, surveyEntries) => {
+  const SurveyEntriesByDateData = surveyEntries
+    ?.filter((data) => data?.by?.name || data?.LocationId)
+    ?.reduce((SurveyEntriesByDateData, surveyEntries) => {
       const date =
         moment.tz(surveyEntries?.finishTime, zone).format("MM-DD-YYYY") ||
         "No SurveyEntry on this date";
@@ -178,9 +190,7 @@ export const SurveyEntriesBydateToExcel = (surveyEntries) => {
       SurveyEntriesByDateData[date] = entry;
 
       return SurveyEntriesByDateData;
-    },
-    {}
-  );
+    }, {});
 
   const Data = Object.entries(SurveyEntriesByDateData)?.map(([name, obj]) => ({
     ...obj,
