@@ -24,9 +24,9 @@ const CHART_ID1 = "survey_by_locations";
 const CHART_ID2 = "Survey_Entries_by_date";
 const CHART_ID3 = "survey_by_questionnaire";
 const charts = [
-  { id: CHART_ID1, name: "Survey by Locations" },
-  { id: CHART_ID2, name: "Survey by Date" },
-  { id: CHART_ID3, name: "Number of Completed by Available Surveys" },
+  { id: CHART_ID1, name: "Survey Completions By Location" },
+  { id: CHART_ID2, name: "Completed Surveys By Date" },
+  { id: CHART_ID3, name: "Completed by Surveys" },
 ];
 const WelcomeAdmin = ({
   surveyEntries,

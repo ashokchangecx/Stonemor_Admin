@@ -196,7 +196,6 @@ const QrCodeShare = ({ toggle, surveyId, locationData }) => {
         fullWidth
         type="Email"
       />
-     
       {alertSuccessEmail ? (
         <Alert severity="success">{emailSuccess}</Alert>
       ) : (
@@ -254,7 +253,7 @@ const QrCodeShare = ({ toggle, surveyId, locationData }) => {
           </Grid>
         )}
       </Box>
-    // </Box>
+    </Box>
   );
 };
 
