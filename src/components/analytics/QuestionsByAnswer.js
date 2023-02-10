@@ -1,7 +1,4 @@
-import {
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import AutoCompleteSelect from "../reusable/AutoComplete";
 import { useLazyQuery, useQuery } from "@apollo/client";
@@ -14,10 +11,8 @@ import { Loader } from "../common/Loader";
 import Progress_bar from "../charts/load";
 
 const QuestionsByAnswer = ({ questionariesName }) => {
-  const [
-    get_questionnarie,
-    { called, loading, data: currentQuestionnarie },
-  ] = useLazyQuery(GET_QUESTIONNAIRES);
+  const [get_questionnarie, { called, loading, data: currentQuestionnarie }] =
+    useLazyQuery(GET_QUESTIONNAIRES);
   const { data: responsess, loading: listResponsessLoading } = useQuery(
     LIST_RESPONSESS,
     {
@@ -112,7 +107,9 @@ const QuestionsByAnswer = ({ questionariesName }) => {
           )}
         </Grid>
       </Grid>
-     
+      {listResponsessLoading ? (
+        <Loader />
+      ) : (
         <>
           {" "}
           {questionValue?.id && (
@@ -153,7 +150,7 @@ const QuestionsByAnswer = ({ questionariesName }) => {
             </Box>
           )}
         </>
-      
+      )}
     </Box>
   );
 };
