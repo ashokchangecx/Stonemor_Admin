@@ -4,7 +4,7 @@ import { LIST_RESPONSESS } from "../../graphql/custom/queries";
 
 const useSurveyResponses = () => {
   let variables = {
-    limit: 100000,
+    limit: 200,
   };
   const {
     loading: listSurveyResponsesLoading,
@@ -55,7 +55,7 @@ const useSurveyResponses = () => {
       handleFetch();
     }
   }, [nextToken]);
-
+console.log("kk",surveyResponses)
   return { loading, surveyResponses };
 };
 

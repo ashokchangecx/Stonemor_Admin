@@ -284,60 +284,56 @@ export const LIST_QUESTIONS = /* GraphQL */ gql(`
   }
 `);
 export const LIST_RESPONSESS = /* GraphQL */ gql(`
-query ListResponsess(
-  $filter: ModelResponsesFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listResponsess(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      res
-      deleted
-      archived
-      createdAt
-      updatedAt
-      qu {
-        id
-        qu
-        type
-        isSelf
-        isDependent
-        deleted
-        archived
-        order
-        createdAt
-        updatedAt
-      }
-      question {
-        id
-        qu
-        type
-        isSelf
-        isDependent
-        deleted
-        archived
-        order
-        createdAt
-        updatedAt
-      }
-      group {
-        id
-        startTime
-        finishTime
-        questionnaireId
-        LocationId
-        deleted
-        archived
-        testing
-        complete
-        createdAt
-        updatedAt
-      }
+  query ListResponsess(
+    $filter: ModelResponsesFilterInput={
+      deleted:{ne:true}
+  
     }
-    nextToken
+    $limit: Int =10000000
+    $nextToken: String
+  ) {
+    listResponsess(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        res
+        deleted
+        archived
+        createdAt
+        updatedAt
+        qu {
+          id
+          qu
+          type
+          isSelf
+          isDependent
+          listOptions {
+        listValue
+        nextQuestion
+        isText
+        isMultiple
+      }
+          deleted
+          archived
+          order
+          createdAt
+          updatedAt
+        }
+        group {
+          id
+          startTime
+          finishTime
+          questionnaireId
+          deleted
+          archived
+          testing
+          complete
+          createdAt
+          updatedAt
+        }
+      }
+      nextToken
+    }
   }
-}
 `);
 
 export const GET_QUESTIONNAIRES = /* GraphQL */ gql(`

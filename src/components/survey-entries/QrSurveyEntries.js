@@ -111,9 +111,9 @@ const QrSurveyEntries = ({
                 <StyledTableCell>Location</StyledTableCell>
                 <StyledTableCell>Email</StyledTableCell>
                 <StyledTableCell>Questionnaire</StyledTableCell>
-                <StyledTableCell>Duration</StyledTableCell>
                 <StyledTableCell>Date</StyledTableCell>
                 <StyledTableCell>Time</StyledTableCell>
+                <StyledTableCell>Duration</StyledTableCell>
                 <StyledTableCell>View</StyledTableCell>
               </StyledTableRow>
             </TableHead>
