@@ -16,6 +16,14 @@ const AutoCompleteSelect = ({
       value={value?.label}
       isOptionEqualToValue={(option, value) => option.id === value?.id}
       fullWidth
+      renderOption={(props, option) => {
+        return (
+          <li {...props} key={option.id}>
+            {option.label}
+          </li>
+        );
+      }}
+    
       renderInput={(params) => (
         <TextField {...params} label={label} color="secondary" />
       )}
