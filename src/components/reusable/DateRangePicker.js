@@ -25,7 +25,7 @@ const ResponsiveDateRangePicker = ({
         // textAlign="center"
         // justifyContent="center"
       >
-        <Grid item xs={5} cm={5} md={3} maxWidth="350px">
+        <Grid item xs={5} cm={5} md={5} maxWidth="350px">
           <DatePicker
             label="From"
             value={fromDate}
@@ -36,7 +36,7 @@ const ResponsiveDateRangePicker = ({
             renderInput={(params) => <TextField {...params} />}
           />
         </Grid>
-        <Grid item xs={5} cm={5} md={3} maxWidth="350px">
+        <Grid item xs={5} cm={5} md={5} maxWidth="350px">
           <DatePicker
             label="To"
             value={endDate}
@@ -52,10 +52,10 @@ const ResponsiveDateRangePicker = ({
             item
             xs={2}
             cm={2}
-            md={1}
+            md={2}
             display="flex"
-            justifyContent="center"
-            alignItems="center"
+            justifyContent="start"
+            alignItems="start"
           >
             {/* <Button
             variant="contained"
@@ -65,13 +65,13 @@ const ResponsiveDateRangePicker = ({
           >
             Reset
           </Button> */}
-
             <IconButton
+            sx={{p:0}}
               color="error"
               aria-label="mailsend"
               onClick={handleDateReset}
             >
-              <HighlightOffOutlinedIcon fontSize="large" />
+              <HighlightOffOutlinedIcon fontSize="small" />
             </IconButton>
           </Grid>
         )}
