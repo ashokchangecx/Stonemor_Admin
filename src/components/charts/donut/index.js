@@ -27,13 +27,13 @@ const themeColor = [
 //   themeColor.push("#" + ("123123" + color.toString(16)).slice(-6));
 // }
 const SimpleDonutChart = ({ id, data, title, labels }) => {
+
   const chartData = Object.entries(data)
     ?.map(([name, obj]) => ({
       ...obj,
-      name: labels?.find((l) => l.id === obj.x)?.name,
+      name: labels?.find((l) => l.name === obj.x)?.name,
     }))
     ?.sort((a, b) => b?.y - a?.y);
-
   const options = {
     chart: {
       id,

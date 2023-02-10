@@ -23,7 +23,6 @@ import validator from "validator";
 import axios from "axios";
 import ForwardToInboxOutlinedIcon from "@mui/icons-material/ForwardToInboxOutlined";
 import DownloadForOfflineOutlinedIcon from "@mui/icons-material/DownloadForOfflineOutlined";
-import LocationData from "../../helpers/LocationData.js";
 
 const QrCodeShare = ({ toggle, surveyId }) => {
   const { loading, error, data } = useQuery(LIST_SURVEY_LOCATIONS);
@@ -178,7 +177,7 @@ const QrCodeShare = ({ toggle, surveyId }) => {
           value={locationID}
           onChange={(event) => setLocationID(event.target.value)}
         >
-          {LocationData?.items
+          {/* {LocationData?.items
             ?.slice()
             ?.sort(
               (a, b) =>
@@ -189,7 +188,7 @@ const QrCodeShare = ({ toggle, surveyId }) => {
               <MenuItem key={u} value={user?.locationID}>
                 {user?.location} - {user?.inchargeEmail}
               </MenuItem>
-            ))}
+            ))} */}
         </Select>
         {/* <TextField
           margin="dense"

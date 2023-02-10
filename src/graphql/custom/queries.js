@@ -289,6 +289,12 @@ export const LIST_RESPONSESS = /* GraphQL */ gql(`
           type
           isSelf
           isDependent
+          listOptions {
+        listValue
+        nextQuestion
+        isText
+        isMultiple
+      }
           deleted
           archived
           order

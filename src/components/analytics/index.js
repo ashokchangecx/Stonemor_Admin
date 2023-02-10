@@ -11,13 +11,17 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import { LIST_QUESTIONNARIES_NAME } from "../../graphql/custom/queries";
+import {
+  LIST_QUESTIONNARIES_NAME,
+  LIST_RESPONSESS,
+} from "../../graphql/custom/queries";
 import SurveyByLocations from "./chart_report/SurveyByLocations";
 import ResponsiveDateRangePicker from "../reusable/DateRangePicker";
 import { Loader } from "../common/Loader";
 import LocationByQuestionnaire from "./chart_report/LocationByQuestionnaire";
 import BreadCrumbs from "../reusable/BreadCrumbs";
 import moment from "moment-timezone";
+import QuestionsByAnswer from "./QuestionsByAnswer";
 
 const QuestionnariesByLocation = lazy(() =>
   import("./chart_report/QuestionnariesByLocation")
@@ -61,11 +65,21 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
     data: questionariesName,
     error,
   } = useQuery(LIST_QUESTIONNARIES_NAME);
+  const { data: RP } = useQuery(LIST_RESPONSESS, {
+    variables: {
+      filter: {
+        deleted: { ne: true },
+        qu: {
+          id: "df418d17-18d6-4280-a687-7349a52f8d0d",
+        },
+      },
+    },
+  });
   const [surveyEntries, setSurveyEntries] = useState(surveyEntriesData);
   const [incompletedSurveyEntries, setIncompletedSurveyEntries] = useState(
     incompletedSurveyEntriesData
   );
-  const [tabValue, setTabValue] = useState(0);
+  const [tabValue, setTabValue] = useState(4);
   const [type, setType] = useState("All");
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedQuestionnarie, setSelectedQuestionnarie] = useState(null);
@@ -216,57 +230,61 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
           <Tab label="Survey type" />
           <Tab label="Date" />
           <Tab label="Incomplete Surveys" />
+          <Tab label="Response" />
         </Tabs>
-        <Grid container spacing={3} mb={2} alignItems="flex-start">
-          <Grid item xs={4} sm={2} md={1}>
-            <Typography variant="button" color="primary">
-              Filters
-            </Typography>
-          </Grid>
-          <Grid item xs={10} sm={8} md={6}>
-            <ResponsiveDateRangePicker
-              fromDate={fromDate}
-              setFromDate={setFromDate}
-              endDate={endDate}
-              setEndDate={setEndDate}
-            />
-          </Grid>
-          {tabValue > 1 && (
-            <Grid item xs={4} sm={4}>
-              <Box sx={{ minWidth: 120 }}>
-                <FormControl variant="standard">
-                  <InputLabel id="demo-simple-select-label" color="secondary">
-                    Type Filter
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={type}
-                    name="type"
-                    label="Type Filter"
-                    onChange={handleChangeType}
-                    color="secondary"
-                  >
-                    <MenuItem value="All"> All Survey Entries</MenuItem>
-                    <MenuItem value="Link"> Link Survey Entries</MenuItem>
-                    <MenuItem value="QrCode">QR Code Survey Entries</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
+        {tabValue !== 4 && (
+          <Grid container spacing={3} mb={2} alignItems="flex-start">
+            <Grid item xs={4} sm={2} md={1}>
+              <Typography variant="button" color="primary">
+                Filters
+              </Typography>
             </Grid>
-          )}
-        </Grid>
+
+            <Grid item xs={10} sm={8} md={6}>
+              <ResponsiveDateRangePicker
+                fromDate={fromDate}
+                setFromDate={setFromDate}
+                endDate={endDate}
+                setEndDate={setEndDate}
+              />
+            </Grid>
+            {tabValue === 3 && (
+              <Grid item xs={4} sm={4}>
+                <Box sx={{ minWidth: 120 }}>
+                  <FormControl variant="standard">
+                    <InputLabel id="demo-simple-select-label" color="secondary">
+                      Type Filter
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={type}
+                      name="type"
+                      label="Type Filter"
+                      onChange={handleChangeType}
+                      color="secondary"
+                    >
+                      <MenuItem value="All"> All Survey Entries</MenuItem>
+                      <MenuItem value="Link"> Link Survey Entries</MenuItem>
+                      <MenuItem value="QrCode">QR Code Survey Entries</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Grid>
+            )}
+          </Grid>
+        )}
       </Box>
       <TabPanel value={tabValue} index={0}>
         <Grid container spacing={2} alignItems="stretch">
-          {/* <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6}>
             <SurveyByLocations
               data={surveyEntries}
               setSelectedLocation={setSelectedLocation}
               fromDate={fromDate}
               endDate={endDate}
             />
-          </Grid> */}
+          </Grid>
           {selectedLocation && (
             <Grid item xs={12} md={6}>
               <Suspense fallback={<Loader />}>
@@ -373,6 +391,13 @@ const Analytics = ({ surveyEntriesData, incompletedSurveyEntriesData }) => {
             </Grid>
           )}
         </Grid>
+      </TabPanel>
+      <TabPanel index={4} value={tabValue}>
+        {loading ? (
+          <Loader/>
+        ) : (
+          <QuestionsByAnswer questionariesName={questionariesName} />
+        )}
       </TabPanel>
     </div>
   );
