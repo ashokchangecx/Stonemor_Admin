@@ -331,7 +331,7 @@ const Analytics = ({
           <Tab label="Survey type" />
           <Tab label="Incomplete Surveys" />
         </Tabs>
-        {tabValue != 1 && (
+        {tabValue !== 1 && (
           <Grid container spacing={3} mb={2} alignItems="flex-start">
             <Grid item xs={4} sm={2} md={1}>
               <Typography variant="button" color="primary">
@@ -347,7 +347,7 @@ const Analytics = ({
               />
             </Grid>
             {tabValue !== 4 && (
-              <Grid item xs={10} sm={8} md={2}>
+              <Grid item xs={10} sm={8} md={3}>
                 <Autocomplete
                   id="location-select-demo"
                   sx={{ width: "100%", marginTop: "2px" }}
@@ -378,7 +378,7 @@ const Analytics = ({
                 />
               </Grid>
             )}
-            { (tabValue === 2 || tabValue === 4)  && (
+            {(tabValue === 2 || tabValue === 4) && (
               <>
                 <Grid item xs={4} sm={4} md={2}>
                   <Box sx={{ minWidth: 120 }}>
@@ -485,14 +485,16 @@ const Analytics = ({
               </Suspense>
             </Grid>
           )}
-          <Grid item xs={12} md={6}>
-            <SurveyByLink
-              data={surveyEntries}
-              questionariesName={questionariesName}
-              fromDate={fromDate}
-              endDate={endDate}
-            />
-          </Grid>
+          {!surveyLocation && (
+            <Grid item xs={12} md={6}>
+              <SurveyByLink
+                data={surveyEntries}
+                questionariesName={questionariesName}
+                fromDate={fromDate}
+                endDate={endDate}
+              />
+            </Grid>
+          )}
           <Grid item xs={12} md={6}>
             <SurveyByQuestionnarie
               data={surveyEntries}
