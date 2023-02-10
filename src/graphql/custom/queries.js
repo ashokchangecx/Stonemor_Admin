@@ -56,6 +56,7 @@ query ListSurveyEntriess(
       responses {
         items {
           id
+          res
         }
         nextToken
       }
@@ -165,6 +166,7 @@ export const LIST_QUESTIONNARIES = /* GraphQL */ gql(`
       }
       nextToken
     }
+    
   }
 `);
 
@@ -244,6 +246,18 @@ export const LIST_QUESTIONS = /* GraphQL */ gql(`
         deleted
         archived
         order
+        responses {
+          items {
+            id
+            res
+            deleted
+            archived
+            createdAt
+            updatedAt
+           
+          }
+          nextToken
+        }
         dependent {
           id
         }
@@ -265,53 +279,65 @@ export const LIST_QUESTIONS = /* GraphQL */ gql(`
       }
       nextToken
     }
+   
+
   }
 `);
 export const LIST_RESPONSESS = /* GraphQL */ gql(`
-  query ListResponsess(
-    $filter: ModelResponsesFilterInput={
-      deleted:{ne:true}
-  
-    }
-    $limit: Int =10000000
-    $nextToken: String
-  ) {
-    listResponsess(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
+query ListResponsess(
+  $filter: ModelResponsesFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listResponsess(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      res
+      deleted
+      archived
+      createdAt
+      updatedAt
+      qu {
         id
-        res
+        qu
+        type
+        isSelf
+        isDependent
         deleted
         archived
+        order
         createdAt
         updatedAt
-        qu {
-          id
-          qu
-          type
-          isSelf
-          isDependent
-          deleted
-          archived
-          order
-          createdAt
-          updatedAt
-        }
-        group {
-          id
-          startTime
-          finishTime
-          questionnaireId
-          deleted
-          archived
-          testing
-          complete
-          createdAt
-          updatedAt
-        }
       }
-      nextToken
+      question {
+        id
+        qu
+        type
+        isSelf
+        isDependent
+        deleted
+        archived
+        order
+        createdAt
+        updatedAt
+      }
+      group {
+        id
+        startTime
+        finishTime
+        questionnaireId
+        LocationId
+        deleted
+        archived
+        testing
+        complete
+        createdAt
+        updatedAt
+      }
     }
+    nextToken
   }
+}
 `);
 
 export const GET_QUESTIONNAIRES = /* GraphQL */ gql(`
@@ -408,6 +434,7 @@ export const GET_QUESTIONNAIRES = /* GraphQL */ gql(`
         }
         nextToken
       }
+    
     }
   }
 `);
@@ -533,6 +560,18 @@ export const GET_QUESTION = /* GraphQL */ gql(`
       deleted
       archived
       order
+      responses {
+        items {
+          id
+          res
+          deleted
+          archived
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+
       dependent {
         id
         options {
@@ -540,10 +579,13 @@ export const GET_QUESTION = /* GraphQL */ gql(`
           nextQuestion
         }
       }
+  
       createdAt
       updatedAt
      
     }
+    
+
   }
 `);
 

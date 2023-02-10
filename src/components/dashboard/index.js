@@ -1,7 +1,9 @@
 import { Grid } from "@mui/material";
+import useSmLocationData from "../../helpers/hooks/useSmLocationData";
 import SurveyByDate from "../analytics/chart_report/SurveyByDate";
 import SurveyByLocations from "../analytics/chart_report/SurveyByLocations";
 import SurveyByQuestionnarie from "../analytics/chart_report/SurveyByQuestionnarie";
+import { Loader } from "../common/Loader";
 import Overview from "./Overview";
 import WelcomeAdmin from "./WelcomeAdmin";
 
@@ -13,6 +15,7 @@ const Dashboard = ({
   surveyUsersCount,
   questionariesName,
 }) => {
+  const { loadingLocations, smLocations } = useSmLocationData();
   const surveyByDateData = surveyEntries
     ?.sort(
       (a, b) =>
@@ -22,6 +25,10 @@ const Dashboard = ({
   const surveyEntriesCountData = surveyEntries.filter(
     (data) => data?.complete === 100
   );
+
+  if (loadingLocations) {
+    return <Loader />;
+  }
   return (
     <Grid
       container
@@ -55,6 +62,7 @@ const Dashboard = ({
         <SurveyByLocations
           data={surveyEntries}
           setSelectedLocation={() => null}
+          locationData={smLocations}
         />
       </Grid>
       <Grid item xs={12} lg={6}>
