@@ -3,7 +3,7 @@ import SimpleDonutChart from "../../charts/donut";
 import { Loader } from "../../common/Loader";
 
 const CHART_ID = "questionnarie_by_location";
-const TITLE = "Questionnarie By Location";
+const TITLE = "Question Pools By Location";
 
 const QuestionnariesByLocation = ({
   data,
