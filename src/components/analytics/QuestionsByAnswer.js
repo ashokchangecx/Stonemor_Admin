@@ -96,13 +96,15 @@ const QuestionsByAnswer = ({ questionariesName }) => {
   const calculatePercentage = (chartData) => {
     return (chartData["y"] / total) * 100;
   };
+
+
   return (
     <Box>
       <Grid container spacing={2} p={1}>
         <Grid item md={4} xs={12}>
           <AutoCompleteSelect
             handleAutoCompleteChange={(e, v) => setQuestionariesValue(v?.id)}
-            label="Select Questionarie"
+            label="Select Question Pool"
             options={options}
           />
         </Grid>
@@ -119,7 +121,7 @@ const QuestionsByAnswer = ({ questionariesName }) => {
             <>
               {(questionariesValue === null ||
                 questionOptions?.length === 0) && (
-               <Grid textAlign={"center"}> <Typography variant="h6">No Radio and Rating type questions in this questionnaire</Typography></Grid>
+               <Grid textAlign={"center"}> <Typography variant="h6">No Radio and Rating type of questions in this Question Pool</Typography></Grid>
               )}{" "}
             </>
           )}
@@ -182,8 +184,8 @@ const QuestionsByAnswer = ({ questionariesName }) => {
                             </Grid>
                           </div>
                         ) : (
-                          <p>no</p>
-                        )}{" "}
+                          <p>No one has answered this question</p>
+                        )}
                       </div>
                     ))}
                   </>
