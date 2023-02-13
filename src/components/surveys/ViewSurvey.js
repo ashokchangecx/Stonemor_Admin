@@ -50,7 +50,7 @@ const ViewSurvey = ({ currentSurveyData }) => {
 
         {preQuestionnaire?.name && (
           <Typography gutterBottom component="div">
-            Associated Questionnaire : {preQuestionnaire?.name}
+            Associated Question Pools : {preQuestionnaire?.name}
           </Typography>
         )}
       </CardContent>
@@ -69,7 +69,7 @@ const ViewSurvey = ({ currentSurveyData }) => {
             component={Link}
             to={`/questionnaries/${preQuestionnaire?.id}`}
           >
-            View Questionnaire
+            View Question Pools
           </Button>
         )}
       </CardActions>

@@ -147,11 +147,11 @@ const QuestionnariesQuestion = ({ questions, questionnarieData }) => {
           <BreadCrumbs
             paths={[
               {
-                name: "Questionnarie",
+                name: "Question Pools",
                 to: "/questionnaries",
               },
             ]}
-            active=" Question"
+            active=" Questions"
           />
         </Grid>
         <Grid item xs={6}>
