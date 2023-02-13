@@ -142,7 +142,7 @@ const IncompletedQrSurveyEntries = ({ incompleteQrSurvey, locationData }) => {
               <StyledTableCell>Location</StyledTableCell>
               <StyledTableCell>Email</StyledTableCell>
 
-              <StyledTableCell>Questionnaire</StyledTableCell>
+              <StyledTableCell>Question Pools</StyledTableCell>
               <StyledTableCell>Date</StyledTableCell>
               <StyledTableCell>Time</StyledTableCell>
               <StyledTableCell>Completed Status</StyledTableCell>
