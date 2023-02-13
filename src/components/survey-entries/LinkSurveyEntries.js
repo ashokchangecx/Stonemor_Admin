@@ -101,7 +101,7 @@ const LinkSurveyEntries = ({ surveyEntries, questionnaries, linkSurvey }) => {
 
                 <StyledTableCell>Name</StyledTableCell>
                 <StyledTableCell>Email</StyledTableCell>
-                <StyledTableCell>Questionnaire</StyledTableCell>
+                <StyledTableCell>Question Pools</StyledTableCell>
                 <StyledTableCell>Date</StyledTableCell>
                 <StyledTableCell>Time</StyledTableCell>
                 <StyledTableCell>Duration</StyledTableCell>
