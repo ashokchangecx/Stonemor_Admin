@@ -14,6 +14,19 @@ const SurveyByQuestionnarie = ({
   endDate,
 }) => {
   const [date, setDate] = useState(TITLE);
+
+  const color = [
+    "#12263a",
+    "#456b37",
+    "#477c63",
+    "#fd8080",
+    "#5a170f",
+    "#b18476",
+    "#834833",
+    "#266dd3",
+    "#13270c",
+    "#b15218",
+  ];
   const chartData = data
     ?.filter((data) => data?.by?.name || data?.LocationId)
     ?.reduce((chartData, { questionnaireId }) => {
@@ -48,6 +61,7 @@ const SurveyByQuestionnarie = ({
             data={chartData}
             title={date}
             labels={questionariesName.listQuestionnaires.items}
+            colorData={color}
           />
         )
       )}

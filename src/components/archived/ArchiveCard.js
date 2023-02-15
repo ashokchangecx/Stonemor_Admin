@@ -16,8 +16,11 @@ import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined
 import DynamicModel from "../reusable/DynamicModel";
 import useToggle from "../../helpers/hooks/useToggle";
 import { Loader } from "../common/Loader";
+import { useMutation } from "@apollo/client";
 import UnarchiveOutlinedIcon from "@mui/icons-material/UnarchiveOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import { UPDATE_SURVEY } from "../../graphql/custom/mutations";
+import { LIST_SURVEYS } from "../../graphql/custom/queries";
 
 const ViewSurvey = lazy(() => import("../surveys/ViewSurvey"));
 const UnarchiveSurvey = lazy(() => import("./UnarchiveSurvey"));
@@ -48,6 +51,17 @@ const ArchiveCard = ({ survey }) => {
   const openArchivedDialog =
     Boolean(archivedOpen) && Boolean(currentSurvey?.id);
 
+  const [deleteSurvey] = useMutation(UPDATE_SURVEY, {
+    refetchQueries: [
+      {
+        query: LIST_SURVEYS,
+        variables: {
+          // filter: { archived: { ne: true }, deleted: { ne: true } },
+          limit: 100,
+        },
+      },
+    ],
+  });
   const handleSurveyViewDialog = (survey) => {
     setCurrentSurvey(survey);
     setViewOpen(true);
@@ -70,12 +84,22 @@ const ArchiveCard = ({ survey }) => {
     setCurrentSurvey({});
     archivedToggleOpen();
   };
+
+  const onClickDelete = async () => {
+    const DeleteSurveyQuery = {
+      id: currentSurvey?.id,
+
+      deleted: true,
+    };
+    await deleteSurvey({ variables: { input: DeleteSurveyQuery } });
+    toggleDeleteModelOpen();
+  };
   return (
     <>
       <DeleteModel
         open={deleteModelOpen}
         toggle={toggleDeleteModelOpen}
-        //  onClickConfirm={onClickDelete}
+        onClickConfirm={onClickDelete}
         dialogTitle="Delete "
         dialogContentText={`Are You Sure You Want to Delete ${currentSurvey?.name} survey?`}
       />

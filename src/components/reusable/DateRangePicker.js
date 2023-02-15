@@ -66,7 +66,7 @@ const ResponsiveDateRangePicker = ({
             Reset
           </Button> */}
             <IconButton
-            sx={{p:0}}
+              sx={{ p: 0 }}
               color="error"
               aria-label="mailsend"
               onClick={handleDateReset}
