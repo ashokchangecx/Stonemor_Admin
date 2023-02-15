@@ -35,7 +35,8 @@ query ListSurveyEntriess(
 
     testing:{ne:true},
     archived:{ne:true},
-    complete:{eq:100}
+    complete:{eq:100},
+    deleted:{ne:true}
   }
   $limit: Int =  100000
   $nextToken: String
@@ -287,7 +288,7 @@ export const LIST_RESPONSESS = /* GraphQL */ gql(`
   query ListResponsess(
     $filter: ModelResponsesFilterInput={
       deleted:{ne:true}
-  
+      archived:{ne:true}
     }
     $limit: Int =10000000
     $nextToken: String

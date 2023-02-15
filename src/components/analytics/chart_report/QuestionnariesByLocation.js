@@ -18,6 +18,18 @@ const QuestionnariesByLocation = ({
     return loc?.location ?? id;
   };
   const locationName = onGettingLocationById(selectedLocation);
+  const color = [
+    "#12263a",
+    "#456b37",
+    "#477c63",
+    "#fd8080",
+    "#5a170f",
+    "#b18476",
+    "#834833",
+    "#266dd3",
+    "#13270c",
+    "#b15218",
+  ];
   const chartData = data
     ?.filter((d) => d?.LocationId === selectedLocation)
     ?.reduce((chartData, { questionnaireId }) => {
@@ -41,6 +53,7 @@ const QuestionnariesByLocation = ({
           data={chartData}
           title={TITLE + " - " + locationName}
           labels={questionariesName.listQuestionnaires.items}
+          colorData={color}
         />
       ) : (
         loading && <Loader />

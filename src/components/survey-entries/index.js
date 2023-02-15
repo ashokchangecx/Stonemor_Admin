@@ -151,14 +151,18 @@ const SurveyEntries = () => {
           <Grid item xs={6} md={3}>
             <BreadCrumbs active=" Survey Entries" />
           </Grid>
+
           <Grid item xs={10} sm={8} md={6}>
-            <ResponsiveDateRangePicker
-              fromDate={fromDate}
-              setFromDate={setFromDate}
-              endDate={endDate}
-              setEndDate={setEndDate}
-            />
+            {tabValue < 2 && (
+              <ResponsiveDateRangePicker
+                fromDate={fromDate}
+                setFromDate={setFromDate}
+                endDate={endDate}
+                setEndDate={setEndDate}
+              />
+            )}
           </Grid>
+
           <Grid item xs={6} md={3}>
             <SearchBar searchInput={(e) => setSurveySearched(e.target.value)} />
           </Grid>

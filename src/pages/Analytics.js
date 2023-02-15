@@ -17,48 +17,10 @@ const AnalyticsPage = () => {
     useIncompletedSurveyEntries();
   const { loadingLocations, smLocations } = useSmLocationData();
 
-  // const [incompeletedSurveyEntriesData, setIncompletedSurveyEntriesData] =
-  //   useState([]);
-
-  // let variables = {
-  //   limit: 100000,
-  // };
-
-  // const {
-  //   loading: listIncompletedSurveyEntriesLoading,
-  //   error: listIncompletedSurveyEntriesError,
-  //   data: listIncompletedSurveyEntriesData,
-  // } = useQuery(LIST_INCOMPLETED_SURVEY_ENTRIES, {
-  //   variables,
-  // });
-  // useEffect(() => {
-  //   if (
-  //     !listIncompletedSurveyEntriesLoading &&
-  //     !listIncompletedSurveyEntriesError
-  //   )
-  //     setIncompletedSurveyEntriesData(
-  //       listIncompletedSurveyEntriesData?.listSurveyEntriess?.items
-  //     );
-  // }, [
-  //   listIncompletedSurveyEntriesLoading,
-  //   listIncompletedSurveyEntriesData?.listSurveyEntriess?.items,
-  // ]);
-
-  if (loading) {
+  if (loading || incompletedLoading || loadingLocations) {
     return <Loader />;
   }
-  if (incompletedLoading) {
-    return <Loader />;
-  }
-  if (loadingLocations) {
-    return <Loader />;
-  }
-  // if (listIncompletedSurveyEntriesLoading) {
-  //   return <Loader />;
-  // }
-  // if (listIncompletedSurveyEntriesError) {
-  //   return <>error</>;
-  // }
+
   return (
     <Analytics
       surveyEntriesData={surveyEntries}

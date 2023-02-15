@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import SimpleBarChart from "../../charts/bar";
 import { bindTitle } from "../../../config/ChartConfig";
+import { Loader } from "../../common/Loader";
 
 const CHART_ID = "Incompleted survey_by_locations";
 const TITLE = "Incompleted Survey By Locations";
@@ -20,9 +21,14 @@ const IcompletedSurveyByLocation = ({
     return loc?.location ?? id;
   };
 
+  const xAxisFormatter = (value) => {
+    const label = value;
+    return label;
+  };
+
   const chartData = data?.reduce((chartData, { LocationId }) => {
     if (LocationId) {
-      const x = LocationId || "no-loc";
+      const x = onGettingLocationById(LocationId) || "no-loc";
       const y = (chartData[x]?.y || 0) + 1;
       const loc = {
         x,
@@ -37,10 +43,7 @@ const IcompletedSurveyByLocation = ({
       config.w.config.series[0]?.data[config.dataPointIndex]?.x;
     setSelectedLocation(locationId);
   };
-  const xAxisFormatter = (value) => {
-    const label = onGettingLocationById(value);
-    return label;
-  };
+
   useEffect(() => {
     const fullTitle = bindTitle({
       TITLE,
@@ -50,6 +53,10 @@ const IcompletedSurveyByLocation = ({
     });
     setDate(fullTitle);
   }, [fromDate, endDate, type]);
+
+  if (!locationData) {
+    return <Loader />;
+  }
 
   return (
     <>

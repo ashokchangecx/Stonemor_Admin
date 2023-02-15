@@ -17,17 +17,23 @@ const SurveyByLocations = ({
 
   const onGettingLocationById = (id) => {
     const loc = locationData?.find((q) => q?.locationID === id);
+
     return loc?.location ?? id;
+  };
+  const onGettingIdByLocation = (locationName) => {
+    const loc = locationData?.find((q) => q?.location === locationName);
+
+    return loc?.locationID ?? locationName;
   };
 
   const xAxisFormatter = (value) => {
-    const label = onGettingLocationById(value);
+    const label = value;
 
     return label;
   };
   const chartData = data?.reduce((chartData, { LocationId }) => {
     if (LocationId) {
-      const x = LocationId || "no-loc";
+      const x = onGettingLocationById(LocationId) || "no-loc";
       const y = (chartData[x]?.y || 0) + 1;
       const loc = {
         x,
@@ -35,12 +41,14 @@ const SurveyByLocations = ({
       };
       chartData[x] = loc;
     }
+
     return chartData;
   }, {});
   const onClick = (event, chartContext, config) => {
     const locationId =
       config.w.config.series[0]?.data[config.dataPointIndex]?.x;
-    setSelectedLocation(locationId);
+    const locID = onGettingIdByLocation(locationId);
+    setSelectedLocation(locID);
   };
 
   useEffect(() => {
