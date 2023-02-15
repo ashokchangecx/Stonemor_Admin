@@ -24,6 +24,7 @@ import DeleteModel from "../reusable/DeleteModel";
 import SearchBar from "../reusable/SearchBar";
 import { UPDATE_SURVEY_USER } from "../../graphql/custom/mutations";
 import BreadCrumbs from "../reusable/BreadCrumbs";
+import axios from "axios";
 
 const UpdateUser = lazy(() => import("./UpdateUser"));
 
@@ -57,11 +58,17 @@ const Users = () => {
     setOpen: setUpdateOpen,
   } = useToggle();
   const { loading, error, data } = useQuery(LIST_SURVEY_USERS);
+
+  const API_KEY = "pk_a2cec243366943810a1cedd1931fb8d6cc";
+  const LIST_ID = "VUeTun";
+
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentUser, setCurrentUser] = useState({});
   const [search, setSearch] = useState({});
+
+  const LIST = [{ data: { email: "perinbaraja232@gmail.com" } }];
   const {
     open: deleteModelOpen,
     setOpen: setDeleteModelOpen,
@@ -88,6 +95,19 @@ const Users = () => {
           )
       );
   }, [loading, data?.listSurveyUsers?.items]);
+
+  // useEffect(() => {
+  //   if (!loading && !error && data) {
+  //     fetch("http://localhost:5000/klaviyo", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(LIST),
+  //     })
+  //       .then((response) => response.json())
+  //       .then((data) => console.log(data))
+  //       .catch((error) => console.error(error));
+  //   }
+  // }, [data, error, loading]);
 
   if (loading) {
     return <Loader />;
@@ -143,6 +163,7 @@ const Users = () => {
       )
     );
   };
+
   return (
     <>
       <DynamicModel

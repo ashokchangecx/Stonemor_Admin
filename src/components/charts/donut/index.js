@@ -26,7 +26,7 @@ const themeColor = [
 //   } while (themeColor.indexOf(color) >= 0);
 //   themeColor.push("#" + ("123123" + color.toString(16)).slice(-6));
 // }
-const SimpleDonutChart = ({ id, data, title, labels }) => {
+const SimpleDonutChart = ({ id, data, title, labels, colorData }) => {
   const chartData = Object.entries(data)
     ?.map(([name, obj]) => ({
       ...obj,
@@ -74,7 +74,7 @@ const SimpleDonutChart = ({ id, data, title, labels }) => {
     },
     fill: {
       // type: "gradient",
-      colors: themeColor,
+      colors: colorData,
     },
     tooltip: {
       enabled: true,
@@ -87,7 +87,7 @@ const SimpleDonutChart = ({ id, data, title, labels }) => {
     legend: {
       position: "bottom",
       markers: {
-        fillColors: themeColor,
+        fillColors: colorData,
       },
       formatter: function (val, opts) {
         return val + " - " + opts.w.globals.series[opts.seriesIndex];

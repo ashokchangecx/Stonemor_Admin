@@ -15,10 +15,21 @@ import {
 } from "@mui/material";
 import React, { Suspense, useEffect, useState } from "react";
 import withSuspense from "../../helpers/hoc/withSuspense";
-
-// import axios from "axios";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import Surveys from "../surveys";
+import { LIST_SURVEYS } from "../../graphql/custom/queries";
+import { useQuery } from "@apollo/client";
+import { Link } from "react-router-dom";
 
 const SMLocation = ({ smLocations, locationData }) => {
+  const { loading, error, data } = useQuery(LIST_SURVEYS, {
+    variables: {
+      filter: { archived: { ne: true }, deleted: { ne: true } },
+      limit: 100,
+    },
+  });
+
+
   const [page, setPage] = useState(0);
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -67,20 +78,6 @@ const SMLocation = ({ smLocations, locationData }) => {
       item?.locationPhone?.includes(smLocations)
   );
 
-  // useEffect(() => {
-  //   const url =
-  //     "https://stonemor-jrni-zudy-mock-api.vercel.app/smlocation?$limit=100";
-
-  //   const fetchLocation = async () => {
-  //     const response = await fetch(url);
-  //     const res = await response.json();
-  //     if (res?.items) {
-  //       setData(res?.items);
-  //     }
-  //   };
-  //   fetchLocation();
-  // }, []);
-
   if (!locationsSearch.length)
     return (
       <p
@@ -94,18 +91,8 @@ const SMLocation = ({ smLocations, locationData }) => {
     );
   return (
     <div>
-      {/* <Grid container spacing={2} sx={{ p: "0.5rem" }}>
-              <Grid item xs={6}>
-                <BreadCrumbs active="Locations" />
-              </Grid>
-              <Grid item xs={6}>
-                <SearchBar
-                  searchInput={(e) => locationsSearch(e.target.value)}
-                />
-              </Grid>
-            </Grid> */}
       {locationsSearch?.length > 0 && (
-        <TableContainer>
+        <TableContainer style={{overflow: "scroll"}}>
           <Table>
             <TableHead>
               <TableRow>
@@ -114,13 +101,15 @@ const SMLocation = ({ smLocations, locationData }) => {
                 <StyledTableCell>Location</StyledTableCell>
                 <StyledTableCell>Email</StyledTableCell>
                 <StyledTableCell>Phone Number</StyledTableCell>
+                <StyledTableCell> View</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {locationsSearch
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((location, i) => (
-                  <StyledTableRow key={i}>
+                  <StyledTableRow key={i}         
+>
                     <StyledTableCell component="th" scope="row">
                       {i + 1}
                     </StyledTableCell>
@@ -130,6 +119,16 @@ const SMLocation = ({ smLocations, locationData }) => {
                     <StyledTableCell>{location?.location}</StyledTableCell>
                     <StyledTableCell>{location?.locationEmail}</StyledTableCell>
                     <StyledTableCell>{location?.locationPhone}</StyledTableCell>
+                    <StyledTableCell>
+                      <Button
+                        size="small"
+                        color="secondary"
+                        component={Link}
+                        to={`/surveyslocations/${location?.locationID}`}
+                      >
+                        <VisibilityOutlinedIcon color="inherit" />
+                      </Button>
+                    </StyledTableCell>
                   </StyledTableRow>
                 ))}
             </TableBody>

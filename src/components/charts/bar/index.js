@@ -8,18 +8,17 @@ import {
 import { Loader } from "../../common/Loader";
 import ChartWrapper from "../ChartWrapper";
 
-const themeColor = [
-  "#2E93fA",
-  "#006600",
-  "#ff00ff",
-  "#996600",
-  "#99cc00",
-  "#0099cc",
-  " #1a0a00",
-  "#4000ff",
-  "#bfff00",
-  "#9933ff",
-  "#ffcccc",
+const color = [
+  "#68d4cd",
+  "#cff67b",
+  "#94dafb",
+  "#fd8080",
+  "#6d848e",
+  "#26a0fc",
+  "#26e7a6",
+  "#febc3b",
+  "#fab1b2",
+  "#8973d5",
 ];
 const SimpleBarChart = ({
   data,
@@ -31,7 +30,7 @@ const SimpleBarChart = ({
   yAxisTitle,
 }) => {
   const theme = useTheme();
-  const color = theme.palette.secondary.main;
+  // const color = theme.palette.secondary.main;
   const chartData = Object.entries(data)
     ?.map(([name, obj]) => obj)
     ?.sort((a, b) => b?.y - a?.y);
@@ -44,7 +43,6 @@ const SimpleBarChart = ({
   ];
   const seriesLength = series[0]?.data?.length;
 
-
   if (seriesLength < 3) {
     const seriesLength = series[0]?.data?.length;
 
@@ -56,8 +54,9 @@ const SimpleBarChart = ({
   const options = {
     plotOptions: {
       bar: {
-        // distributed: true,
+        distributed: true,
         // barHeight: "20%",
+
         columnWidth: optimalColumnWidthPercent + "%",
       },
     },
@@ -104,7 +103,7 @@ const SimpleBarChart = ({
       type: "category",
       labels: {
         trim: true,
-        hideOverlappingLabels: false,
+        hideOverlappingLabels: true,
         formatter: xAxisFormatter,
         rotate: -30,
       },
@@ -118,7 +117,12 @@ const SimpleBarChart = ({
     //   text: title,
     //   align: "center",
     // },
-    colors: Array(chartData.length).fill(color),
+
+    colors: color,
+    fill: {
+      // type: "solid",
+      colors: color,
+    },
     tooltip: {
       fillSeriesColor: true,
       intersect: true,
