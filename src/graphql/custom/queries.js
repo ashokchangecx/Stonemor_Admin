@@ -15,6 +15,7 @@ export const LIST_SURVEYS = /* GraphQL */ gql(`
         name
         description
         image
+        locations
         archived
         deleted
         createdAt
@@ -443,6 +444,7 @@ export const GET_SURVEY = /* GraphQL */ gql(`
       name
       description
       image
+      locations
       archived
       deleted
       groups

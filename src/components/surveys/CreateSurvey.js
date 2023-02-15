@@ -1,5 +1,18 @@
 import { useMutation } from "@apollo/client";
-import { Alert, Button, Grid, TextField } from "@mui/material";
+import {
+  Alert,
+  Autocomplete,
+  Button,
+  FormControl,
+  Grid,
+  IconButton,
+  Input,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
 import { CREATE_SURVEY } from "../../graphql/custom/mutations";
@@ -7,6 +20,9 @@ import { LIST_SURVEYS } from "../../graphql/custom/queries";
 
 import withSuspense from "../../helpers/hoc/withSuspense";
 import useForm from "../../helpers/hooks/useForm";
+import useSmLocationData from "../../helpers/hooks/useSmLocationData";
+import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
+
 
 const initialFormValues = {
   name: "",
@@ -34,12 +50,25 @@ const CreateSurvey = ({ toggle, surevy }) => {
   const { values, handleInputChange } = useForm(initialFormValues);
   const [duplicate, setDuplicate] = useState(false);
   const [surveyDup, setSurveyDup] = useState("");
+  const { loadingLocation, smLocations } = useSmLocationData();
+  const [surveyLocation, setSuveyLocation] = useState([]);
+
+  // const handleLocationChange = (e) => {
+  //   setSuveyLocation(e.target.value);
+  // };
+  const getLocationData = (id) =>
+    smLocations?.find((loc) => loc?.locationID === id);
 
   const handleChangeName = (e) => {
     handleInputChange(e);
     setDuplicate(false);
   };
-
+  const handleRemoveValue = (valueToRemove) => {
+    const updatedValues = surveyLocation.filter(
+      (value) => value !== valueToRemove
+    );
+    setSuveyLocation(updatedValues);
+  };
   const SurveyEntries = async (sname) => {
     let findEntries = surevy?.find(
       (s) => s?.name.toLowerCase() === sname.toLowerCase()
@@ -61,7 +90,9 @@ const CreateSurvey = ({ toggle, surevy }) => {
       setDuplicate(true);
       setSurveyDup(`${values.name} already Exists. Give another SurveyName `);
     } else {
-      await createSurvey({ variables: { input: values } });
+      await createSurvey({
+        variables: { input: { ...values, locations: surveyLocation } },
+      });
       toggle();
     }
   };
@@ -107,6 +138,58 @@ const CreateSurvey = ({ toggle, surevy }) => {
             onChange={handleInputChange}
             value={values.image}
           />
+        </Grid>
+        <Grid item xs={12} cm={6} my={2}>
+          <FormControl fullWidth margin="dense">
+            <InputLabel>Link Location</InputLabel>
+
+            <Select
+              multiple
+              margin="dense"
+              fullWidth
+              variant="standard"
+              color="secondary"
+              value={surveyLocation}
+              onChange={(e) => {
+                setSuveyLocation(e.target.value);
+              }}
+            >
+              {smLocations?.map((loc, s) => (
+                <MenuItem key={s} value={loc?.locationID}>
+                  {loc?.location}
+                </MenuItem>
+              ))}
+            </Select>
+            {surveyLocation?.length > 0 && (
+              <>
+                {" "}
+                <Typography>
+                  {" "}
+                  Linked {surveyLocation?.length} Location
+                </Typography>
+                <Grid container spacing={2} pl={2}>
+                {surveyLocation?.map((loc, i) => (
+                  <Grid item xs={6} key={i}  >
+                    {" "}
+                    <ul>
+                      <li>
+                        {" "}
+                        {getLocationData(loc)?.location}
+                          <IconButton
+            sx={{p:0}}
+              color="error"
+              aria-label="mailsend"
+              onClick={() => handleRemoveValue(loc)}
+            >
+              <HighlightOffOutlinedIcon fontSize="small" />
+            </IconButton>
+                      </li>
+                    </ul>{" "}
+                  </Grid>
+                ))}</Grid>
+              </>
+            )}
+          </FormControl>
         </Grid>
       </Grid>
       <Box

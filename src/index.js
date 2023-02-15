@@ -22,6 +22,7 @@ const AnalyticsPage = lazy(() => import("./pages/Analytics"));
 const QuestionnariesPage = lazy(() => import("./pages/Questionnaries"));
 const UsersPage = lazy(() => import("./pages/Users"));
 const LocationsPage = lazy(() => import("./pages/Locations"));
+const LocationsBySurveyPage = lazy(() => import("./pages/LocationBySurvey"));
 // const SMLocationsPage = lazy(() => import("./components/locations/SMLocation"));
 
 const QuestionnariesQuestionPage = lazy(() =>
@@ -47,6 +48,7 @@ const router = createBrowserRouter(
       <Route path="locations" element={<LocationsPage />} />
       <Route path="profile" element={<Profile />} />
       <Route path="surveyEntries/:id" element={<SurveyResponsesPage />} />
+      <Route path="surveyslocations/:id" element={<LocationsBySurveyPage />} />
       <Route path="analytics" element={<AnalyticsPage />} />
       <Route path="surveyEntries" element={<SurveyEntriesPage />} />
       <Route path="archived" element={<ArchivedPage />} />

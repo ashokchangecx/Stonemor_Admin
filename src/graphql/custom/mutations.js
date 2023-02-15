@@ -71,6 +71,7 @@ export const CREATE_SURVEY = /* GraphQL */ gql(`
       description
       image
       groups
+      locations
       createdAt
       updatedAt
       archived
@@ -150,6 +151,7 @@ mutation UpdateSurvey(
     name
     description
     image
+    locations
     archived
     deleted
     groups
