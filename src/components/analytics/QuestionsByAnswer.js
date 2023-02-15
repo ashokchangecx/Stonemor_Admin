@@ -9,7 +9,6 @@ import {
 import { Box } from "@mui/system";
 import { Loader } from "../common/Loader";
 import Progress_bar from "../charts/load";
-import { QuestionAnswerOutlined } from "@mui/icons-material";
 
 const QuestionsByAnswer = ({ questionariesName }) => {
   const [get_questionnarie, { called, loading, data: currentQuestionnarie }] =
@@ -23,9 +22,10 @@ const QuestionsByAnswer = ({ questionariesName }) => {
     }
   );
 
-  const [questionariesValue, setQuestionariesValue] = useState(null);
+  const [questionariesValue, setQuestionariesValue] = useState();
   const [questionValue, setQuestionValue] = useState(null);
   const [loadingQuestion, setLoadingQuestion] = useState(true);
+  const [data, setData] = useState();
 
   const Rating = {
     1: "😟 - Very Dissatisfied",
@@ -43,6 +43,7 @@ const QuestionsByAnswer = ({ questionariesName }) => {
       })),
     [questionariesName]
   );
+
   const questions = currentQuestionnarie?.getQuestionnaire?.question?.items;
   const questionOptions = questions
     ?.filter((q) => q?.type === "RADIO" || q?.type === "LIST")
@@ -84,6 +85,8 @@ const QuestionsByAnswer = ({ questionariesName }) => {
     return chartData;
   }, {});
 
+  // const www = questionOptions?.slice(0,5)?.map((q) => q?.label);
+
   const total = filterChartData?.length;
 
   if (loadingQuestion) {
@@ -94,77 +97,101 @@ const QuestionsByAnswer = ({ questionariesName }) => {
     return (chartData["y"] / total) * 100;
   };
 
+
   return (
     <Box>
       <Grid container spacing={2} p={1}>
         <Grid item md={4} xs={12}>
           <AutoCompleteSelect
             handleAutoCompleteChange={(e, v) => setQuestionariesValue(v?.id)}
-            label="Questionaries"
+            label="Select Question Pool"
             options={options}
           />
         </Grid>
         <Grid item md={8} xs={12}>
           {called && loading ? (
             <Loader />
+          ) : questionOptions?.length > 0 ? (
+            <AutoCompleteSelect
+              handleAutoCompleteChange={(e, v) => setQuestionValue(v)}
+              label="Select Question"
+              options={questionOptions}
+            />
           ) : (
-            questionOptions?.length > 0 && (
-              <AutoCompleteSelect
-                handleAutoCompleteChange={(e, v) => setQuestionValue(v)}
-                label="Questions"
-                options={questionOptions}
-              />
-            )
+            <>
+              {(questionariesValue === null ||
+                questionOptions?.length === 0) && (
+               <Grid textAlign={"center"}> <Typography variant="h6">No Radio and Rating type of questions in this Question Pool</Typography></Grid>
+              )}{" "}
+            </>
           )}
+          {/* (questionariesValue === null || questionOptions?.length === 0) */}
         </Grid>
       </Grid>
-      {listResponsessLoading ? (
-        <Loader />
-      ) : (
+      {questionOptions?.length > 0 && (
         <>
-          {" "}
-          {questionValue?.id && (
-            <Typography mt={2} pl={2} color="primary.main" variant="h6">
-              Q. {questionValue?.label}
-            </Typography>
+          {questionValue === null && (
+            <Grid pl={3}>
+              {questionOptions?.slice(0, 5)?.map((q, k) => (
+                <ul key={k}>
+                  <li
+                    style={{
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {q?.label}
+                  </li>
+                </ul>
+              ))}
+            </Grid>
           )}
-          {questionValue?.id && (
-            <Box pl={2}>
-              <>
-                {Object.entries(chartData).map(([key, value], i) => (
-                  <div key={i}>
-                    {" "}
-                    {total > 0 ? (
-                      <div key={key}>
-                        <Grid pl={2}>
-                          {" "}
-                          <ul>
-                            <li
-                              style={{
-                                fontWeight: "bold",
-                              }}
-                            >
-                              {questionValue.type === "LIST" ? (
-                                <> {Rating[key]}</>
-                              ) : (
-                                <>{key}</>
-                              )}
-                            </li>
-                          </ul>
-                          <Progress_bar
-                            bgcolor="green"
-                            progress={calculatePercentage(value).toFixed(2)}
-                            height={30}
-                          />
-                        </Grid>
+          {listResponsessLoading ? (
+            <Loader />
+          ) : (
+            <>
+              {" "}
+              {questionValue?.id && (
+                <Typography mt={2} pl={2} color="primary.main" variant="h6">
+                  Q. {questionValue?.label}
+                </Typography>
+              )}
+              {questionValue?.id && (
+                <Box pl={2}>
+                  <>
+                    {Object.entries(chartData).map(([key, value], i) => (
+                      <div key={i}>
+                        {calculatePercentage(value).toFixed(2) > 0 ? (
+                          <div key={key}>
+                            <Grid pl={2}>
+                              <ul>
+                                <li
+                                  style={{
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {questionValue.type === "LIST" ? (
+                                    <> {Rating[key]}</>
+                                  ) : (
+                                    <>{key}</>
+                                  )}
+                                </li>
+                              </ul>
+                              <Progress_bar
+                                bgcolor="rgb(106, 163, 66)"
+                                progress={calculatePercentage(value).toFixed(2)}
+                                height={30}
+                              />
+                            </Grid>
+                          </div>
+                        ) : (
+                          <p>No one has answered this question</p>
+                        )}
                       </div>
-                    ) : (
-                      <p>kk</p>
-                    )}{" "}
-                  </div>
-                ))}
-              </>
-            </Box>
+                    ))}
+                  </>
+                </Box>
+              )}
+            </>
           )}
         </>
       )}

@@ -96,9 +96,9 @@ const CreateQuestionnarie = ({ toggle, questionnaire }) => {
 
   return (
     <Box>
-      <p>
-        To create a new Questionnaire, please complete the following details.
-      </p>
+      {/* <p>
+        To create a new Question Pools, please complete the following details.
+      </p> */}
       {duplicate ? <Alert severity="error">{questionnaireDup}</Alert> : null}
       <Grid justifyContent="center" my={1}>
         <Grid item xs={12} cm={6}>

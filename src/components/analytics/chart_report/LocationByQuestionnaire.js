@@ -4,7 +4,7 @@ import SimpleDonutChart from "../../charts/donut";
 import { Loader } from "../../common/Loader";
 
 const CHART_ID = "Location_by_questionnarie";
-const TITLE = "Location By Questionnarie  ";
+const TITLE = "Location By Question Pools  ";
 
 const LocationByQuestionnaire = ({
   data,

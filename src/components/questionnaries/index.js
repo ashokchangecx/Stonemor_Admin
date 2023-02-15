@@ -32,6 +32,7 @@ const Questionnaries = ({ questionnaires }) => {
     );
   const count = Math.ceil(questyionnairesList?.length / PER_PAGE);
   const data = usePagination(questyionnairesList, PER_PAGE);
+  console.log("data",questyionnairesList)
 
   const handleChange = (e, p) => {
     setPage(p);
@@ -41,7 +42,7 @@ const Questionnaries = ({ questionnaires }) => {
   return (
     <div>
       <DynamicModel
-        dialogTitle="Create Questionnaire"
+        dialogTitle="Create Question Pool"
         open={open}
         toggle={toggleOpen}
         isClose
@@ -57,7 +58,7 @@ const Questionnaries = ({ questionnaires }) => {
       </DynamicModel>
       <Grid container spacing={2} sx={{ p: "0.5rem" }}>
         <Grid item xs={6}>
-          <BreadCrumbs active="Questionnaires" />
+          <BreadCrumbs active="Question Pools" />
         </Grid>
         <Grid item xs={6}>
           <SearchBar
@@ -70,7 +71,7 @@ const Questionnaries = ({ questionnaires }) => {
         <>
           <Grid container spacing={2} alignItems="stretch" sx={{ p: "0.5rem" }}>
             <Grid item xs={12} cm={6} md={4}>
-              <CreateCard title="Create Questionnaire" onClick={toggleOpen} />
+              <CreateCard title="Create Question Pool" onClick={toggleOpen} />
             </Grid>
             {data?.currentData()?.map((questionnarie, i) => (
               <Grid item xs={12} cm={6} md={4} key={i}>

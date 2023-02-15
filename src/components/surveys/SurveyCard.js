@@ -28,7 +28,7 @@ const ShareSurvey = lazy(() => import("../../components/surveys/ShareSurvey"));
 const UpdateSurvey = lazy(() => import("./UpdateSurvey"));
 const ViewSurvey = lazy(() => import("./ViewSurvey"));
 
-const SurveyCard = ({ survey }) => {
+const SurveyCard = ({ survey, showActions = true }) => {
   const {
     open: updateOpen,
     toggleOpen: updateToggleOpen,
@@ -216,16 +216,18 @@ const SurveyCard = ({ survey }) => {
           justifyContent: "space-between",
         }}
       >
-        <CardHeader
-          action={
-            <IconButton
-              aria-label="delete"
-              onClick={() => handleSurveyDeleteDialog(survey)}
-            >
-              <DeleteForeverOutlinedIcon color="error" />
-            </IconButton>
-          }
-        />
+        {showActions && (
+          <CardHeader
+            action={
+              <IconButton
+                aria-label="delete"
+                onClick={() => handleSurveyDeleteDialog(survey)}
+              >
+                <DeleteForeverOutlinedIcon color="error" />
+              </IconButton>
+            }
+          />
+        )}
         <CardMedia
           component="img"
           height="100"
@@ -250,7 +252,7 @@ const SurveyCard = ({ survey }) => {
             justifyContent: "space-around",
           }}
         >
-          {survey?.preQuestionnaire?.id && (
+        {showActions &&  <>  {survey?.preQuestionnaire?.id && (
             <IconButton
               color="primary"
               aria-label="archive"
@@ -260,13 +262,13 @@ const SurveyCard = ({ survey }) => {
             </IconButton>
           )}
 
-          <IconButton
+   <IconButton
             color="primary"
             aria-label="archive"
             onClick={() => handleSurveyUpdateDialog(survey)}
           >
             <ModeEditOutlineOutlinedIcon />
-          </IconButton>
+          </IconButton></>}
           <IconButton
             color="primary"
             aria-label="archive"

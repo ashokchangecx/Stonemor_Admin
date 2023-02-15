@@ -4,7 +4,7 @@ import SimpleDonutChart from "../../charts/donut";
 import { Loader } from "../../common/Loader";
 
 const CHART_ID = "Incompleted survey_by_questionnaire";
-const TITLE = "Incompleted Survey By Questionnarie";
+const TITLE = "Incompleted Survey By Question Pools";
 const IncompletedSurveyByQuestionnarie = ({
   data,
   questionariesName,
