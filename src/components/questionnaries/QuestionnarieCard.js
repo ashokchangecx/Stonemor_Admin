@@ -98,7 +98,7 @@ const QuestionnarieCard = ({ questionnarie }) => {
   return (
     <>
       <DynamicModel
-        dialogTitle={`Update Questionnaire - ${currentQuestionnarie?.name}`}
+        dialogTitle={`Update Question Pool - ${currentQuestionnarie?.name}`}
         open={openUpdateDialog}
         toggle={handleupdateToggleOpen}
         isClose
