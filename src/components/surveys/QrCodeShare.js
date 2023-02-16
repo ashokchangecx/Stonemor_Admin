@@ -103,9 +103,13 @@ const QrCodeShare = ({ toggle, surveyId, locationData }) => {
     downloadLink.click();
     document.body.removeChild(downloadLink);
   };
-  //emai validation//
+
   const handleEmail = (e) => {
     setInchargeEmail(e.target.value);
+   
+  };
+  //emai validation//
+  useEffect(()=>{
     if (validator.isEmail(inchargeEmail)) {
       setEmailSuccess("valid email");
       setAlertSuccessEmail(true);
@@ -115,7 +119,8 @@ const QrCodeShare = ({ toggle, surveyId, locationData }) => {
       setAlertError(true);
       setAlertSuccessEmail(false);
     }
-  };
+    return () =>{ setEmailSuccess();}
+},[inchargeEmail])
   useEffect(() => {
     const surveyLoc = data?.listSurveyLocations?.items?.find(
       (loc) => loc?.id === surveyLocation

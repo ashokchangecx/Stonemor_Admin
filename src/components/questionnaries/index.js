@@ -32,7 +32,6 @@ const Questionnaries = ({ questionnaires }) => {
     );
   const count = Math.ceil(questyionnairesList?.length / PER_PAGE);
   const data = usePagination(questyionnairesList, PER_PAGE);
-  console.log("data",questyionnairesList)
 
   const handleChange = (e, p) => {
     setPage(p);
