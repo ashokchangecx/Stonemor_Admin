@@ -55,7 +55,6 @@ const useSurveyResponses = () => {
       handleFetch();
     }
   }, [nextToken]);
-console.log("kk",surveyResponses)
   return { loading, surveyResponses };
 };
 

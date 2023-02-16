@@ -21,6 +21,8 @@ export const questionQuery = (values) => {
       options: dependentQuestionOptions,
     };
     createQuestionQuery.isDependent = true;
+    createQuestionQuery.isSelf = false;
+
     createQuestionQuery.dependent = dependentQuestionQuery;
     if (listItemOptions.length > 0)
       createQuestionQuery.listOptions = listItemOptions;
@@ -28,6 +30,8 @@ export const questionQuery = (values) => {
 
   if (currentMode === "self") {
     createQuestionQuery.isSelf = true;
+    createQuestionQuery.isDependent = false;
+
     if (type === "TEXT" || type === "LIST") {
       createQuestionQuery.listOptions = {
         listValue: type,
@@ -45,6 +49,10 @@ export const questionQuery = (values) => {
         listValue: option?.listValue,
         nextQuestion,
       }));
+  }
+  if (currentMode === "normal") {
+    createQuestionQuery.isSelf = false;
+    createQuestionQuery.isDependent = false;
   }
   return createQuestionQuery;
 };

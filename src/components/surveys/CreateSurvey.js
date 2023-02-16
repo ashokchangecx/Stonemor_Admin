@@ -23,7 +23,6 @@ import useForm from "../../helpers/hooks/useForm";
 import useSmLocationData from "../../helpers/hooks/useSmLocationData";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 
-
 const initialFormValues = {
   name: "",
   description: "",
@@ -56,19 +55,16 @@ const CreateSurvey = ({ toggle, surevy }) => {
   // const handleLocationChange = (e) => {
   //   setSuveyLocation(e.target.value);
   // };
-  const getLocationData = (id) =>
-    smLocations?.find((loc) => loc?.locationID === id);
+
+  const handleSelectedLocationChange = (event, values) => {
+    setSuveyLocation(values);
+  };
 
   const handleChangeName = (e) => {
     handleInputChange(e);
     setDuplicate(false);
   };
-  const handleRemoveValue = (valueToRemove) => {
-    const updatedValues = surveyLocation.filter(
-      (value) => value !== valueToRemove
-    );
-    setSuveyLocation(updatedValues);
-  };
+
   const SurveyEntries = async (sname) => {
     let findEntries = surevy?.find(
       (s) => s?.name.toLowerCase() === sname.toLowerCase()
@@ -83,7 +79,9 @@ const CreateSurvey = ({ toggle, surevy }) => {
   const enableButton =
     Boolean(values.name) &&
     Boolean(values.description) &&
-    Boolean(values.image);
+    Boolean(values.image) &&
+    Boolean(surveyLocation?.length > 0);
+
   const onClickCreate = async () => {
     let dup = await SurveyEntries(values.name);
     if (dup) {
@@ -91,7 +89,12 @@ const CreateSurvey = ({ toggle, surevy }) => {
       setSurveyDup(`${values.name} already Exists. Give another SurveyName `);
     } else {
       await createSurvey({
-        variables: { input: { ...values, locations: surveyLocation } },
+        variables: {
+          input: {
+            ...values,
+            locations: surveyLocation?.map((item) => item?.locationID),
+          },
+        },
       });
       toggle();
     }
@@ -140,56 +143,22 @@ const CreateSurvey = ({ toggle, surevy }) => {
           />
         </Grid>
         <Grid item xs={12} cm={6} my={2}>
-          <FormControl fullWidth margin="dense">
-            <InputLabel>Link Location</InputLabel>
-
-            <Select
-              multiple
-              margin="dense"
-              fullWidth
-              variant="standard"
-              color="secondary"
-              value={surveyLocation}
-              onChange={(e) => {
-                setSuveyLocation(e.target.value);
-              }}
-            >
-              {smLocations?.map((loc, s) => (
-                <MenuItem key={s} value={loc?.locationID}>
-                  {loc?.location}
-                </MenuItem>
-              ))}
-            </Select>
-            {surveyLocation?.length > 0 && (
-              <>
-                {" "}
-                <Typography>
-                  {" "}
-                  Linked {surveyLocation?.length} Location
-                </Typography>
-                <Grid container spacing={2} pl={2}>
-                {surveyLocation?.map((loc, i) => (
-                  <Grid item xs={6} key={i}  >
-                    {" "}
-                    <ul>
-                      <li>
-                        {" "}
-                        {getLocationData(loc)?.location}
-                          <IconButton
-            sx={{p:0}}
-              color="error"
-              aria-label="mailsend"
-              onClick={() => handleRemoveValue(loc)}
-            >
-              <HighlightOffOutlinedIcon fontSize="small" />
-            </IconButton>
-                      </li>
-                    </ul>{" "}
-                  </Grid>
-                ))}</Grid>
-              </>
+          <Autocomplete
+            multiple
+            id="tags-outlined"
+            options={smLocations}
+            getOptionLabel={(option) => option?.location}
+            onChange={handleSelectedLocationChange}
+            filterSelectedOptions
+            value={surveyLocation}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Link Location"
+                placeholder="Location"
+              />
             )}
-          </FormControl>
+          />
         </Grid>
       </Grid>
       <Box
