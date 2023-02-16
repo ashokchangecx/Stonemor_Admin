@@ -29,7 +29,6 @@ const SMLocation = ({ smLocations, locationData }) => {
     },
   });
 
-
   const [page, setPage] = useState(0);
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -92,7 +91,7 @@ const SMLocation = ({ smLocations, locationData }) => {
   return (
     <div>
       {locationsSearch?.length > 0 && (
-        <TableContainer style={{overflow: "scroll"}}>
+        <TableContainer style={{ overflow: "scroll" }}>
           <Table>
             <TableHead>
               <TableRow>
@@ -108,8 +107,7 @@ const SMLocation = ({ smLocations, locationData }) => {
               {locationsSearch
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((location, i) => (
-                  <StyledTableRow key={i}         
->
+                  <StyledTableRow key={i}>
                     <StyledTableCell component="th" scope="row">
                       {i + 1}
                     </StyledTableCell>
@@ -124,7 +122,7 @@ const SMLocation = ({ smLocations, locationData }) => {
                         size="small"
                         color="secondary"
                         component={Link}
-                        to={`/surveyslocations/${location?.locationID}`}
+                        to={`/locations/${location?.locationID}`}
                       >
                         <VisibilityOutlinedIcon color="inherit" />
                       </Button>

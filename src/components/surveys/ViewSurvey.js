@@ -11,11 +11,17 @@ import {
 import { Box } from "@mui/system";
 import moment from "moment-timezone";
 import { Link } from "react-router-dom";
+import useSmLocationData from "../../helpers/hooks/useSmLocationData";
+import { Loader } from "../common/Loader";
 
 const ViewSurvey = ({ currentSurveyData }) => {
   const { image, name, description, preQuestionnaire, createdAt } =
     currentSurveyData;
   let zone = "America/New_York";
+  const { loadingLocation, smLocations } = useSmLocationData();
+  const getLocationData = (id) =>
+    smLocations?.find((loc) => loc?.locationID === id);
+
   return (
     <Box
       sx={{
@@ -53,6 +59,13 @@ const ViewSurvey = ({ currentSurveyData }) => {
             Associated Question Pools : {preQuestionnaire?.name}
           </Typography>
         )}
+      {currentSurveyData?.locations?.length > 0 && 
+       <Typography gutterBottom component="div">
+          Associated Locations :{" "}
+          {currentSurveyData?.locations?.map((loc, i,arr) => (
+            <span key={i}>{loc?.length > 0 ? <>{getLocationData(loc)?.location} {i !== (arr.length-1) ? ',' : '.'}</>:<Loader/> }</span>
+          ))}
+        </Typography>}
       </CardContent>
       <CardActions
         sx={{
