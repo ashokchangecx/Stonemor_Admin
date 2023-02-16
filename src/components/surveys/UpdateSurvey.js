@@ -1,7 +1,9 @@
 import { useMutation, useQuery } from "@apollo/client";
 import {
   Alert,
+  Autocomplete,
   Button,
+  Chip,
   FormControl,
   Grid,
   IconButton,
@@ -18,9 +20,11 @@ import { LIST_SURVEYS } from "../../graphql/custom/queries";
 import withSuspense from "../../helpers/hoc/withSuspense";
 import useForm from "../../helpers/hooks/useForm";
 import useSmLocationData from "../../helpers/hooks/useSmLocationData";
-import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
+import { Loader } from "../common/Loader";
 
 const UpdateSurvey = ({ toggle, initialFormValues }) => {
+  const { loadingLocation, smLocations } = useSmLocationData();
+  const { values, handleInputChange } = useForm(initialFormValues);
   const [updateSurvey, { loading, error }] = useMutation(UPDATE_SURVEY, {
     query: LIST_SURVEYS,
     variables: {
@@ -29,18 +33,30 @@ const UpdateSurvey = ({ toggle, initialFormValues }) => {
     },
   });
   const { data } = useQuery(LIST_SURVEYS);
-  const { values, handleInputChange } = useForm(initialFormValues);
-  const [duplicate, setDuplicate] = useState(false);
-  const [surveyDup, setSurveyDup] = useState("");
-  const { loadingLocation, smLocations } = useSmLocationData();
-  const [surveyLocation, setSuveyLocation] = useState([]);
+  const surveyUpdateData = data?.listSurveys?.items?.filter(
+    (item) => item?.id === values?.id
+  );
+  const currentLocationList =
+    surveyUpdateData?.length > 0 ? surveyUpdateData[0]?.locations : [];
 
+  const defaultLocations = smLocations?.filter((obj) =>
+    currentLocationList?.includes(obj.locationID)
+  );
+  const [surveyLocation, setSuveyLocation] = useState([]);
   const surveyData = data?.listSurveys?.items.filter(
     (item) => item?.id !== values?.id
   );
+
+  const [duplicate, setDuplicate] = useState(false);
+  const [surveyDup, setSurveyDup] = useState("");
+
   const handleUpdateSurveyName = (e) => {
     handleInputChange(e);
     setDuplicate(false);
+  };
+
+  const handleSelectedLocationChange = (event, values) => {
+    setSuveyLocation(values);
   };
   const getLocationData = (id) =>
     smLocations?.find((loc) => loc?.locationID === id);
@@ -67,7 +83,8 @@ const UpdateSurvey = ({ toggle, initialFormValues }) => {
   const enableButton =
     Boolean(values.name) &&
     Boolean(values.description) &&
-    Boolean(values.image);
+    Boolean(values.image) &&
+    Boolean(surveyLocation?.length > 0);
 
   const onClickUpdate = async () => {
     let dup = await SurveyEntriesUpdate();
@@ -76,7 +93,12 @@ const UpdateSurvey = ({ toggle, initialFormValues }) => {
       setSurveyDup(`${values.name} already Exists. Give another SurveyName `);
     } else {
       await updateSurvey({
-        variables: { input: { ...values, locations: surveyLocation } },
+        variables: {
+          input: {
+            ...values,
+            locations: surveyLocation?.map((item) => item?.locationID),
+          },
+        },
       });
       toggle();
     }
@@ -86,6 +108,13 @@ const UpdateSurvey = ({ toggle, initialFormValues }) => {
       setSuveyLocation(surveyData?.locations || []);
     }
   }, [loading]);
+
+  useEffect(() => {
+    if (surveyLocation?.length === 0) {
+      setSuveyLocation(defaultLocations);
+    }
+  }, [surveyLocation, defaultLocations]);
+
   return (
     <Box>
       {duplicate ? <Alert severity="error">{surveyDup}</Alert> : null}
@@ -131,7 +160,7 @@ const UpdateSurvey = ({ toggle, initialFormValues }) => {
         </Grid>
       </Grid>
       <Grid item xs={12} my={2}>
-        <FormControl fullWidth margin="dense">
+        {/* <FormControl fullWidth margin="dense">
           <InputLabel>Link Location</InputLabel>
 
           <Select
@@ -179,7 +208,28 @@ const UpdateSurvey = ({ toggle, initialFormValues }) => {
               </Grid>
             </>
           )}
-        </FormControl>
+        </FormControl> */}
+
+        {surveyLocation.length > 0 ? (
+          <Autocomplete
+            multiple
+            id="locations"
+            options={smLocations}
+            getOptionLabel={(option) => option?.location}
+            onChange={handleSelectedLocationChange}
+            filterSelectedOptions
+            value={surveyLocation}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Link Location"
+                placeholder="Location"
+              />
+            )}
+          />
+        ) : (
+          <Loader />
+        )}
       </Grid>
       <Box
         sx={{
