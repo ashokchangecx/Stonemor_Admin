@@ -25,7 +25,7 @@ const Surveys = () => {
       limit: 100,
     },
   });
-  console.log("first",data)
+
   const [surveys, setSurveys] = useState([]);
   const [surveySearch, setSurveySearch] = useState("");
   const [page, setPage] = useState(1);
@@ -60,7 +60,7 @@ const Surveys = () => {
   if (error) {
     return <>error</>;
   }
-  console.log("sueveys",surveys)
+
   return (
     <div>
       <DynamicModel
