@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import {
-    Alert,
+  Alert,
   Box,
   Card,
   CardActions,
@@ -30,7 +30,6 @@ import {
   LIST_QUESTIONNARIES_NAME,
   LIST_SURVEY_LOCATIONS,
 } from "../../graphql/custom/queries";
-
 
 const LocationSurveyCard = ({ survey, locationId, showActions = true }) => {
   const { loading, error, data } = useQuery(LIST_SURVEY_LOCATIONS);
@@ -154,30 +153,24 @@ const LocationSurveyCard = ({ survey, locationId, showActions = true }) => {
   //email validation//
   const handleEmail = (e) => {
     setInchargeEmail(e.target.value);
-   
   };
   //email validation//
-  useEffect(()=>{
-    if(Boolean(inchargeEmail)){
-    if (validator.isEmail(inchargeEmail)) {
-      setEmailSuccess("valid email");
-      setAlertSuccessEmail(true);
-      setAlertError(false);
-    } 
-    else{
-      setEmailError("Enter valid Email!");
-      setAlertError(true);
+  useEffect(() => {
+    if (Boolean(inchargeEmail)) {
+      if (validator.isEmail(inchargeEmail)) {
+        setEmailSuccess("valid email");
+        setAlertSuccessEmail(true);
+        setAlertError(false);
+      } else {
+        setEmailError("Enter valid Email!");
+        setAlertError(true);
+        setAlertSuccessEmail(false);
+      }
+    } else {
       setAlertSuccessEmail(false);
+      setAlertError(false);
     }
-
-  }
-  else{
-    setAlertSuccessEmail(false);
-    setAlertError(false);
-  }    
-  return ()=>{     setAlertSuccessEmail(false);
-  }
-},[inchargeEmail])
+  }, [inchargeEmail]);
   useEffect(() => {
     const surveyLoc = data?.listSurveyLocations?.items?.find(
       (loc) => loc?.id === surveyLocation
@@ -208,69 +201,69 @@ const LocationSurveyCard = ({ survey, locationId, showActions = true }) => {
         isClose
         maxWidth="md"
         isActions={false}
-        
       >
-         <Box my={2}>
-        {alertSuccess ? (
-          <Alert severity="success">{alertContentSuccess}</Alert>
-        ) : (
-          ""
-        )}
-        {alertFail ? <Alert severity="error">{alertContentFail}</Alert> : ""}
+        <Box my={2}>
+          {alertSuccess ? (
+            <Alert severity="success">{alertContentSuccess}</Alert>
+          ) : (
+            ""
+          )}
+          {alertFail ? <Alert severity="error">{alertContentFail}</Alert> : ""}
+        </Box>
+        <Grid container spacing={4}>
+          <Grid item md={4}>
+            <QRCode
+              id="qr-gen"
+              value={surveyQrcodeTest}
+              size={280}
+              level={"H"}
+              includeMargin={true}
+            />{" "}
+          </Grid>
 
-      </Box>
-      <Grid container xs={12} spacing={4}>
-        <Grid item md={4} > 
-        <QRCode
-          id="qr-gen"  
-          value={surveyQrcodeTest}
-          size={280}
-          level={"H"}
-          includeMargin={true}
-        />{" "}</Grid> 
-      
-    <Grid item md={8}>  <TextField 
-          margin="dense"
-          id="InchargeEmail"
-          label="Email"
-          placeholder="Enter Email Address to  receive Qr Code"
-          value={inchargeEmail}
-          onChange={(e) => handleEmail(e)}
-          fullWidth
-          type="Email"
-        />
-        {alertSuccessEmail ? (
-          <Alert severity="success">{emailSuccess}</Alert>
-        ) : (
-          ""
-        )}
-              {alertError ? <Alert severity="error">{emailError}</Alert> : ""}{" "}
+          <Grid item md={8}>
+            {" "}
+            <TextField
+              margin="dense"
+              id="InchargeEmail"
+              label="Email"
+              placeholder="Enter Email Address to  receive Qr Code"
+              value={inchargeEmail}
+              onChange={(e) => handleEmail(e)}
+              fullWidth
+              type="Email"
+            />
+            {alertSuccessEmail ? (
+              <Alert severity="success">{emailSuccess}</Alert>
+            ) : (
+              ""
+            )}
+            {alertError ? <Alert severity="error">{emailError}</Alert> : ""}{" "}
+            <Grid
+              item
+              display="flex"
+              justifyContent="space-evenly"
+              alignItems="center"
+            >
+              <IconButton
+                color="primary"
+                aria-label="mailsend"
+                onClick={downloadQRCodeTest}
+              >
+                <DownloadForOfflineOutlinedIcon fontSize="large" />
+              </IconButton>
 
-        <Grid
-          item
-          xs
-          display="flex"
-          justifyContent="space-evenly"
-          alignItems="center"
-        >
-          <IconButton
-            color="primary"
-            aria-label="mailsend"
-            onClick={downloadQRCodeTest}
-          >
-            <DownloadForOfflineOutlinedIcon fontSize="large" />
-          </IconButton>
-
-          <IconButton
-            color="error"
-            aria-label="mailsend"
-            onClick={handleSendEmail}
-            disabled={!alertSuccessEmail}
-          >
-            <ForwardToInboxOutlinedIcon fontSize="large" />
-          </IconButton>
-        </Grid></Grid>  
-    </Grid>
+              <IconButton
+                color="error"
+                aria-label="mailsend"
+                onClick={handleSendEmail}
+                disabled={!alertSuccessEmail}
+              >
+                <ForwardToInboxOutlinedIcon fontSize="large" />
+              </IconButton>
+            </Grid>
+          </Grid>
+        </Grid>
       </DynamicModel>
       <Suspense fallback={<Loader />}></Suspense>
       <DynamicModel

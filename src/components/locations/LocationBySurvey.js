@@ -124,7 +124,7 @@ const LocationBySurveys = () => {
         isActions={false}
       >
         <Suspense fallback={<Loader />}>
-          <Grid container spacing={2} xs={12}>
+          <Grid container spacing={2}>
             {unAssignedSurveys?.map((survey, i) => (
               <Grid item xs={12} md={3} key={i} sx={{ position: "relative" }}>
                 <AddCircleOutlineOutlinedIcon
@@ -152,7 +152,6 @@ const LocationBySurveys = () => {
               </Grid>
             ))}
           </Grid>
-          <Grid></Grid>
         </Suspense>
       </DynamicModel>
       <Grid container spacing={2} sx={{ py: "0.5rem" }}>
@@ -173,7 +172,7 @@ const LocationBySurveys = () => {
       </Grid>
       <Grid container spacing={2} alignItems="stretch" sx={{ p: 2 }}>
         <Grid container spacing={2}>
-          <Grid xs={12} md={3} item>
+          <Grid item xs={12} md={3}>
             {" "}
             <Card
               sx={{
@@ -204,7 +203,7 @@ const LocationBySurveys = () => {
             </Card>
           </Grid>
           {surveysList?.map((survey, i) => (
-            <Grid xs={12} md={3} item key={i} sx={{ position: "relative" }}>
+            <Grid item xs={12} md={3} key={i} sx={{ position: "relative" }}>
               <RemoveCircleOutlineIcon
                 sx={{
                   color: "#fc0d00",
