@@ -85,7 +85,7 @@ const ShareSurvey = ({ toggle, currentSurveyData }) => {
         </Suspense>
       </DynamicModel>
       <DynamicModel
-        dialogTitle="Generate Survey QR Code"
+        dialogTitle="Generate QR Code"
         open={openQrShareDialog}
         toggle={handleQrToggleOpen}
         isClose

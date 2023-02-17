@@ -15,13 +15,12 @@ import useSmLocationData from "../../helpers/hooks/useSmLocationData";
 import { Loader } from "../common/Loader";
 
 const ViewSurvey = ({ currentSurveyData }) => {
-  const { image, name, description, preQuestionnaire, createdAt } =
+  const { image, name, description, preQuestionnaire, createdAt, locations } =
     currentSurveyData;
   let zone = "America/New_York";
   const { loadingLocation, smLocations } = useSmLocationData();
   const getLocationData = (id) =>
     smLocations?.find((loc) => loc?.locationID === id);
-
   return (
     <Box
       sx={{
@@ -51,21 +50,43 @@ const ViewSurvey = ({ currentSurveyData }) => {
         )}
 
         <Typography gutterBottom variant="body2">
-          Created Date : {moment.tz(createdAt, zone).format(" MMMM Do  YYYY")}
+          <span style={{ fontWeight: "bold" }}> Created Date :</span>{" "}
+          {moment.tz(createdAt, zone).format(" MMMM Do  YYYY")}
         </Typography>
 
-        {preQuestionnaire?.name && (
+        <Typography gutterBottom component="div">
+          <span style={{ fontWeight: "bold" }}>
+            {" "}
+            Associated Question Pools :
+          </span>{" "}
+          {preQuestionnaire?.name ? (
+            <>{preQuestionnaire?.name}</>
+          ) : (
+            <span style={{ color: "red" }}>No Question Pool Assigned</span>
+          )}
+        </Typography>
+        {locations?.length > 0 ? (
           <Typography gutterBottom component="div">
-            Associated Question Pools : {preQuestionnaire?.name}
+            <span style={{ fontWeight: "bold" }}> Associated Locations : </span>
+
+            <>
+              {" "}
+              {currentSurveyData?.locations?.map((loc, i, arr) => (
+                <span key={i}>
+                  {" "}
+                  <>
+                    {getLocationData(loc)?.location}
+                    {i !== arr.length - 1 ? "," : "."}
+                  </>
+                </span>
+              ))}
+            </>
           </Typography>
+        ) : (
+          <>
+            <Loader />
+          </>
         )}
-      {currentSurveyData?.locations?.length > 0 && 
-       <Typography gutterBottom component="div">
-          Associated Locations :{" "}
-          {currentSurveyData?.locations?.map((loc, i,arr) => (
-            <span key={i}>{loc?.length > 0 ? <>{getLocationData(loc)?.location} {i !== (arr.length-1) ? ',' : '.'}</>:<Loader/> }</span>
-          ))}
-        </Typography>}
       </CardContent>
       <CardActions
         sx={{
