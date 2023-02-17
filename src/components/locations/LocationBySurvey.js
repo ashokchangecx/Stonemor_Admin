@@ -6,6 +6,7 @@ import {
   CardMedia,
   Grid,
   Pagination,
+  Typography,
 } from "@mui/material";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -25,6 +26,7 @@ import usePagination from "@mui/material/usePagination/usePagination";
 import { Box } from "@mui/system";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import LocationSurveyCard from "./LocationSurveyCard";
+import useSmLocationData from "../../helpers/hooks/useSmLocationData";
 const LocationBySurveys = () => {
   const params = useParams();
   const locationId = params.id;
@@ -50,8 +52,11 @@ const LocationBySurveys = () => {
   const [assignedSurveys, setAssignedSurveys] = useState([]);
   const [unAssignedSurveys, setUnAssignedSurveys] = useState([]);
   const [surveySearch, setSurveySearch] = useState("");
+  const { loadingLocation, smLocations } = useSmLocationData();
   const [page, setPage] = useState(1);
   const PER_PAGE = 5;
+  
+  const look = smLocations?.find((loc) => loc?.locationID === locationId);
 
   const { open, toggleOpen } = useToggle();
 
@@ -163,8 +168,8 @@ const LocationBySurveys = () => {
                 to: "/locations",
               },
             ]}
-            active="Location Surveys"
-          />{" "}
+            active={look?.location}
+         />
         </Grid>
         <Grid item xs={6}>
           <SearchBar searchInput={(e) => setSurveySearch(e.target.value)} />
@@ -223,6 +228,8 @@ const LocationBySurveys = () => {
                 sx={{ height: "100%" }}
                 showActions={true}
                 locationId={locationId}
+                smLocations={smLocations}
+
               />
             </Grid>
           ))}
