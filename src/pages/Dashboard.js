@@ -14,7 +14,8 @@ import useSmLocationData from "../helpers/hooks/useSmLocationData";
 const DashboardPage = () => {
   const { loading, surveyEntries } = useSurveyEntries();
   const { data: questionariesName } = useQuery(LIST_QUESTIONNARIES_NAME);
-  const { loadingLocations, smLocations } = useSmLocationData();
+  const { loadingLocation, smLocations } = useSmLocationData();
+
   const {
     loading: surveyCountLoading,
     error: surveyCountError,
@@ -30,13 +31,14 @@ const DashboardPage = () => {
     error: surveyUsersCountError,
     data: surveyUsersCountData,
   } = useQuery(COUNT_SURVEY_USERS);
+
   const overviewReady =
     Boolean(surveyCountLoading) ||
     Boolean(surveyCountError) ||
     Boolean(surveyLocationCountLoading) ||
     Boolean(surveyLocationCountError);
   Boolean(surveyUsersCountLoading) || Boolean(surveyUsersCountError);
-  if (loading || loadingLocations) {
+  if (loading || loadingLocation) {
     return <Loader />;
   }
   return (
@@ -45,9 +47,7 @@ const DashboardPage = () => {
       overviewReady={overviewReady}
       questionariesName={questionariesName}
       surveyCount={surveyCountData?.listSurveys?.items?.length || 0}
-      surveyLocationsCount={
-        surveyLocationCountData?.listSurveyLocations?.items?.length || 0
-      }
+      surveyLocationsCount={smLocations?.length || 0}
       surveyUsersCount={
         surveyUsersCountData?.listSurveyUsers?.items?.length || 0
       }
