@@ -158,22 +158,31 @@ const LocationSurveyCard = ({ survey, locationId, showActions = true }) => {
   };
   //email validation//
   useEffect(()=>{
+    if(Boolean(inchargeEmail)){
     if (validator.isEmail(inchargeEmail)) {
       setEmailSuccess("valid email");
       setAlertSuccessEmail(true);
       setAlertError(false);
-    } else {
+    } 
+    else{
       setEmailError("Enter valid Email!");
       setAlertError(true);
       setAlertSuccessEmail(false);
     }
-    return () =>{ setEmailSuccess();}
+
+  }
+  else{
+    setAlertSuccessEmail(false);
+    setAlertError(false);
+  }    
+  return ()=>{     setAlertSuccessEmail(false);
+  }
 },[inchargeEmail])
   useEffect(() => {
     const surveyLoc = data?.listSurveyLocations?.items?.find(
       (loc) => loc?.id === surveyLocation
     );
-    setInchargeEmail(surveyLoc?.inchargeEmail || " ");
+    setInchargeEmail(surveyLoc?.inchargeEmail || "");
   }, [surveyLocation]);
   return (
     <Box height="100%">
