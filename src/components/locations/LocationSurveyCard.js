@@ -30,8 +30,9 @@ import {
   LIST_QUESTIONNARIES_NAME,
   LIST_SURVEY_LOCATIONS,
 } from "../../graphql/custom/queries";
+import { Looks } from "@mui/icons-material";
 
-const LocationSurveyCard = ({ survey, locationId, showActions = true }) => {
+const LocationSurveyCard = ({ survey, locationId, smLocations,showActions = true }) => {
   const { loading, error, data } = useQuery(LIST_SURVEY_LOCATIONS);
   const { data: questionariesName } = useQuery(LIST_QUESTIONNARIES_NAME);
 
@@ -58,9 +59,12 @@ const LocationSurveyCard = ({ survey, locationId, showActions = true }) => {
 
     return que?.name ?? id;
   };
-
   const surveyLoc = surveyLocation;
   const surveyName = onGettingQuestionById(locationId);
+
+  const look = smLocations?.find((loc) => loc?.locationID === locationId);
+
+
   const {
     open: viewOpen,
     toggleOpen: viewToggleOpen,
@@ -177,6 +181,12 @@ const LocationSurveyCard = ({ survey, locationId, showActions = true }) => {
     );
     setInchargeEmail(surveyLoc?.inchargeEmail || "");
   }, [surveyLocation]);
+  // console.log("data",survey)
+  // const look =survey?.locations?.find(
+  //   (loc) => loc?.id === locationId
+  // )
+  // console.log("surveyLoc",look?.map((i)=>(i?.location)) );
+
   return (
     <Box height="100%">
       <DynamicModel
@@ -195,13 +205,15 @@ const LocationSurveyCard = ({ survey, locationId, showActions = true }) => {
         </Suspense>
       </DynamicModel>
       <DynamicModel
-        dialogTitle="Generate Survey QR Code"
+        dialogTitle="Generate QR Code"
         open={openQrShareDialog}
         toggle={handleQrToggleOpen}
         isClose
         maxWidth="md"
         isActions={false}
-      >
+      >    
+       
+
         <Box my={2}>
           {alertSuccess ? (
             <Alert severity="success">{alertContentSuccess}</Alert>
@@ -222,6 +234,8 @@ const LocationSurveyCard = ({ survey, locationId, showActions = true }) => {
           </Grid>
 
           <Grid item md={8}>
+          <Typography style={{fontWeight:"bold"}}>Survey -<span style={{fontWeight:"lighter"}}> {survey?.name}</span></Typography>
+        <Typography  sx={{pb:3}} style={{fontWeight:"bold"}}>Location -<span style={{fontWeight:"lighter"}}> {look?.location}</span></Typography>
             {" "}
             <TextField
               margin="dense"
@@ -232,6 +246,7 @@ const LocationSurveyCard = ({ survey, locationId, showActions = true }) => {
               onChange={(e) => handleEmail(e)}
               fullWidth
               type="Email"
+             
             />
             {alertSuccessEmail ? (
               <Alert severity="success">{emailSuccess}</Alert>
@@ -261,7 +276,9 @@ const LocationSurveyCard = ({ survey, locationId, showActions = true }) => {
               >
                 <ForwardToInboxOutlinedIcon fontSize="large" />
               </IconButton>
+              
             </Grid>
+           
           </Grid>
         </Grid>
       </DynamicModel>
