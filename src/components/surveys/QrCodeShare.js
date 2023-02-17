@@ -106,26 +106,30 @@ const QrCodeShare = ({ toggle, surveyId, locationData }) => {
 
   const handleEmail = (e) => {
     setInchargeEmail(e.target.value);
-   
   };
   //emai validation//
-  useEffect(()=>{
-    if (validator.isEmail(inchargeEmail)) {
-      setEmailSuccess("valid email");
-      setAlertSuccessEmail(true);
-      setAlertError(false);
+  useEffect(() => {
+    if (Boolean(inchargeEmail)) {
+      if (validator.isEmail(inchargeEmail)) {
+        setEmailSuccess("valid email");
+        setAlertSuccessEmail(true);
+        setAlertError(false);
+      } else {
+        setEmailError("Enter valid Email!");
+        setAlertError(true);
+        setAlertSuccessEmail(false);
+      }
     } else {
-      setEmailError("Enter valid Email!");
-      setAlertError(true);
       setAlertSuccessEmail(false);
+      setAlertError(false);
     }
-    return () =>{ setEmailSuccess();}
-},[inchargeEmail])
+  }, [inchargeEmail]);
+
   useEffect(() => {
     const surveyLoc = data?.listSurveyLocations?.items?.find(
       (loc) => loc?.id === surveyLocation
     );
-    setInchargeEmail(surveyLoc?.inchargeEmail || " ");
+    setInchargeEmail(surveyLoc?.inchargeEmail || "");
   }, [surveyLocation]);
 
   return (
