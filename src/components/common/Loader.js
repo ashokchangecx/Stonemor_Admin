@@ -10,7 +10,7 @@ export const Loader = () => {
         alignItems: "center",
       }}
     >
-      <CircularProgress thickness={5} size={100} disableShrink />
+      <CircularProgress thickness={4} size={65} disableShrink />
     </div>
   );
 };
