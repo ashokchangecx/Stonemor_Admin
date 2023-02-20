@@ -29,7 +29,6 @@ const QuestionnariesQuestionPage = () => {
     },
   });
 
-
   const { open, toggleOpen } = useToggle();
   const [questions, setQuestions] = useState([]);
   const [questionnarieData, setQuestionnarieData] = useState({});
@@ -70,6 +69,7 @@ const QuestionnariesQuestionPage = () => {
         isClose
         maxWidth="md"
         isActions={false}
+        fullScreen="fullScreen"
       >
         <Suspense fallback={<Loader />}>
           <CreateQuestion

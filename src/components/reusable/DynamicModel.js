@@ -5,7 +5,9 @@ import {
   DialogActions,
   Button,
   IconButton,
+  Slide,
 } from "@mui/material";
+import * as React from "react";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 
 const DynamicModel = ({
@@ -19,9 +21,12 @@ const DynamicModel = ({
   isClose = false,
   maxWidth = "md",
   isActions = true,
+
+  fullScreen,
 }) => {
+  console.log("fullScreen", fullScreen);
   return (
-    <Dialog open={open} fullWidth maxWidth={maxWidth}>
+    <Dialog open={open} fullWidth maxWidth={maxWidth} fullScreen={fullScreen}>
       <DialogTitle
         sx={{
           display: "flex",
