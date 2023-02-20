@@ -27,6 +27,9 @@ import { Box } from "@mui/system";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import LocationSurveyCard from "./LocationSurveyCard";
 import useSmLocationData from "../../helpers/hooks/useSmLocationData";
+import DeleteModel from "../reusable/DeleteModel";
+import RemoveModel from "../reusable/RemoveModel";
+import AddModel from "../reusable/AddModel";
 const LocationBySurveys = () => {
   const params = useParams();
   const locationId = params.id;
@@ -60,6 +63,17 @@ const LocationBySurveys = () => {
 
   const { open, toggleOpen } = useToggle();
 
+  const {
+    open: removeModelOpen,
+    setOpen: setRemoveModelOpen,
+    toggleOpen: toggleRemoveModelOpen,
+  } = useToggle(false);
+  const {
+    open: addModelOpen,
+    setOpen: setAddModelOpen,
+    toggleOpen: toggleAddModelOpen,
+  } = useToggle(false);
+
   useEffect(() => {
     if (surveys?.length > 0) {
       let tempAssignedSurveys = [];
@@ -86,6 +100,7 @@ const LocationBySurveys = () => {
     await updateSurvey({
       variables: { input: payload },
     });
+    setAddModelOpen(false)
   };
 
   const surveysList = assignedSurveys
@@ -115,7 +130,9 @@ const LocationBySurveys = () => {
     await updateSurvey({
       variables: { input: payload },
     });
+    setRemoveModelOpen(false)
   };
+
 
   if (loading) <Loader />;
   return (
@@ -131,7 +148,14 @@ const LocationBySurveys = () => {
         <Suspense fallback={<Loader />}>
           <Grid container spacing={2}>
             {unAssignedSurveys?.map((survey, i) => (
-              <Grid item xs={12} md={3} key={i} sx={{ position: "relative" }}>
+             <> <AddModel
+             open={addModelOpen}
+             toggle={toggleAddModelOpen}
+             onClickConfirm={() => handleAddSurvey(survey)}
+             isClose
+             dialogTitle="Add Survey "
+             dialogContentText={`Are You Sure You Want to Add survey in ${look?.location}? `}
+           /> <Grid item xs={12} md={3} key={i} sx={{ position: "relative" }}>
                 <AddCircleOutlineOutlinedIcon
                   sx={{
                     color: "green",
@@ -144,7 +168,7 @@ const LocationBySurveys = () => {
                       color: "#78f069",
                     },
                   }}
-                  onClick={() => handleAddSurvey(survey)}
+                  onClick={() => setAddModelOpen(true)}
                   title="Assign Survey"
                 />
 
@@ -154,11 +178,12 @@ const LocationBySurveys = () => {
                   locationId={locationId}
                   unAssignedSurveys={unAssignedSurveys}
                 />
-              </Grid>
+              </Grid></>
             ))}
           </Grid>
         </Suspense>
       </DynamicModel>
+    
       <Grid container spacing={2} sx={{ py: "0.5rem" }}>
         <Grid item xs={6}>
           <BreadCrumbs
@@ -208,6 +233,15 @@ const LocationBySurveys = () => {
             </Card>
           </Grid>
           {surveysList?.map((survey, i) => (
+           <>
+             <RemoveModel
+              open={removeModelOpen}
+              toggle={toggleRemoveModelOpen}
+              onClickConfirm={()=>handleRemoveSurvey(survey)}
+              isClose
+              dialogTitle="Remove "
+              dialogContentText={`Are You Sure You Want to remove survey in ${look?.location}? `}
+              />
             <Grid item xs={12} md={3} key={i} sx={{ position: "relative" }}>
               <RemoveCircleOutlineIcon
                 sx={{
@@ -220,7 +254,7 @@ const LocationBySurveys = () => {
                     color: "#b83832",
                   },
                 }}
-                onClick={() => handleRemoveSurvey(survey)}
+                onClick={() => setRemoveModelOpen(true)}
                 title="Remove Survey"
               />
               <LocationSurveyCard
@@ -232,7 +266,7 @@ const LocationBySurveys = () => {
 
               />
             </Grid>
-          ))}
+            </>    ))}
         </Grid>
       </Grid>
       <Box display="flex" justifyContent="end" my={2}>

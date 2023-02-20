@@ -22,7 +22,7 @@ const ListOptions = ({
   getQuestionById,
   currentMode,
 }) => {
-  // console.log("currentMode", currentMode);
+  console.log("options : ", listItemOptions);
   return (
     <Grid container rowGap={3} columnGap={1} alignItems="center">
       <Grid item xs={12} md={4}>
@@ -46,6 +46,7 @@ const ListOptions = ({
               setListItem({ ...listItem, nextQuestion: newValue?.id });
             }}
             options={options}
+            value={listItem}
             label="Next Question"
           />
         </Grid>
