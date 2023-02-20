@@ -29,7 +29,7 @@ const Step2 = ({
     () =>
       questions?.map((question) => ({
         id: question?.id,
-        label: question?.order + "  " + question?.qu,
+        label: question?.order + ".  " + question?.qu,
       })),
     [questions]
   );

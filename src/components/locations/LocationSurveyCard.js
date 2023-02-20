@@ -189,6 +189,7 @@ const LocationSurveyCard = ({ survey, locationId, smLocations,showActions = true
 
   return (
     <Box height="100%">
+      
       <DynamicModel
         dialogTitle={` Share survey - ${currentSurvey?.name}`}
         open={openShareDialog}
