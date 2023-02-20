@@ -42,6 +42,7 @@ const UpdateSurvey = ({ toggle, initialFormValues }) => {
   const defaultLocations = smLocations?.filter((obj) =>
     currentLocationList?.includes(obj.locationID)
   );
+
   const [surveyLocation, setSuveyLocation] = useState([]);
   const surveyData = data?.listSurveys?.items.filter(
     (item) => item?.id !== values?.id
@@ -83,8 +84,7 @@ const UpdateSurvey = ({ toggle, initialFormValues }) => {
   const enableButton =
     Boolean(values.name) &&
     Boolean(values.description) &&
-    Boolean(values.image) &&
-    Boolean(surveyLocation?.length > 0);
+    Boolean(values.image);
 
   const onClickUpdate = async () => {
     let dup = await SurveyEntriesUpdate();
@@ -110,10 +110,8 @@ const UpdateSurvey = ({ toggle, initialFormValues }) => {
   }, [loading]);
 
   useEffect(() => {
-    if (surveyLocation?.length === 0) {
-      setSuveyLocation(defaultLocations);
-    }
-  }, [surveyLocation, defaultLocations]);
+    setSuveyLocation(defaultLocations);
+  }, [defaultLocations?.length > 0]);
 
   return (
     <Box>
@@ -210,7 +208,7 @@ const UpdateSurvey = ({ toggle, initialFormValues }) => {
           )}
         </FormControl> */}
 
-        {surveyLocation.length > 0 ? (
+        {defaultLocations?.length ? (
           <Autocomplete
             multiple
             id="locations"
