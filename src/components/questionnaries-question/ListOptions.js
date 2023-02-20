@@ -20,8 +20,9 @@ const ListOptions = ({
   listItemOptions,
   showNextQuestion,
   getQuestionById,
+  currentMode,
 }) => {
-  console.log("options : ",listItemOptions)
+  console.log("options : ", listItemOptions);
   return (
     <Grid container rowGap={3} columnGap={1} alignItems="center">
       <Grid item xs={12} md={4}>
@@ -64,8 +65,11 @@ const ListOptions = ({
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Option</TableCell>
-              {showNextQuestion && <TableCell>Next Question</TableCell>}
+              <TableCell>Option </TableCell>
+              {currentMode === "self" && showNextQuestion && (
+                <TableCell>Next Question (self)</TableCell>
+              )}
+
               <TableCell sx={{ textAlign: "center" }}>Remove</TableCell>
             </TableRow>
           </TableHead>

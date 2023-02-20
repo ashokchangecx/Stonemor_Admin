@@ -158,57 +158,7 @@ const UpdateSurvey = ({ toggle, initialFormValues }) => {
         </Grid>
       </Grid>
       <Grid item xs={12} my={2}>
-        {/* <FormControl fullWidth margin="dense">
-          <InputLabel>Link Location</InputLabel>
-
-          <Select
-            multiple
-            margin="dense"
-            fullWidth
-            variant="standard"
-            color="secondary"
-            value={surveyLocation}
-            onChange={handleSelectChange}
-          >
-            {smLocations?.map((loc, s) => (
-              <MenuItem key={s} value={loc?.locationID}>
-                {loc?.location}
-              </MenuItem>
-            ))}
-          </Select>
-
-          {surveyLocation?.length > 0 && (
-            <>
-              {" "}
-              <Typography style={{ fontWeight: "bold" }}>
-                {" "}
-                Linked {surveyLocation?.length} Location
-              </Typography>
-              <Grid container spacing={2} pl={2}>
-                {surveyLocation?.map((loc, i) => (
-                  <Grid item xs={6} key={i} pl={2}>
-                    <ul>
-                      <li>
-                        {" "}
-                        {getLocationData(loc)?.location}
-                        <IconButton
-                          sx={{ p: 0 }}
-                          color="error"
-                          aria-label="mailsend"
-                          onClick={() => handleRemoveValue(loc)}
-                        >
-                          <HighlightOffOutlinedIcon fontSize="small" />
-                        </IconButton>
-                      </li>
-                    </ul>{" "}
-                  </Grid>
-                ))}
-              </Grid>
-            </>
-          )}
-        </FormControl> */}
-
-        {/* {defaultLocations ? ( */}
+        {/* {defaultLocations?.length ? ( */}
         <Autocomplete
           multiple
           id="locations"
@@ -224,6 +174,13 @@ const UpdateSurvey = ({ toggle, initialFormValues }) => {
               placeholder="Location"
             />
           )}
+          renderOption={(props, option) => {
+            return (
+              <li {...props} key={option.locationID}>
+                {option.location}
+              </li>
+            );
+          }}
         />
         {/* ) : (
           <Loader />
