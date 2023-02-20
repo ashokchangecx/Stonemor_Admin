@@ -62,7 +62,7 @@ const ViewSurvey = ({ currentSurveyData }) => {
           {preQuestionnaire?.name ? (
             <>{preQuestionnaire?.name}</>
           ) : (
-            <span style={{ color: "red" }}>No Question Pool Assigned</span>
+            <span style={{ color: "red" }}>No associated question pool assign for this survey</span>
           )}
         </Typography>
         {locations?.length > 0 ? (
@@ -83,9 +83,11 @@ const ViewSurvey = ({ currentSurveyData }) => {
             </>
           </Typography>
         ) : (
-          <>
-            <Loader />
-          </>
+          <Typography>
+                      <span style={{ fontWeight: "bold" }}> Associated Locations : </span>
+         <span style={{ color: "red" }}>No associated location assign for this survey</span>
+    
+          </Typography>
         )}
       </CardContent>
       <CardActions
