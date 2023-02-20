@@ -21,6 +21,7 @@ const ListOptions = ({
   listItemOptions,
   showNextQuestion,
   getQuestionById,
+  currentMode,
 }) => {
   // console.log("options : ",options)
   return (
@@ -91,8 +92,11 @@ const ListOptions = ({
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Option</TableCell>
-              {showNextQuestion && <TableCell>Next Question</TableCell>}
+              <TableCell>Option </TableCell>
+              {currentMode === "self" && showNextQuestion && (
+                <TableCell>Next Question (self)</TableCell>
+              )}
+
               <TableCell sx={{ textAlign: "center" }}>Remove</TableCell>
             </TableRow>
           </TableHead>
