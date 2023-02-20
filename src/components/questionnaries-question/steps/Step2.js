@@ -29,7 +29,7 @@ const Step2 = ({
     () =>
       questions?.map((question) => ({
         id: question?.id,
-        label: question?.order + "  " + question?.qu,
+        label: question?.order + ".  " + question?.qu,
       })),
     [questions]
   );
@@ -90,6 +90,7 @@ const Step2 = ({
           handleRemovingListItem={handleRemovingListItem}
           listItem={listItem}
           listItemOptions={listItemOptions}
+          currentMode={"self"}
         />
       )}
       {currentMode === "normal" &&
@@ -103,6 +104,7 @@ const Step2 = ({
             handleRemovingListItem={handleRemovingListItem}
             listItem={listItem}
             listItemOptions={listItemOptions}
+            currentMode={"normal"}
           />
         )}
       {currentMode === "dependent" &&
@@ -117,6 +119,7 @@ const Step2 = ({
               handleRemovingListItem={handleRemovingListItem}
               listItem={listItem}
               listItemOptions={listItemOptions}
+              currentMode={"dependent"}
             />
             <Divider
               sx={{
@@ -146,6 +149,7 @@ const Step2 = ({
             handleRemovingListItem={handleRemovingListItem}
             listItem={listItem}
             listItemOptions={listItemOptions}
+            currentMode={"self"}
           />
           <Divider sx={{ my: 2 }} />
           <AutoCompleteSelect

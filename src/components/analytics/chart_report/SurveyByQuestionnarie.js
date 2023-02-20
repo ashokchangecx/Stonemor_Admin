@@ -60,7 +60,7 @@ const SurveyByQuestionnarie = ({
             id={CHART_ID}
             data={chartData}
             title={date}
-            labels={questionariesName.listQuestionnaires.items}
+            labels={questionariesName?.listQuestionnaires?.items}
             colorData={color}
           />
         )

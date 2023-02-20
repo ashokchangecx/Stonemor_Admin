@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Button,
   Grid,
   Table,
@@ -20,7 +21,9 @@ const ListOptions = ({
   listItemOptions,
   showNextQuestion,
   getQuestionById,
+  currentMode,
 }) => {
+  // console.log("options : ",options)
   return (
     <Grid container rowGap={3} columnGap={1} alignItems="center">
       <Grid item xs={12} md={4}>
@@ -39,13 +42,40 @@ const ListOptions = ({
       </Grid>
       {showNextQuestion && (
         <Grid item xs={12} md={6}>
-          <AutoCompleteSelect
+          {/* <AutoCompleteSelect
             handleAutoCompleteChange={(event, newValue) => {
               setListItem({ ...listItem, nextQuestion: newValue?.id });
             }}
             options={options}
+            value={listItem}
             label="Next Question"
-          />
+          /> */}
+          
+          <Autocomplete
+      disablePortal
+      onChange={(event, newValue) => {
+        setListItem({ ...listItem, nextQuestion: newValue?.id });
+      }}
+      id="combo-box-questions-select-ioo"
+      options={options}
+      value={listItem?.listValue}
+      isOptionEqualToValue={(option, value) =>  option.id === value?.nextQuestion}
+      getOptionLabel={(option)=> option.label || ""}
+      fullWidth
+      renderOption={(props, option) => {
+        return (
+          <li {...props} key={option.id}>
+            {option.label}
+          </li>
+        );
+      }}
+    
+      renderInput={(params) => (
+        <TextField {...params} label="Next Question" color="secondary" />
+      )}
+    />
+
+
         </Grid>
       )}
       <Grid item xs={12} md={1} textAlign="center">
@@ -62,8 +92,11 @@ const ListOptions = ({
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Option</TableCell>
-              {showNextQuestion && <TableCell>Next Question</TableCell>}
+              <TableCell>Option </TableCell>
+              {currentMode === "self" && showNextQuestion && (
+                <TableCell>Next Question (self)</TableCell>
+              )}
+
               <TableCell sx={{ textAlign: "center" }}>Remove</TableCell>
             </TableRow>
           </TableHead>

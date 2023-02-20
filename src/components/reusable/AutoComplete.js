@@ -7,6 +7,7 @@ const AutoCompleteSelect = ({
   value,
   ...others
 }) => {
+  // console.log("Value : ",value)
   return (
     <Autocomplete
       disablePortal
@@ -14,7 +15,7 @@ const AutoCompleteSelect = ({
       id="combo-box-questions-select"
       options={options}
       value={value?.label}
-      isOptionEqualToValue={(option, value) => option.id === value?.id}
+      isOptionEqualToValue={(option, value) => option.id === value?.id || option.id === value?.nextQuestion}
       fullWidth
       renderOption={(props, option) => {
         return (

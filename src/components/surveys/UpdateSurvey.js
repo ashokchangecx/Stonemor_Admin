@@ -42,6 +42,7 @@ const UpdateSurvey = ({ toggle, initialFormValues }) => {
   const defaultLocations = smLocations?.filter((obj) =>
     currentLocationList?.includes(obj.locationID)
   );
+
   const [surveyLocation, setSuveyLocation] = useState([]);
   const surveyData = data?.listSurveys?.items.filter(
     (item) => item?.id !== values?.id
@@ -83,8 +84,7 @@ const UpdateSurvey = ({ toggle, initialFormValues }) => {
   const enableButton =
     Boolean(values.name) &&
     Boolean(values.description) &&
-    Boolean(values.image) &&
-    Boolean(surveyLocation?.length > 0);
+    Boolean(values.image);
 
   const onClickUpdate = async () => {
     let dup = await SurveyEntriesUpdate();
@@ -110,10 +110,8 @@ const UpdateSurvey = ({ toggle, initialFormValues }) => {
   }, [loading]);
 
   useEffect(() => {
-    if (surveyLocation?.length === 0) {
-      setSuveyLocation(defaultLocations);
-    }
-  }, [surveyLocation, defaultLocations]);
+    setSuveyLocation(defaultLocations);
+  }, [defaultLocations?.length > 0]);
 
   return (
     <Box>
@@ -160,76 +158,33 @@ const UpdateSurvey = ({ toggle, initialFormValues }) => {
         </Grid>
       </Grid>
       <Grid item xs={12} my={2}>
-        {/* <FormControl fullWidth margin="dense">
-          <InputLabel>Link Location</InputLabel>
-
-          <Select
-            multiple
-            margin="dense"
-            fullWidth
-            variant="standard"
-            color="secondary"
-            value={surveyLocation}
-            onChange={handleSelectChange}
-          >
-            {smLocations?.map((loc, s) => (
-              <MenuItem key={s} value={loc?.locationID}>
-                {loc?.location}
-              </MenuItem>
-            ))}
-          </Select>
-
-          {surveyLocation?.length > 0 && (
-            <>
-              {" "}
-              <Typography style={{ fontWeight: "bold" }}>
-                {" "}
-                Linked {surveyLocation?.length} Location
-              </Typography>
-              <Grid container spacing={2} pl={2}>
-                {surveyLocation?.map((loc, i) => (
-                  <Grid item xs={6} key={i} pl={2}>
-                    <ul>
-                      <li>
-                        {" "}
-                        {getLocationData(loc)?.location}
-                        <IconButton
-                          sx={{ p: 0 }}
-                          color="error"
-                          aria-label="mailsend"
-                          onClick={() => handleRemoveValue(loc)}
-                        >
-                          <HighlightOffOutlinedIcon fontSize="small" />
-                        </IconButton>
-                      </li>
-                    </ul>{" "}
-                  </Grid>
-                ))}
-              </Grid>
-            </>
+        {/* {defaultLocations?.length ? ( */}
+        <Autocomplete
+          multiple
+          id="locations"
+          options={smLocations}
+          getOptionLabel={(option) => option?.location}
+          onChange={handleSelectedLocationChange}
+          filterSelectedOptions
+          value={surveyLocation}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Link Location"
+              placeholder="Location"
+            />
           )}
-        </FormControl> */}
-
-        {surveyLocation.length > 0 ? (
-          <Autocomplete
-            multiple
-            id="locations"
-            options={smLocations}
-            getOptionLabel={(option) => option?.location}
-            onChange={handleSelectedLocationChange}
-            filterSelectedOptions
-            value={surveyLocation}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Link Location"
-                placeholder="Location"
-              />
-            )}
-          />
-        ) : (
+          renderOption={(props, option) => {
+            return (
+              <li {...props} key={option.locationID}>
+                {option.location}
+              </li>
+            );
+          }}
+        />
+        {/* ) : (
           <Loader />
-        )}
+        )} */}
       </Grid>
       <Box
         sx={{

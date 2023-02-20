@@ -79,8 +79,7 @@ const CreateSurvey = ({ toggle, surevy }) => {
   const enableButton =
     Boolean(values.name) &&
     Boolean(values.description) &&
-    Boolean(values.image) &&
-    Boolean(surveyLocation?.length > 0);
+    Boolean(values.image);
 
   const onClickCreate = async () => {
     let dup = await SurveyEntries(values.name);
@@ -158,6 +157,13 @@ const CreateSurvey = ({ toggle, surevy }) => {
                 placeholder="Location"
               />
             )}
+            renderOption={(props, option) => {
+              return (
+                <li {...props} key={option.locationID}>
+                  {option.location}
+                </li>
+              );
+            }}
           />
         </Grid>
       </Grid>
