@@ -157,13 +157,6 @@ const CreateSurvey = ({ toggle, surevy }) => {
                 placeholder="Location"
               />
             )}
-            renderOption={(props, option) => {
-              return (
-                <li {...props} key={option.id}>
-                  {option.label}
-                </li>
-              );
-            }}
           />
         </Grid>
       </Grid>

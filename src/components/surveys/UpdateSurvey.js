@@ -208,26 +208,26 @@ const UpdateSurvey = ({ toggle, initialFormValues }) => {
           )}
         </FormControl> */}
 
-        {defaultLocations?.length ? (
-          <Autocomplete
-            multiple
-            id="locations"
-            options={smLocations}
-            getOptionLabel={(option) => option?.location}
-            onChange={handleSelectedLocationChange}
-            filterSelectedOptions
-            value={surveyLocation}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Link Location"
-                placeholder="Location"
-              />
-            )}
-          />
-        ) : (
+        {/* {defaultLocations ? ( */}
+        <Autocomplete
+          multiple
+          id="locations"
+          options={smLocations}
+          getOptionLabel={(option) => option?.location}
+          onChange={handleSelectedLocationChange}
+          filterSelectedOptions
+          value={surveyLocation}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Link Location"
+              placeholder="Location"
+            />
+          )}
+        />
+        {/* ) : (
           <Loader />
-        )}
+        )} */}
       </Grid>
       <Box
         sx={{
