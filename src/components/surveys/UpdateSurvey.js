@@ -182,8 +182,8 @@ const UpdateSurvey = ({ toggle, initialFormValues }) => {
             );
           }}
         />
-        // ) : ( // <Loader />
-        // )}
+        {/* // ) : ( // <Loader />
+        // )} */}
       </Grid>
       <Box
         sx={{
