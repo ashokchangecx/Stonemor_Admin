@@ -132,6 +132,7 @@ const QuestionnariesQuestion = ({ questions, questionnarieData }) => {
         isClose
         maxWidth="md"
         isActions={false}
+        fullScreen="fullScreen"
       >
         <Suspense fallback={<Loader />}>
           <UpdateQuestion
