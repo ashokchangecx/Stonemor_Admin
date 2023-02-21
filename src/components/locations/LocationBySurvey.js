@@ -56,6 +56,7 @@ const LocationBySurveys = () => {
   const [unAssignedSurveys, setUnAssignedSurveys] = useState([]);
   const [surveySearch, setSurveySearch] = useState("");
   const { loadingLocation, smLocations } = useSmLocationData();
+  const [ selectedSurvey, setSelectedSurvey ] = useState({});
   const [page, setPage] = useState(1);
   const PER_PAGE = 5;
   
@@ -91,8 +92,8 @@ const LocationBySurveys = () => {
     return () => null;
   }, [surveys]);
 
-  const handleAddSurvey = async (survey) => {
-    const { id, locations } = survey;
+  const handleAddSurvey = async () => {
+    const { id, locations } = selectedSurvey;
     const payload = {
       id,
       locations: [...locations, locationId],
@@ -100,8 +101,16 @@ const LocationBySurveys = () => {
     await updateSurvey({
       variables: { input: payload },
     });
+    setSelectedSurvey()
     setAddModelOpen(false)
   };
+
+   const handleAddClickSurvey = (survey) => {
+    setSelectedSurvey(survey)
+    setAddModelOpen(true)
+
+  };
+  
 
   const surveysList = assignedSurveys
     ?.filter((item) =>
@@ -121,8 +130,8 @@ const LocationBySurveys = () => {
     setPage(p);
     _DATA.jump(p);
   };
-  const handleRemoveSurvey = async (survey) => {
-    const { id, locations } = survey;
+  const handleRemoveSurvey = async () => {
+    const { id, locations } = selectedSurvey;
     const payload = {
       id,
       locations: locations?.filter((loc) => loc !== locationId),
@@ -130,9 +139,14 @@ const LocationBySurveys = () => {
     await updateSurvey({
       variables: { input: payload },
     });
+    setSelectedSurvey()
     setRemoveModelOpen(false)
   };
+  const handleRemoveClickSurvey = (survey) => {
+    setSelectedSurvey(survey)
+    setRemoveModelOpen(true)
 
+  };
 
   if (loading) <Loader />;
   return (
@@ -145,17 +159,22 @@ const LocationBySurveys = () => {
         maxWidth="2xl"
         isActions={false}
       >
+   
+        <AddModel
+      open={addModelOpen}
+      toggle={toggleAddModelOpen}
+      onClickConfirm={handleAddSurvey}
+      isClose
+      dialogTitle="Add Survey "
+      dialogContentText={`Are You Sure You Want to Add survey in ${look?.location}? `}
+    /> 
+     
+
+
         <Suspense fallback={<Loader />}>
           <Grid container spacing={2}>
             {unAssignedSurveys?.map((survey, i) => (
-             <> <AddModel
-             open={addModelOpen}
-             toggle={toggleAddModelOpen}
-             onClickConfirm={() => handleAddSurvey(survey)}
-             isClose
-             dialogTitle="Add Survey "
-             dialogContentText={`Are You Sure You Want to Add survey in ${look?.location}? `}
-           /> <Grid item xs={12} md={3} key={i} sx={{ position: "relative" }}>
+             <> <Grid item xs={12} md={3} key={i} sx={{ position: "relative" }}>
                 <AddCircleOutlineOutlinedIcon
                   sx={{
                     color: "green",
@@ -168,7 +187,7 @@ const LocationBySurveys = () => {
                       color: "#78f069",
                     },
                   }}
-                  onClick={() => setAddModelOpen(true)}
+                  onClick={()=>handleAddClickSurvey(survey)}
                   title="Assign Survey"
                 />
 
@@ -183,7 +202,14 @@ const LocationBySurveys = () => {
           </Grid>
         </Suspense>
       </DynamicModel>
-    
+      <RemoveModel
+              open={removeModelOpen}
+              toggle={toggleRemoveModelOpen}
+              onClickConfirm={handleRemoveSurvey}
+              isClose
+              dialogTitle="Remove "
+              dialogContentText={`Are You Sure You Want to remove survey in ${look?.location}? `}
+              />
       <Grid container spacing={2} sx={{ py: "0.5rem" }}>
         <Grid item xs={6}>
           <BreadCrumbs
@@ -234,14 +260,7 @@ const LocationBySurveys = () => {
           </Grid>
           {surveysList?.map((survey, i) => (
            <>
-             <RemoveModel
-              open={removeModelOpen}
-              toggle={toggleRemoveModelOpen}
-              onClickConfirm={()=>handleRemoveSurvey(survey)}
-              isClose
-              dialogTitle="Remove "
-              dialogContentText={`Are You Sure You Want to remove survey in ${look?.location}? `}
-              />
+           
             <Grid item xs={12} md={3} key={i} sx={{ position: "relative" }}>
               <RemoveCircleOutlineIcon
                 sx={{
@@ -254,7 +273,7 @@ const LocationBySurveys = () => {
                     color: "#b83832",
                   },
                 }}
-                onClick={() => setRemoveModelOpen(true)}
+                onClick={() => handleRemoveClickSurvey(survey)}
                 title="Remove Survey"
               />
               <LocationSurveyCard

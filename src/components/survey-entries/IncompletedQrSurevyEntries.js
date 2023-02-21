@@ -164,7 +164,7 @@ const IncompletedQrSurveyEntries = ({ incompleteQrSurvey, locationData }) => {
                     {onGettingLocationById(user?.LocationId)}
                   </StyledTableCell>
                   <StyledTableCell>
-                    {user?.location?.inchargeEmail}
+                    {user?.location?.locationEmail}
                   </StyledTableCell>
 
                   <StyledTableCell>

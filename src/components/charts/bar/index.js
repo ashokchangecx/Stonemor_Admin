@@ -3,8 +3,10 @@ import Chart from "react-apexcharts";
 import {
   CHART_FORECOLOR,
   CHART_HEIGHT,
+  CHART_PDF_DOWNLOAD_ICON,
   CHART_THEME_MODE,
 } from "../../../config/ChartConfig";
+import { dowloadChartAsPDF } from "../../../utils/PDF";
 import { Loader } from "../../common/Loader";
 import ChartWrapper from "../ChartWrapper";
 
@@ -29,11 +31,14 @@ const SimpleBarChart = ({
   seriesName,
   yAxisTitle,
 }) => {
+  const charts = [{ ID: id, docName: title }];
+  console.log(charts);
   const theme = useTheme();
   // const color = theme.palette.secondary.main;
   const chartData = Object.entries(data)
     ?.map(([name, obj]) => obj)
-    ?.sort((a, b) => b?.y - a?.y);
+    ?.sort((a, b) => b?.y - a?.y)
+    ?.slice(0, 9);
 
   const series = [
     {
@@ -67,33 +72,33 @@ const SimpleBarChart = ({
       },
       foreColor: CHART_FORECOLOR,
       // toolbar: {
-      //   // show: false,
-      //   tools: {
-      //     customIcons: [
-      //       {
-      //         ...CHART_PDF_DOWNLOAD_ICON,
-      //         click: async () =>
-      //           await dowloadChartAsPDF({ ID: id, docName: title }),
-      //       },
-      //     ],
-      //   },
-      //   export: {
-      //     csv: {
-      //       filename: title,
-      //       columnDelimiter: ",",
-      //       headerCategory: title,
-      //       headerValue: yAxisTitle,
-      //       dateFormatter(timestamp) {
-      //         return new Date(timestamp).toDateString();
-      //       },
+      // show: false,
+      // tools: {
+      //   customIcons: [
+      //     {
+      //       ...CHART_PDF_DOWNLOAD_ICON,
+      //       click: async () =>
+      //         await dowloadChartAsPDF({ ID: id, docName: title }),
       //     },
-      //     svg: {
-      //       filename: title,
-      //     },
-      //     png: {
-      //       filename: title,
+      //   ],
+      // },
+      // export: {
+      //   csv: {
+      //     filename: title,
+      //     columnDelimiter: ",",
+      //     headerCategory: title,
+      //     headerValue: yAxisTitle,
+      //     dateFormatter(timestamp) {
+      //       return new Date(timestamp).toDateString();
       //     },
       //   },
+      //   svg: {
+      //     filename: title,
+      //   },
+      //   png: {
+      //     filename: title,
+      //   },
+      // },
       // },
       toolbar: {
         show: false,

@@ -16,7 +16,6 @@ import {
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import QuestionnarieDetailCard from "./QuestionnarieDetailCard";
-import DynamicModel from "../reusable/DynamicModel";
 import useToggle from "../../helpers/hooks/useToggle";
 import { Suspense } from "react";
 import { useMutation } from "@apollo/client";
@@ -26,6 +25,7 @@ import DeleteModel from "../reusable/DeleteModel";
 import { GET_QUESTIONNAIRES } from "../../graphql/custom/queries";
 import { UPDATE_QUESTION } from "../../graphql/custom/mutations";
 import BreadCrumbs from "../reusable/BreadCrumbs";
+import DynamicModelForQuestion from "../reusable/DynamicModelForQuestion";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -125,14 +125,13 @@ const QuestionnariesQuestion = ({ questions, questionnarieData }) => {
         dialogContentText={`Are You Sure You Want to Delete  question?`}
       />
 
-      <DynamicModel
+      <DynamicModelForQuestion
         dialogTitle={`Update - ${currentQuestion?.qu}`}
         open={openUpdateDialog}
         toggle={handleQuestionToggleOpen}
         isClose
         maxWidth="md"
         isActions={false}
-        fullScreen="fullScreen"
       >
         <Suspense fallback={<Loader />}>
           <UpdateQuestion
@@ -142,7 +141,7 @@ const QuestionnariesQuestion = ({ questions, questionnarieData }) => {
             questionQuestionnaireId={questionnarieData?.id}
           />
         </Suspense>
-      </DynamicModel>
+      </DynamicModelForQuestion>
       <Grid container spacing={2} sx={{ py: "0.5rem" }}>
         <Grid item xs={6}>
           <BreadCrumbs
@@ -171,7 +170,7 @@ const QuestionnariesQuestion = ({ questions, questionnarieData }) => {
               <StyledTableCell>Q.No</StyledTableCell>
               <StyledTableCell>Question</StyledTableCell>
               <StyledTableCell>Type</StyledTableCell>
-              <StyledTableCell>List Options</StyledTableCell>
+              <StyledTableCell>Options</StyledTableCell>
               <StyledTableCell>Manage</StyledTableCell>
               <StyledTableCell>Delete</StyledTableCell>
             </StyledTableRow>
