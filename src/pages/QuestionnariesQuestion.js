@@ -9,6 +9,7 @@ import { GET_QUESTIONNAIRES } from "../graphql/custom/queries";
 import { LIST_QUESTIONS } from "../graphql/custom/queries";
 import withSuspense from "../helpers/hoc/withSuspense";
 import useToggle from "../helpers/hooks/useToggle";
+import DynamicModelForQuestion from "../components/reusable/DynamicModelForQuestion";
 
 const CreateQuestion = lazy(() =>
   import("../components/questionnaries-question/CreateQuestion")
@@ -62,14 +63,13 @@ const QuestionnariesQuestionPage = () => {
 
   return (
     <div>
-      <DynamicModel
+      <DynamicModelForQuestion
         dialogTitle="Create Question "
         open={open}
         toggle={toggleOpen}
         isClose
         maxWidth="md"
         isActions={false}
-        fullScreen="fullScreen"
       >
         <Suspense fallback={<Loader />}>
           <CreateQuestion
@@ -78,7 +78,7 @@ const QuestionnariesQuestionPage = () => {
             questionQuestionnaireId={questionQuestionnaireId}
           />
         </Suspense>
-      </DynamicModel>
+      </DynamicModelForQuestion>
       <QuestionnariesQuestion
         questions={questions}
         questionnarieData={questionnarieData}
