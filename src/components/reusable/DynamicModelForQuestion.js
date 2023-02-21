@@ -44,7 +44,7 @@ const DynamicModelForQuestion = ({
           <CancelOutlinedIcon />
         </IconButton>
       </DialogTitle>
-      <DialogContent sx={{ minHeight: "60vh", overflow: "auto" }}>
+      <DialogContent sx={{ minHeight: "70vh", overflow: "auto" }}>
         {children}
       </DialogContent>
       {isActions && (

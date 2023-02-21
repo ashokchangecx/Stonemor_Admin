@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import withSuspense from "../../../helpers/hoc/withSuspense";
-import SimpleDonutChart from "../../charts/donut";
+import SimpleLinkDonutChart from "../../charts/donut/Donut";
 import { Loader } from "../../common/Loader";
 
 const CHART_ID = "questionnarie_by_location";
@@ -49,7 +49,7 @@ const QuestionnariesByLocation = ({
   return (
     <>
       {selectedLocation && !error ? (
-     <>   <SimpleDonutChart
+     <>   <SimpleLinkDonutChart
           id={CHART_ID}
           data={chartData}
           to={`/questionnaries/${questionarieID?.id}`}
