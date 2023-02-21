@@ -57,12 +57,12 @@ const ViewSurvey = ({ currentSurveyData }) => {
         <Typography gutterBottom component="div">
           <span style={{ fontWeight: "bold" }}>
             {" "}
-            Associated Question Pools :
+            Associated Question Pool  :
           </span>{" "}
           {preQuestionnaire?.name ? (
             <>{preQuestionnaire?.name}</>
           ) : (
-            <span style={{ color: "red" }}>No associated question pool assign for this survey</span>
+            <span style={{ color: "red" }}>Question pool not yet assigned</span>
           )}
         </Typography>
         {locations?.length > 0 ? (
@@ -85,7 +85,7 @@ const ViewSurvey = ({ currentSurveyData }) => {
         ) : (
           <Typography>
                       <span style={{ fontWeight: "bold" }}> Associated Locations : </span>
-         <span style={{ color: "red" }}>No associated location assign for this survey</span>
+         <span style={{ color: "red" }}>Location not yet assigned</span>
     
           </Typography>
         )}

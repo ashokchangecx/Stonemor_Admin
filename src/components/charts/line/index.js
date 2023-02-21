@@ -5,7 +5,8 @@ import ChartWrapper from "../ChartWrapper";
 const SimpleLineChart = ({ data, title, id, seriesName, yAxisTitle }) => {
   const chartData = Object?.entries(data)
     ?.map(([name, obj]) => obj)
-    ?.sort((a, b) => new Date(b.x).getTime() - new Date(a.x).getTime());
+    ?.sort((a, b) => new Date(b.x).getTime() - new Date(a.x).getTime())
+    ?.slice(0,9);
 
   const series = [
     {

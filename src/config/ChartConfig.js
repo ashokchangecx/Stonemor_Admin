@@ -2,6 +2,7 @@ import ApexCharts from "apexcharts";
 import { jsPDF } from "jspdf";
 import moment from "moment";
 import PDFICON from "../assets/images/PDF_ICON.svg";
+import logo from "../assets/images/LOGO.svg"
 export const CHART_THEME_MODE = "dark";
 export const CHART_HEIGHT = 440;
 export const CHART_FORECOLOR = "#fcfcfc";
@@ -50,7 +51,7 @@ export const bindTitle = ({ TITLE, fromDate, endDate, type }) => {
   } else if (endDate && type) {
     const endDateFormat = moment(endDate).format("MM/DD/YYYY");
     return (
-      TITLE + " - till " + endDateFormat + " - " + type + " " + "SurveyEntries"
+      TITLE + " - till " + endDateFormat + " - " + type + " " + "SurveyEntries" 
     );
   } else if (fromDate) {
     const fromDateFormat = moment(fromDate).format("MM/DD/YYYY");

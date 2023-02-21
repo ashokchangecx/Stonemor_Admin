@@ -170,7 +170,7 @@ const QuestionnariesQuestion = ({ questions, questionnarieData }) => {
               <StyledTableCell>Q.No</StyledTableCell>
               <StyledTableCell>Question</StyledTableCell>
               <StyledTableCell>Type</StyledTableCell>
-              <StyledTableCell>List Options</StyledTableCell>
+              <StyledTableCell>Options</StyledTableCell>
               <StyledTableCell>Manage</StyledTableCell>
               <StyledTableCell>Delete</StyledTableCell>
             </StyledTableRow>

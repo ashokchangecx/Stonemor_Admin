@@ -27,7 +27,7 @@ const themeColor = [
 //   } while (themeColor.indexOf(color) >= 0);
 //   themeColor.push("#" + ("123123" + color.toString(16)).slice(-6));
 // }
-const SimpleDonutChart = ({ id, data, title, labels, colorData,to }) => {
+const SimpleLinkDonutChart = ({ id, data, title, labels, colorData,to }) => {
   const chartData = Object.entries(data)
     ?.map(([name, obj]) => ({
       ...obj,
@@ -101,7 +101,7 @@ const SimpleDonutChart = ({ id, data, title, labels, colorData,to }) => {
     },
   };
 
-  return (
+  return (<Link to={to}>
  <ChartWrapper title={title} id={id}  >
   
       <Chart
@@ -111,8 +111,8 @@ const SimpleDonutChart = ({ id, data, title, labels, colorData,to }) => {
         width="100%"
         height={CHART_HEIGHT}
       />
-    </ChartWrapper>
+    </ChartWrapper> </Link>
   );
 };
 
-export default SimpleDonutChart;
+export default SimpleLinkDonutChart;
