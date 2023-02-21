@@ -404,7 +404,13 @@ const Analytics = ({
         <Grid container spacing={2} alignItems="stretch">
           <Grid item xs={12} md={6}>
             <SurveyByLocations
-              data={surveyEntries}
+              data={surveyEntries
+                ?.slice()
+                ?.sort(
+                  (a, b) =>
+                    new Date(b.createdAt).getTime() -
+                    new Date(a.createdAt).getTime()
+                )}
               setSelectedLocation={setSelectedLocation}
               fromDate={fromDate}
               endDate={endDate}
@@ -416,7 +422,13 @@ const Analytics = ({
             <Grid item xs={12} md={6}>
               <Suspense fallback={<Loader />}>
                 <QuestionnariesByLocation
-                  data={surveyEntries}
+                  data={surveyEntries
+                    ?.slice()
+                    ?.sort(
+                      (a, b) =>
+                        new Date(b.createdAt).getTime() -
+                        new Date(a.createdAt).getTime()
+                    )}
                   questionariesName={questionariesName}
                   loading={loading}
                   error={error}
@@ -438,7 +450,13 @@ const Analytics = ({
       <TabPanel value={tabValue} index={2}>
         <Grid item xs={12} md={6}>
           <SurveyByDate
-            data={surveyEntriesType}
+            data={surveyEntriesType
+              ?.slice()
+              ?.sort(
+                (a, b) =>
+                  new Date(b.createdAt).getTime() -
+                  new Date(a.createdAt).getTime()
+              )}
             loading={loading}
             error={error}
             fromDate={fromDate}
@@ -451,7 +469,13 @@ const Analytics = ({
         <Grid container spacing={2} alignItems="stretch">
           <Grid item xs={12} md={6}>
             <SurveyByQrCode
-              data={surveyEntries}
+              data={surveyEntries
+                ?.slice()
+                ?.sort(
+                  (a, b) =>
+                    new Date(b.createdAt).getTime() -
+                    new Date(a.createdAt).getTime()
+                )}
               questionariesName={questionariesName}
               setSelectedQuestionnarie={setSelectedQuestionnarie}
               fromDate={fromDate}
@@ -463,7 +487,13 @@ const Analytics = ({
             <Grid item xs={12} md={6}>
               <Suspense fallback={<Loader />}>
                 <LocationByQuestionnaire
-                  data={surveyEntries}
+                  data={surveyEntries
+                    ?.slice()
+                    ?.sort(
+                      (a, b) =>
+                        new Date(b.createdAt).getTime() -
+                        new Date(a.createdAt).getTime()
+                    )}
                   questionariesName={questionariesName}
                   loading={loading}
                   error={error}
@@ -476,7 +506,13 @@ const Analytics = ({
           {!surveyLocation && (
             <Grid item xs={12} md={6}>
               <SurveyByLink
-                data={surveyEntries}
+                data={surveyEntries
+                  ?.slice()
+                  ?.sort(
+                    (a, b) =>
+                      new Date(b.createdAt).getTime() -
+                      new Date(a.createdAt).getTime()
+                  )}
                 questionariesName={questionariesName}
                 fromDate={fromDate}
                 endDate={endDate}
@@ -485,7 +521,13 @@ const Analytics = ({
           )}
           <Grid item xs={12} md={6}>
             <SurveyByQuestionnarie
-              data={surveyEntries}
+              data={surveyEntries
+                ?.slice()
+                ?.sort(
+                  (a, b) =>
+                    new Date(b.createdAt).getTime() -
+                    new Date(a.createdAt).getTime()
+                )}
               questionariesName={questionariesName}
               loading={loading}
               error={error}
@@ -499,7 +541,13 @@ const Analytics = ({
         <Grid container spacing={2} alignItems="stretch">
           <Grid item xs={12} md={12}>
             <IncompletedSurveyByDate
-              data={incompletedSurveyEntriesType}
+              data={incompletedSurveyEntriesType
+                ?.slice()
+                ?.sort(
+                  (a, b) =>
+                    new Date(b.createdAt).getTime() -
+                    new Date(a.createdAt).getTime()
+                )}
               loading={loading}
               error={error}
               fromDate={fromDate}
@@ -509,7 +557,13 @@ const Analytics = ({
           </Grid>
           <Grid item xs={12} md={6}>
             <IncompletedSurveyByQuestionnarie
-              data={incompletedSurveyEntriesType}
+              data={incompletedSurveyEntriesType
+                ?.slice()
+                ?.sort(
+                  (a, b) =>
+                    new Date(b.createdAt).getTime() -
+                    new Date(a.createdAt).getTime()
+                )}
               questionariesName={questionariesName}
               loading={loading}
               error={error}
@@ -521,7 +575,13 @@ const Analytics = ({
           {type !== "Link" && (
             <Grid item xs={12} md={6}>
               <IncompletedSurveyByLocations
-                data={incompletedSurveyEntriesType}
+                data={incompletedSurveyEntriesType
+                  ?.slice()
+                  ?.sort(
+                    (a, b) =>
+                      new Date(b.createdAt).getTime() -
+                      new Date(a.createdAt).getTime()
+                  )}
                 // setSelectedLocation={setSelectedLocation}
                 fromDate={fromDate}
                 endDate={endDate}
