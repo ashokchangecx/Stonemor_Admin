@@ -405,7 +405,7 @@ export const GET_QUESTIONNAIRES = /* GraphQL */ gql(`
           nextToken
         }
       }
-      question(limit: 200) {
+      question(limit: 200, filter: { deleted: { ne: true } }) {
         items {
           id
           qu

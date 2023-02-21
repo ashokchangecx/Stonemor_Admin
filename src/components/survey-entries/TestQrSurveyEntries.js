@@ -126,7 +126,7 @@ const TestQrSurveyEntries = ({
                     {onGettingLocationById(res?.LocationId)}
                   </StyledTableCell>
                   <StyledTableCell>
-                    {res?.location?.inchargeEmail}
+                    {res?.location?.locationEmail}
                   </StyledTableCell>
                   <StyledTableCell>
                     {onGettingQuestionnaireById(res?.questionnaireId)}

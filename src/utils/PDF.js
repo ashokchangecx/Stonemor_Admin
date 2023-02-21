@@ -24,11 +24,15 @@ const convertChartToImage = async ({ ID, chartName }) => {
 export const dowloadChartAsPDF = async ({ ID, docName = "chart.pdf" }) => {
   try {
     const { imgURI } = await convertChartToImage({ ID, chartName: docName });
-    const doc = new jsPDF("p", "px", "a4");
+    const doc = new jsPDF("l", "px", [447, 380]);
     const width = doc.internal.pageSize.getWidth();
-    doc.setFontSize(18);
+    const Logo = logoBase64();
+    doc.setFontSize(16);
     doc.text(docName, width / 2, 20, { align: "center" });
+    doc.addImage(Logo, 10, 10, 60, 30, 90, 30);
+
     doc.addImage(imgURI, "JPEG", 15, 40, 416, 270);
+
     doc.save(docName);
   } catch (error) {
     console.log("dowloadChartAsPDF error : ", error);
@@ -138,7 +142,7 @@ export const adminDownloadChartsAsPDF = async (
     for (let i = 2; i <= totalPages; i++) {
       doc.setPage(i);
 
-      doc.addImage(Logo,10,10, 60, 30, 90, 30)
+      doc.addImage(Logo, 10, 10, 60, 30, 90, 30);
       //Handle appending page number
       const currentPage = doc.getCurrentPageInfo().pageNumber;
 
