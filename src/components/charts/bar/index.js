@@ -33,7 +33,8 @@ const SimpleBarChart = ({
   // const color = theme.palette.secondary.main;
   const chartData = Object.entries(data)
     ?.map(([name, obj]) => obj)
-    ?.sort((a, b) => b?.y - a?.y);
+    ?.sort((a, b) => b?.y - a?.y)
+    ?.slice(0,9);
 
   const series = [
     {

@@ -1,4 +1,5 @@
 import Chart from "react-apexcharts";
+import { Link } from "react-router-dom";
 import {
   CHART_FORECOLOR,
   CHART_HEIGHT,
@@ -26,13 +27,14 @@ const themeColor = [
 //   } while (themeColor.indexOf(color) >= 0);
 //   themeColor.push("#" + ("123123" + color.toString(16)).slice(-6));
 // }
-const SimpleDonutChart = ({ id, data, title, labels, colorData }) => {
+const SimpleDonutChart = ({ id, data, title, labels, colorData,to }) => {
   const chartData = Object.entries(data)
     ?.map(([name, obj]) => ({
       ...obj,
       name: labels?.find((l) => l.id === obj.x)?.name,
     }))
-    ?.sort((a, b) => b?.y - a?.y);
+    ?.sort((a, b) => b?.y - a?.y)
+    ?.slice(0,9);
   const options = {
     chart: {
       id,
@@ -99,8 +101,9 @@ const SimpleDonutChart = ({ id, data, title, labels, colorData }) => {
     },
   };
 
-  return (
-    <ChartWrapper title={title} id={id}>
+  return (<Link to={to}>
+ <ChartWrapper title={title} id={id}  >
+  
       <Chart
         options={options}
         series={options.series}
@@ -108,7 +111,7 @@ const SimpleDonutChart = ({ id, data, title, labels, colorData }) => {
         width="100%"
         height={CHART_HEIGHT}
       />
-    </ChartWrapper>
+    </ChartWrapper> </Link>
   );
 };
 

@@ -186,7 +186,7 @@ const UpdateQuestion = ({
 
   const getQuestionById = (id) => {
     const question = questions?.find((q) => q?.id === id);
-    return question?.qu ? question?.order + "  " + question?.qu : id;
+    return question?.qu ? question?.order + " . " + question?.qu : id;
   };
 
   const handleQuestionUpdate = async () => {
