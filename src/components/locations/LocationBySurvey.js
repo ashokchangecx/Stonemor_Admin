@@ -148,7 +148,6 @@ const LocationBySurveys = () => {
 
   };
 
-// console.log("added",selectedSurvey)
   if (loading) <Loader />;
   return (
     <>

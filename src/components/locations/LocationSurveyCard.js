@@ -181,11 +181,7 @@ const LocationSurveyCard = ({ survey, locationId, smLocations,showActions = true
     );
     setInchargeEmail(surveyLoc?.inchargeEmail || "");
   }, [surveyLocation]);
-  // console.log("data",survey)
-  // const look =survey?.locations?.find(
-  //   (loc) => loc?.id === locationId
-  // )
-  // console.log("surveyLoc",look?.map((i)=>(i?.location)) );
+  
 
   return (
     <Box height="100%">

@@ -46,7 +46,6 @@ const QuestionnariesByLocation = ({
       return chartData;
     }, {});
     const questionarieID=questionariesName?.listQuestionnaires?.items?.find((que)=>que?.id)
-console.log("chartData",chartData,questionarieID)
   return (
     <>
       {selectedLocation && !error ? (
