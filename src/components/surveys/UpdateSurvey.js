@@ -158,7 +158,7 @@ const UpdateSurvey = ({ toggle, initialFormValues }) => {
         </Grid>
       </Grid>
       <Grid item xs={12} my={2}>
-        {/* {defaultLocations?.length ? ( */}
+        {/* {defaultLocations?.length > 0 ? ( */}
         <Autocomplete
           multiple
           id="locations"
@@ -182,9 +182,8 @@ const UpdateSurvey = ({ toggle, initialFormValues }) => {
             );
           }}
         />
-        {/* ) : (
-          <Loader />
-        )} */}
+        // ) : ( // <Loader />
+        // )}
       </Grid>
       <Box
         sx={{

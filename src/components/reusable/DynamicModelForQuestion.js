@@ -10,7 +10,7 @@ import {
 import * as React from "react";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 
-const DynamicModel = ({
+const DynamicModelForQuestion = ({
   open = false,
   toggle,
   dialogTitle,
@@ -19,7 +19,7 @@ const DynamicModel = ({
   cancelText = "Close",
   onClickConfirm,
   isClose = false,
-  maxWidth = "md",
+  maxWidth = "xl",
   isActions = true,
 }) => {
   return (
@@ -44,7 +44,9 @@ const DynamicModel = ({
           <CancelOutlinedIcon />
         </IconButton>
       </DialogTitle>
-      <DialogContent>{children}</DialogContent>
+      <DialogContent sx={{ minHeight: "60vh", overflow: "auto" }}>
+        {children}
+      </DialogContent>
       {isActions && (
         <DialogActions>
           {isClose && (
@@ -61,4 +63,4 @@ const DynamicModel = ({
   );
 };
 
-export default DynamicModel;
+export default DynamicModelForQuestion;

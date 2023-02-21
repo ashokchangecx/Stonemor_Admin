@@ -75,6 +75,7 @@ export const CREATE_SURVEY = /* GraphQL */ gql(`
       createdAt
       updatedAt
       archived
+      deleted
     }
   }
 `);
