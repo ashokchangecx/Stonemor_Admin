@@ -27,14 +27,14 @@ const themeColor = [
 //   } while (themeColor.indexOf(color) >= 0);
 //   themeColor.push("#" + ("123123" + color.toString(16)).slice(-6));
 // }
-const SimpleDonutChart = ({ id, data, title, labels, colorData,to }) => {
+const SimpleDonutChart = ({ id, data, title, labels, colorData, to }) => {
   const chartData = Object.entries(data)
     ?.map(([name, obj]) => ({
       ...obj,
       name: labels?.find((l) => l.id === obj.x)?.name,
     }))
-    ?.sort((a, b) => b?.y - a?.y)
-    ?.slice(0,9);
+    // ?.sort((a, b) => b?.y - a?.y)
+    ?.slice(0, 10);
   const options = {
     chart: {
       id,
@@ -102,8 +102,7 @@ const SimpleDonutChart = ({ id, data, title, labels, colorData,to }) => {
   };
 
   return (
- <ChartWrapper title={title} id={id}  >
-  
+    <ChartWrapper title={title} id={id}>
       <Chart
         options={options}
         series={options.series}
