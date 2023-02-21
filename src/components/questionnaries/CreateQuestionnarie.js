@@ -29,12 +29,14 @@ const initialFormValues = {
   introMsg: "Welcome to StoneMor Suvey. Click continue to attend survey.",
   endMsg:
     "Thank you for completing our survey. If you have requested a follow up,someone will be in touch with you soon.",
+  archived: false,
+  deleted: false,
 };
 const CreateQuestionnarie = ({ toggle, questionnaire }) => {
   const { data } = useQuery(LIST_SURVEYS);
 
   const [createQuestionnaire] = useMutation(CREATE_QUESTIONNAIRE);
-  const [updateSurvey , {loading}] = useMutation(UPDATE_SURVEY, {
+  const [updateSurvey, { loading }] = useMutation(UPDATE_SURVEY, {
     refetchQueries: [
       {
         query: LIST_QUESTIONNARIES,
@@ -55,7 +57,9 @@ const CreateQuestionnarie = ({ toggle, questionnaire }) => {
   };
 
   const QuestionnaireEntries = async (qname) => {
-    let findEntries = questionnaire?.find((s) => s?.name.toLowerCase() === qname.toLowerCase());
+    let findEntries = questionnaire?.find(
+      (s) => s?.name.toLowerCase() === qname.toLowerCase()
+    );
     if (findEntries) {
       return true;
     } else {
@@ -80,7 +84,7 @@ const CreateQuestionnarie = ({ toggle, questionnaire }) => {
       setQuestionnaireDup(
         `${values.name} already Exists. Give another QuestionnaireName `
       );
-    } else{
+    } else {
       const res = await createQuestionnaire({ variables: { input: values } });
       const { data } = res;
       if (data.createQuestionnaire) {
