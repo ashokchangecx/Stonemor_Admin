@@ -27,17 +27,28 @@ const themeColor = [
 //   } while (themeColor.indexOf(color) >= 0);
 //   themeColor.push("#" + ("123123" + color.toString(16)).slice(-6));
 // }
-const SimpleLinkDonutChart = ({ id, data, title, labels, colorData, to }) => {
+const SimpleLinkDonutChart = ({
+  id,
+  data,
+  title,
+  labels,
+  colorData,
+  to,
+  onClick,
+}) => {
   const chartData = Object.entries(data)
     ?.map(([name, obj]) => ({
       ...obj,
       name: labels?.find((l) => l.id === obj.x)?.name,
     }))
-    ?.sort((a, b) => a?.y - b?.y)
+    // ?.sort((a, b) => a?.y - b?.y)
     ?.slice(0, 10);
   const options = {
     chart: {
       id,
+      events: {
+        dataPointSelection: onClick,
+      },
       foreColor: CHART_FORECOLOR,
       toolbar: {
         show: false,
