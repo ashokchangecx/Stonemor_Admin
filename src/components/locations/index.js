@@ -32,14 +32,18 @@ const Locations = () => {
   const locationsList = smLocations.filter(
     (user) => user?.responses?.items?.length !== 0
   );
+console.log("smLocations",smLocations)
 
   useEffect(() => {
+   
     if (!listLocationLoading && !listLocationError)
       handleSetLocations(listLocationdata);
+   
   }, [listLocationLoading]);
 
   if (listLocationLoading || loadingLocation) {
-    return <Loader />;
+    return   <>  {smLocations?.length <= 0 && <p  style={{display:"flex",justifyContent:"center",color:"red"}}>  Api CRM down</p>}</>
+    ;
   }
   const TabPanel = (props) => {
     const { value, index, items, children, ...other } = props;

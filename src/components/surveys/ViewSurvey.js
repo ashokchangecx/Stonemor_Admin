@@ -62,7 +62,7 @@ const ViewSurvey = ({ currentSurveyData }) => {
           {preQuestionnaire?.name ? (
             <>{preQuestionnaire?.name}</>
           ) : (
-            <span style={{ color: "red" }}>Question pool not yet assigned</span>
+            <span style={{ color: "red" }}>No qustion pool assigned yet</span>
           )}
         </Typography>
         {locations?.length > 0 ? (

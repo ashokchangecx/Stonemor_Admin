@@ -27,7 +27,7 @@ const themeColor = [
 //   } while (themeColor.indexOf(color) >= 0);
 //   themeColor.push("#" + ("123123" + color.toString(16)).slice(-6));
 // }
-const SimpleLinkDonutChart = ({ id, data, title, labels, colorData,to }) => {
+const SimpleLinkDonutChart = ({ id, data, title, labels, colorData,to,onClick }) => {
   const chartData = Object.entries(data)
     ?.map(([name, obj]) => ({
       ...obj,
@@ -38,6 +38,9 @@ const SimpleLinkDonutChart = ({ id, data, title, labels, colorData,to }) => {
   const options = {
     chart: {
       id,
+      events: {
+        dataPointSelection: onClick,
+      },
       foreColor: CHART_FORECOLOR,
       toolbar: {
         show: false,
@@ -101,17 +104,17 @@ const SimpleLinkDonutChart = ({ id, data, title, labels, colorData,to }) => {
     },
   };
 
-  return (<Link to={to}>
- <ChartWrapper title={title} id={id}  >
-  
-      <Chart
+  return (
+ <ChartWrapper title={title} id={id} >
+
+      <Chart     
         options={options}
         series={options.series}
         type="donut"
         width="100%"
         height={CHART_HEIGHT}
       />
-    </ChartWrapper> </Link>
+    </ChartWrapper> 
   );
 };
 

@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import withSuspense from "../../../helpers/hoc/withSuspense";
 import SimpleLinkDonutChart from "../../charts/donut/Donut";
 import { Loader } from "../../common/Loader";
@@ -18,6 +19,8 @@ const QuestionnariesByLocation = ({
     const loc = locationData?.find((q) => q?.locationID === id);
     return loc?.location ?? id;
   };
+  const [value, setValue] = useState();
+  const navigate = useNavigate()
   const locationName = onGettingLocationById(selectedLocation);
   const color = [
     "#12263a",
@@ -45,21 +48,49 @@ const QuestionnariesByLocation = ({
       }
       return chartData;
     }, {});
-    const questionarieID=questionariesName?.listQuestionnaires?.items?.find((que)=>que?.id)
+
+  // const chartDataID =  Object.entries(chartData).map(([key, value], i)=> ({id:key}))
+  // const chartID = chartDataID?.filter((i)=> i?.id )
+  // console.log("questionarieID",chartID)
+ 
+  // const onClick = (event, chartContext, config) => {
+  //   const questionnaires = questionariesName.listQuestionnaires?.items;
+  //   const label = config.w.config.labels[config.dataPointIndex];
+  //   setValue(label);
+  //   if (questionnaires) {
+  //     const questionnaireID = questionnaires.find((item) => item.name === label)?.id;
+  //     if (questionnaireID) {
+  //       navigate(`/questionnaires/${questionnaireID}`);
+  //     }
+  //   }
+  // };
+  
+  const questionarieID = questionariesName.listQuestionnaires.items?.find(
+    (i) => i?.name === value)
+  const onClick = (event, chartContext, config) => {
+   
+    const label = config.w.config.labels[config.dataPointIndex];
+    setValue(label);
+    if(questionarieID)
+    navigate(`/questionnaries/${questionarieID?.id}`);
+
+  };
+
+
   return (
     <>
       {selectedLocation && !error ? (
-     <>   <SimpleLinkDonutChart
-          id={CHART_ID}
-          data={chartData}
-          to={`/questionnaries/${questionarieID?.id}`}
-          title={TITLE + " - " + locationName}
-          labels={questionariesName.listQuestionnaires.items}
-          colorData={color}
-
-
-        />
-       </>
+        <>
+          {" "}
+          <SimpleLinkDonutChart
+            id={CHART_ID}
+            data={chartData}
+            onClick={onClick}
+            title={TITLE + " - " + locationName}
+            labels={questionariesName.listQuestionnaires.items}
+            colorData={color}
+          />
+        </>
       ) : (
         loading && <Loader />
       )}

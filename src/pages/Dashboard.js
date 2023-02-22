@@ -38,7 +38,7 @@ const DashboardPage = () => {
     Boolean(surveyLocationCountLoading) ||
     Boolean(surveyLocationCountError);
   Boolean(surveyUsersCountLoading) || Boolean(surveyUsersCountError);
-  if (loading || loadingLocation) {
+  if (loading ) {
     return <Loader />;
   }
   return (
