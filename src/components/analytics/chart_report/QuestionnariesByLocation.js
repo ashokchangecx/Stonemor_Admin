@@ -19,12 +19,15 @@ const QuestionnariesByLocation = ({
     const loc = locationData?.find((q) => q?.locationID === id);
     return loc?.location ?? id;
   };
+
+
   const onGettingIdByLocation = (id) => {
     const loc = locationData?.find((q) => q?.location === id);
     return loc?.id ?? id;
   };
   const navigate = useNavigate();
   const [value, setValue] = useState(null);
+
   const locationName = onGettingLocationById(selectedLocation);
   const color = [
     "#12263a",
@@ -52,6 +55,28 @@ const QuestionnariesByLocation = ({
       }
       return chartData;
     }, {});
+
+
+  // const chartDataID =  Object.entries(chartData).map(([key, value], i)=> ({id:key}))
+  // const chartID = chartDataID?.filter((i)=> i?.id )
+  // console.log("questionarieID",chartID)
+ 
+  // const onClick = (event, chartContext, config) => {
+  //   const questionnaires = questionariesName.listQuestionnaires?.items;
+  //   const label = config.w.config.labels[config.dataPointIndex];
+  //   setValue(label);
+  //   if (questionnaires) {
+  //     const questionnaireID = questionnaires.find((item) => item.name === label)?.id;
+  //     if (questionnaireID) {
+  //       navigate(`/questionnaires/${questionnaireID}`);
+  //     }
+  //   }
+  // };
+  
+
+
+
+
   // const questionarieID = questionariesName?.listQuestionnaires?.items?.find(
   //   (que) => que?.id
   // );
@@ -81,6 +106,7 @@ const QuestionnariesByLocation = ({
   //     // Navigate(`/questionnaries/${questionarieID?.id}`);
   //   }
   // };
+
   return (
     <>
       {selectedLocation && !error ? (
@@ -90,7 +116,7 @@ const QuestionnariesByLocation = ({
             id={CHART_ID}
             data={chartData}
             onClick={onClick}
-            // to={`/questionnaries/${questionarieID?.id}`}
+
             title={TITLE + " - " + locationName}
             labels={questionariesName.listQuestionnaires.items}
             colorData={color}

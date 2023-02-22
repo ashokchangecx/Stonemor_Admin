@@ -20,6 +20,7 @@ import {
 import copy from "copy-to-clipboard";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import axios from "axios";
+import { useEffect } from "react";
 
 const TestLinkShare = ({ toggle, surveyId }) => {
   const baseUrl = "https://main.d3d8mcg1fsym22.amplifyapp.com";
@@ -104,7 +105,15 @@ const TestLinkShare = ({ toggle, surveyId }) => {
         alert(err);
       });
   };
-
+  useEffect(() => {
+    setUserSurveyLink();
+    setAlertContentFail();
+    setAlertContentSuccess();
+    setAlertCopySuccess();
+    setAlertEmailFail(false);
+    setAlertEmailSuccess(false);
+    setAlertSuccess(false);
+  }, [usersId]);
   return (
     <Box my={2}>
       {" "}
