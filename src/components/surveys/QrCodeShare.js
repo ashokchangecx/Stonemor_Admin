@@ -212,55 +212,55 @@ const QrCodeShare = ({ toggle, surveyId, locationData }) => {
       )}
       {alertError ? <Alert severity="error">{emailError}</Alert> : ""}{" "}
       <Box my={1}>
-        {surveyLocation && (
-          <Grid item container spacing={2} minHeight={160}>
-            <Grid
-              item
-              xs
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <QRCode
-                id="qr-gen"
-                value={surveyQrcodeTest}
-                size={280}
-                level={"H"}
-                includeMargin={true}
-              />
-            </Grid>
-
-            <Grid
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            ></Grid>
-            <Grid
-              item
-              xs
-              display="flex"
-              justifyContent="space-evenly"
-              alignItems="center"
-            >
-              <IconButton
-                color="primary"
-                aria-label="mailsend"
-                onClick={downloadQRCodeTest}
-              >
-                <DownloadForOfflineOutlinedIcon fontSize="large" />
-              </IconButton>
-
-              <IconButton
-                color="error"
-                aria-label="mailsend"
-                onClick={handleSendEmail}
-                disabled={!alertSuccessEmail}
-              >
-                <ForwardToInboxOutlinedIcon fontSize="large" />
-              </IconButton>
-            </Grid>
+        {/* {surveyLocation && ( */}
+        <Grid item container spacing={2} minHeight={160}>
+          <Grid
+            item
+            xs
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <QRCode
+              id="qr-gen"
+              value={surveyQrcodeTest}
+              size={280}
+              level={"H"}
+              includeMargin={true}
+            />
           </Grid>
-        )}
+
+          <Grid
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          ></Grid>
+          <Grid
+            item
+            xs
+            display="flex"
+            justifyContent="space-evenly"
+            alignItems="center"
+          >
+            <IconButton
+              color="primary"
+              aria-label="mailsend"
+              onClick={downloadQRCodeTest}
+            >
+              <DownloadForOfflineOutlinedIcon fontSize="large" />
+            </IconButton>
+
+            <IconButton
+              color="error"
+              aria-label="mailsend"
+              onClick={handleSendEmail}
+              disabled={!alertSuccessEmail}
+            >
+              <ForwardToInboxOutlinedIcon fontSize="large" />
+            </IconButton>
+          </Grid>
+        </Grid>
+        {/* )} */}
       </Box>
     </Box>
   );
