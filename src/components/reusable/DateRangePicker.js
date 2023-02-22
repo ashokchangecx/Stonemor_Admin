@@ -4,6 +4,7 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
+import moment from "moment";
 
 const ResponsiveDateRangePicker = ({
   fromDate,
@@ -31,7 +32,8 @@ const ResponsiveDateRangePicker = ({
             value={fromDate}
             maxDate={endDate ? endDate : undefined}
             onChange={(event) => {
-              setFromDate(event?._d);
+              const startOfDate = moment(event?._d).startOf("day");
+              setFromDate(startOfDate?._d);
             }}
             renderInput={(params) => <TextField {...params} />}
           />
@@ -42,7 +44,8 @@ const ResponsiveDateRangePicker = ({
             value={endDate}
             minDate={fromDate ? fromDate : undefined}
             onChange={(event) => {
-              setEndDate(event?._d);
+              const endOfDate = moment(event?._d).endOf("day");
+              setEndDate(endOfDate?._d);
             }}
             renderInput={(params) => <TextField {...params} />}
           />
