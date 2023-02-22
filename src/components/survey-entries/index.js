@@ -144,7 +144,7 @@ const SurveyEntries = () => {
   if (TestSurveyEntriesLoading) {
     return <Loader />;
   }
-
+  console.log("incompleteLinkSurvey",IncompletedLinkSurveyEntries)
   return (
     <div>
       {smLocations.length === 0 && (
@@ -158,13 +158,6 @@ const SurveyEntries = () => {
           <Grid item xs={6} md={3}>
             <BreadCrumbs active=" Survey Entries" />
           </Grid>
-          {/* <DynamicModel
-            open={true}
-            confirmText="sent email"
-            cancelText="Close"
-            dialogTitle="Email sent"
-            children={`incomplete`}
-          /> */}
           <Grid item xs={10} sm={8} md={6}>
             {tabValue < 2 && (
               <ResponsiveDateRangePicker
