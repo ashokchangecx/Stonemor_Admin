@@ -122,23 +122,6 @@ const SimpleBarChart = ({
     //   text: title,
     //   align: "center",
     // },
-    yaxis: {
-      title: {
-        text: yAxisTitle,
-        style: {
-          fontSize: '18px',
-        },
-      },
-      labels: {
-        style: {
-          fontSize: '14px',
-        },
-      },
-      max:function(max){
-        const value = max + 0.99
-        return value
-      }
-    },
 
     colors: color,
     fill: {
@@ -166,8 +149,6 @@ const SimpleBarChart = ({
         type="bar"
         width="100%"
         height={CHART_HEIGHT}
-     
-
       />
     </ChartWrapper>
   );
