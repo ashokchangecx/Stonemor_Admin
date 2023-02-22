@@ -20,8 +20,6 @@ const QuestionnariesByLocation = ({
     return loc?.location ?? id;
   };
 
-  const [value, setValue] = useState();
-  const navigate = useNavigate()
 
   const onGettingIdByLocation = (id) => {
     const loc = locationData?.find((q) => q?.location === id);
@@ -75,16 +73,7 @@ const QuestionnariesByLocation = ({
   //   }
   // };
   
-  const questionarieID = questionariesName.listQuestionnaires.items?.find(
-    (i) => i?.name === value)
-  const onClick = (event, chartContext, config) => {
-   
-    const label = config.w.config.labels[config.dataPointIndex];
-    setValue(label);
-    if(questionarieID)
-    navigate(`/questionnaries/${questionarieID?.id}`);
 
-  };
 
 
 
