@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import {
+  Alert,
   Autocomplete,
   Box,
   FormControl,
@@ -288,7 +289,7 @@ const Analytics = ({
 console.log("loadingLocations",loadingLocations)
   return (
     <div>
-             <p>{smLocations?.length <= 0 && <p  style={{display:"flex",justifyContent:"center",color:"red"}}>  Api CRM down</p>}</p>
+             <p>{smLocations?.length === 0 && <p  style={{display:"flex",justifyContent:"center",color:"red"}}>  <Alert severity="error">CRM Api Down</Alert></p>}</p>
 
       <Grid container spacing={2} sx={{ py: "0.5rem" }}>
         <Grid item xs={6}>

@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material";
+import { Alert, Box, Grid } from "@mui/material";
 import useSmLocationData from "../../helpers/hooks/useSmLocationData";
 import SurveyByDate from "../analytics/chart_report/SurveyByDate";
 import SurveyByLocations from "../analytics/chart_report/SurveyByLocations";
@@ -29,7 +29,7 @@ const Dashboard = ({
   return (
     <>
     
-    {locationData.length <= 0 && <p  style={{display:"flex",justifyContent:"center",color:"red"}}>  Api CRM down</p>}
+    {locationData.length === 0 && <p  style={{display:"flex",justifyContent:"center",color:"red"}}>  <Alert severity="error">CRM Api Down</Alert></p>}
       <Grid
         container
         // rowGap={2}

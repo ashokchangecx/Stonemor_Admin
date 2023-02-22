@@ -1,4 +1,4 @@
-import { Grid, Tab, Tabs } from "@mui/material";
+import { Alert, Grid, Tab, Tabs } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import BreadCrumbs from "../reusable/BreadCrumbs";
@@ -41,8 +41,8 @@ console.log("smLocations",smLocations)
    
   }, [listLocationLoading]);
 
-  if (listLocationLoading || loadingLocation) {
-    return   <>  {smLocations?.length <= 0 && <p  style={{display:"flex",justifyContent:"center",color:"red"}}>  Api CRM down</p>}</>
+  if (listLocationLoading  ) {
+    return  <Loader/>
     ;
   }
   const TabPanel = (props) => {
@@ -55,7 +55,8 @@ console.log("smLocations",smLocations)
         id={`simple-tabpanel-${index}`}
         aria-labelledby={`simple-tab-${index}`}
         {...other}
-      >
+      >    
+
         {value === index && (
           <>
             {children}
@@ -77,6 +78,8 @@ console.log("smLocations",smLocations)
   };
   return (
     <div>
+             <>  {smLocations?.length === 0 && <p  style={{display:"flex",justifyContent:"center",color:"red"}}> <Alert severity="error">CRM Api Down</Alert></p>}</>
+
       <div sx={{ mt: 2 }}>
         <Grid container spacing={2} sx={{ p: "0.5rem" }}>
           <Grid item xs={6}>
