@@ -19,8 +19,17 @@ const QuestionnariesByLocation = ({
     const loc = locationData?.find((q) => q?.locationID === id);
     return loc?.location ?? id;
   };
+
   const [value, setValue] = useState();
   const navigate = useNavigate()
+
+  const onGettingIdByLocation = (id) => {
+    const loc = locationData?.find((q) => q?.location === id);
+    return loc?.id ?? id;
+  };
+  const navigate = useNavigate();
+  const [value, setValue] = useState(null);
+
   const locationName = onGettingLocationById(selectedLocation);
   const color = [
     "#12263a",
@@ -48,6 +57,7 @@ const QuestionnariesByLocation = ({
       }
       return chartData;
     }, {});
+
 
   // const chartDataID =  Object.entries(chartData).map(([key, value], i)=> ({id:key}))
   // const chartID = chartDataID?.filter((i)=> i?.id )
@@ -77,6 +87,37 @@ const QuestionnariesByLocation = ({
   };
 
 
+
+  // const questionarieID = questionariesName?.listQuestionnaires?.items?.find(
+  //   (que) => que?.id
+  // );
+
+  const questionarieID = questionariesName.listQuestionnaires.items?.find(
+    (i) => i?.name === value
+  );
+  const onClick = (event, chartContext, config) => {
+    const label = config.w.config.labels[config.dataPointIndex];
+    console.log("config.w.config.labels:", config.w.config.labels);
+    console.log("config.dataPointIndex:", config.dataPointIndex);
+    console.log("Selected label:", label);
+    console.log("questionarieID :", questionarieID);
+    setValue(label);
+    if (questionarieID?.id) {
+      navigate(`/questionnaries/${questionarieID?.id}`);
+    }
+  };
+
+  // const onClick = (event, chartContext, config) => {
+  //   const questionarieID = questionariesName.listQuestionnaires.items?.find(
+  //     (i) => i?.name === value
+  //   );
+  //   const label = config.w.config.labels[config.dataPointIndex];
+  //   setValue(label);
+  //   if (questionarieID) {
+  //     // Navigate(`/questionnaries/${questionarieID?.id}`);
+  //   }
+  // };
+
   return (
     <>
       {selectedLocation && !error ? (
@@ -86,6 +127,7 @@ const QuestionnariesByLocation = ({
             id={CHART_ID}
             data={chartData}
             onClick={onClick}
+
             title={TITLE + " - " + locationName}
             labels={questionariesName.listQuestionnaires.items}
             colorData={color}

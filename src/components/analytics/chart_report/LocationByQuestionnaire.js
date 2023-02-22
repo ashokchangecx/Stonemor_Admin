@@ -53,7 +53,7 @@ const LocationByQuestionnaire = ({
       }
       return chartData;
     }, {});
-
+  console.log(data);
   return (
     <>
       {selectedQuestionnarie && !error ? (

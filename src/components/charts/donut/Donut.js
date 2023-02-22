@@ -27,14 +27,25 @@ const themeColor = [
 //   } while (themeColor.indexOf(color) >= 0);
 //   themeColor.push("#" + ("123123" + color.toString(16)).slice(-6));
 // }
-const SimpleLinkDonutChart = ({ id, data, title, labels, colorData,to,onClick }) => {
+
+const SimpleLinkDonutChart = ({ id, data, title, labels, colorData,to,onCl
+const SimpleLinkDonutChart = ({
+  id,
+  data,
+  title,
+  labels,
+  colorData,
+  to,
+  onClick,
+}) => {
+
   const chartData = Object.entries(data)
     ?.map(([name, obj]) => ({
       ...obj,
       name: labels?.find((l) => l.id === obj.x)?.name,
     }))
-    ?.sort((a, b) => b?.y - a?.y)
-    ?.slice(0,9);
+    // ?.sort((a, b) => a?.y - b?.y)
+    ?.slice(0, 10);
   const options = {
     chart: {
       id,
@@ -105,6 +116,7 @@ const SimpleLinkDonutChart = ({ id, data, title, labels, colorData,to,onClick })
   };
 
   return (
+
  <ChartWrapper title={title} id={id} >
 
       <Chart     
@@ -115,6 +127,18 @@ const SimpleLinkDonutChart = ({ id, data, title, labels, colorData,to,onClick })
         height={CHART_HEIGHT}
       />
     </ChartWrapper> 
+
+      <ChartWrapper title={title} id={id}>
+        <Chart
+          options={options}
+          series={options.series}
+          type="donut"
+          width="100%"
+          height={CHART_HEIGHT}
+        />
+      </ChartWrapper>{" "}
+  
+
   );
 };
 

@@ -31,14 +31,13 @@ const SimpleBarChart = ({
   seriesName,
   yAxisTitle,
 }) => {
-  const charts = [{ ID: id, docName: title }];
-  console.log(charts);
   const theme = useTheme();
   // const color = theme.palette.secondary.main;
+
   const chartData = Object.entries(data)
     ?.map(([name, obj]) => obj)
-    ?.sort((a, b) => b?.y - a?.y)
-    ?.slice(0, 9);
+    // ?.sort((a, b) => b?.y - a?.y)
+    ?.slice(0, 10);
 
   const series = [
     {
