@@ -102,21 +102,31 @@ const LinkShare = ({ toggle, surveyId }) => {
       });
   };
 
+  useEffect(() => {
+    setUserSurveyLink();
+    setAlertContentFail();
+    setAlertContentSuccess();
+    setAlertCopySuccess();
+    setAlertEmailFail(false);
+    setAlertEmailSuccess(false);
+    setAlertSuccess(false);
+  }, [usersId]);
+
   return (
     <Box my={2}>
       {" "}
       <Box my={2}>
-        {alertSuccess ? (
+        {alertSuccess === true ? (
           <Alert severity="success">{alertCopySuccess}</Alert>
         ) : (
           ""
         )}{" "}
-        {alertEmailSuccess ? (
+        {alertEmailSuccess === true ? (
           <Alert severity="success">{alertContentSuccess}</Alert>
         ) : (
           ""
         )}
-        {alertEmailFail ? (
+        {alertEmailFail === true ? (
           <Alert severity="error">{alertContentFail}</Alert>
         ) : (
           ""
