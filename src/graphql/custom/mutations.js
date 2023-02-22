@@ -190,6 +190,7 @@ export const UPDATE_SURVEYENTRIES = /* GraphQL */ gql(`
       createdAt
       updatedAt
       questionnaireId
+      icMail
       responses {
         items {
           id

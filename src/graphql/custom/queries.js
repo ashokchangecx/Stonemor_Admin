@@ -51,6 +51,7 @@ query ListSurveyEntriess(
       LocationId
       deleted
       archived
+      icMail
       testing
       complete
       createdAt
@@ -470,7 +471,7 @@ query GetSurveyEntries($id: ID!) {
     LocationId
     deleted
     archived
-  
+    icMail
     responses {
       items {
         id
@@ -484,6 +485,7 @@ query GetSurveyEntries($id: ID!) {
           qu
           type
           isSelf
+          
           isDependent
           order
           createdAt
@@ -516,6 +518,7 @@ query ListSurveyEntriess(
       LocationId
       deleted
       archived
+      icMail
       testing
       complete
       createdAt
@@ -608,6 +611,7 @@ query ListSurveyEntriess(
       deleted
       archived
       testing
+      icMail
       complete
       createdAt
       updatedAt

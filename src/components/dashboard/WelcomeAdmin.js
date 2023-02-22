@@ -185,7 +185,7 @@ const WelcomeAdmin = ({
         >
           Hello, {profile?.username ? profile?.username : "Admin"}
           <br />
-          Download Latest Report
+          Download Latest Report (QA)
         </Typography>
         <Tooltip title="Download as Excel">
           <IconButton
