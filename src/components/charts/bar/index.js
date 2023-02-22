@@ -112,6 +112,12 @@ const SimpleBarChart = ({
         rotate: -30,
       },
     },
+    yaxis: {
+      max:function(max){
+        const value = max + 0.99
+        return value
+      }
+    },
     // yaxis: {
     //   title: {
     //     text: yAxisTitle,

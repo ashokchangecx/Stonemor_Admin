@@ -1,4 +1,4 @@
-import { Box, Grid, Tab, Tabs } from "@mui/material";
+import { Alert, Box, Grid, Tab, Tabs } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import moment from "moment-timezone";
 import { useQuery } from "@apollo/client";
@@ -19,6 +19,7 @@ import BreadCrumbs from "../reusable/BreadCrumbs";
 import useSmLocationData from "../../helpers/hooks/useSmLocationData";
 import ResponsiveDateRangePicker from "../reusable/DateRangePicker";
 import useSurveyEntries from "../../helpers/hooks/useSurveyEntries";
+import DynamicModel from "../reusable/DynamicModel";
 
 const IncompletedLinkSurveyEntries = lazy(() =>
   import("./IncompletedLinkSurveyEntries")
@@ -140,18 +141,23 @@ const SurveyEntries = () => {
     setSurveyEntries(filteredEntries);
   }, [fromDate, endDate, surveyEntriesData]);
 
-  if (TestSurveyEntriesLoading || loadingLocation) {
+  if (TestSurveyEntriesLoading) {
     return <Loader />;
   }
-
+  console.log("incompleteLinkSurvey",IncompletedLinkSurveyEntries)
   return (
     <div>
+      {smLocations.length === 0 && (
+        <p style={{ display: "flex", justifyContent: "center", color: "red" }}>
+          <Alert severity="error">CRM Api Down</Alert>
+        </p>
+      )}
+
       <div sx={{ mt: 2 }}>
         <Grid container spacing={2} sx={{ p: "0.5rem" }}>
           <Grid item xs={6} md={3}>
             <BreadCrumbs active=" Survey Entries" />
           </Grid>
-
           <Grid item xs={10} sm={8} md={6}>
             {tabValue < 2 && (
               <ResponsiveDateRangePicker

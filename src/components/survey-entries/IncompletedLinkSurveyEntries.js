@@ -19,6 +19,7 @@ import {
   LIST_QUESTIONNARIES_NAME,
 } from "../../graphql/custom/queries";
 import { Loader } from "../common/Loader";
+import EmailModel from "../reusable/EmailModel";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -125,9 +126,22 @@ const IncompletedLinkSurveyEntries = ({ incompleteLinkSurvey }) => {
         No Search Results Found
       </p>
     );
+  const incompleSurveyEmail = incompleteLinkEntries.map((user) => 
+    user?.by?.email,
+  );
+
   return (
     <>
-      {" "}
+      {/* <EmailModel
+        open={true}
+        confirmText="sent email"
+        cancelText="Close"
+        dialogTitle="Email sent"
+        isClose={true}
+        isActions={true}
+        children={incompleSurveyEmail}
+      /> */}
+
       {/* {linkResponses?.length > 0 && ( */}
       <TableContainer component={Paper}>
         <Table stickyHeader aria-label="sticky table">
