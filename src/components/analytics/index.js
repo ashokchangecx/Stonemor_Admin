@@ -21,6 +21,7 @@ import LocationByQuestionnaire from "./chart_report/LocationByQuestionnaire";
 import BreadCrumbs from "../reusable/BreadCrumbs";
 import moment from "moment-timezone";
 import QuestionsByAnswer from "./QuestionsByAnswer";
+import useSmLocationData from "../../helpers/hooks/useSmLocationData";
 
 const QuestionnariesByLocation = lazy(() =>
   import("./chart_report/QuestionnariesByLocation")
@@ -80,6 +81,8 @@ const Analytics = ({
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedQuestionnarie, setSelectedQuestionnarie] = useState(null);
   const [surveyEntriesType, setSurveyEntriesType] = useState(surveyEntriesData);
+  const { loadingLocation, smLocations } = useSmLocationData();
+
   const [incompletedSurveyEntriesType, setIncompletedSurveyEntriesType] =
     useState(incompletedSurveyEntriesData);
 
@@ -282,9 +285,11 @@ const Analytics = ({
   if (loadingLocations) {
     return <Loader />;
   }
-
+console.log("loadingLocations",loadingLocations)
   return (
     <div>
+             <p>{smLocations?.length <= 0 && <p  style={{display:"flex",justifyContent:"center",color:"red"}}>  Api CRM down</p>}</p>
+
       <Grid container spacing={2} sx={{ py: "0.5rem" }}>
         <Grid item xs={6}>
           <BreadCrumbs active="Analytics" />
